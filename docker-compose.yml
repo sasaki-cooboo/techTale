@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  front:
+    container_name: front
+    build:
+      context: .
+      dockerfile: docker/front/Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./front:/app
+
+  nginx:
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./api:/app
+    environment:
+      - PHP_HOST=api
+    depends_on:
+      - api
+
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: docker/api/Dockerfile
+    volumes:
+      - ./api:/app
+    depends_on:
+      - db
+
+  db:
+    container_name: db
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    volumes:
+      - db:/var/lib/mysql
+      - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+    env_file:
+      - ./docker/db/development.env
+
+volumes:
+  db:

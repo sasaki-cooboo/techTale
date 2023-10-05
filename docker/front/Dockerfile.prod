@@ -1,0 +1,29 @@
+FROM node:18-bullseye-slim AS build-stage
+
+WORKDIR /app
+
+RUN apt-get update
+
+COPY client/ /app/
+
+# install後にenv定義してbuildを実行
+RUN touch .env \
+    # TODO : NEXT_PUBLIC_MY_DOMAINを環境変数で設定
+    && echo "NEXT_PUBLIC_MY_DOMAIN=${NEXT_PUBLIC_MY_DOMAIN}" > .env \
+    && npm install --production \
+    && npx next build;
+
+# 実行ステージ: 軽量な実行用イメージを作成
+FROM node:18-bullseye-slim AS production-stage
+
+# コンテナ内での作業ディレクトリを設定
+WORKDIR /app
+
+# 開発ステージから必要なファイルをコピー
+COPY --from=build-stage /app/next.config.js ./
+COPY --from=build-stage /app/public ./public
+COPY --from=build-stage /app/.next/static ./.next/static
+COPY --from=build-stage /app/.next/standalone ./
+
+# アプリケーションを実行
+CMD ["node", "server.js"]
