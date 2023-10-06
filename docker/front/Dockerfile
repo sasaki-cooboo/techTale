@@ -4,7 +4,7 @@ WORKDIR /app
 
 RUN apt-get update
 
-COPY client/ /app/
+COPY front/ /app/
 
 RUN npm install
 
