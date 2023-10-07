@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Services\AIChatService;
 use Illuminate\Console\Command;
 use OpenAI\Laravel\Facades\OpenAI;
 
@@ -26,7 +27,7 @@ class SampleCommand extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(AIChatService $aIChatService)
     {
         $language = "ruby php";
         $messages = [
@@ -39,12 +40,7 @@ class SampleCommand extends Command
                 "content" => "Generate a job listing title. Please answer in Japanese. Answer the title only. The language is {$language}. Example:【フロントエンド/JavaScript/React/高単価】ポータルサイト開発案件"
             ],
         ];
-        $result = OpenAI::chat()->create([
-            'model' => 'gpt-3.5-turbo',
-            'messages' => $messages,
-            "max_tokens" => 200
-        ]);
-        $res = $result['choices'][0]['message']['content'];
+        $res = $aIChatService->generateResponse($messages);
         $this->info($res);
         return Command::SUCCESS;
     }
