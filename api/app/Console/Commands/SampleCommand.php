@@ -28,6 +28,7 @@ class SampleCommand extends Command
      */
     public function handle()
     {
+        $language = "ruby php";
         $messages = [
             [
                 "role" => 'system',
@@ -35,7 +36,7 @@ class SampleCommand extends Command
             ],
             [
                 "role" => 'user',
-                "content" => "Generate a job listing title. Please answer in Japanese. Answer the title only."
+                "content" => "Generate a job listing title. Please answer in Japanese. Answer the title only. The language is {$language}. Example:【フロントエンド/JavaScript/React/高単価】ポータルサイト開発案件"
             ],
         ];
         $result = OpenAI::chat()->create([
