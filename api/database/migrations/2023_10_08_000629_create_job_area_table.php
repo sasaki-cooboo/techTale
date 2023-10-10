@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('job_area', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('job_id')->constrained();
-            $table->foreignId('area_id')->constrained();
+            $table->unsignedBigInteger('job_id')->comment('案件ID');
+            $table->unsignedBigInteger('area_id')->comment('地域ID');
             $table->timestamps();
         });
     }

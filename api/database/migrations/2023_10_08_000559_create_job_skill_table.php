@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('job_skill', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('job_id')->constrained();
-            $table->foreignId('skill_id')->constrained();
+            $table->unsignedBigInteger('job_id')->comment('案件ID');
+            $table->unsignedBigInteger('skill_id')->comment('スキルID');
             $table->timestamps();
         });
     }
