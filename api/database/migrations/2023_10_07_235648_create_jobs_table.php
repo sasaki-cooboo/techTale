@@ -15,6 +15,16 @@ return new class extends Migration
     {
         Schema::create('jobs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('area_id')->constrained();
+            $table->foreignId('language_id')->constrained();
+            $table->foreignId('skill_id')->constrained();
+            $table->foreignId('enginner_type_id')->constrained();
+            $table->foreignId('feature_id')->constrained();
+            $table->string('title');
+            $table->integer('cost');
+            $table->string('description', 1000);
+            $table->json('required_skills');
+            $table->string('message');
             $table->timestamps();
         });
     }
