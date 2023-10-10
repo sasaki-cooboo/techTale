@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('job_enginner_type', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('job_id')->constrained();
+            $table->foreignId('enginner_type_id')->constrained();
             $table->timestamps();
         });
     }
