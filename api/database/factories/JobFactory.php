@@ -24,7 +24,7 @@ class JobFactory extends Factory
         $randomNumber = $this->faker->numberBetween(100000, 1000000);
         $cost = floor($randomNumber / 100000) * 100000;
         return [
-            'title' => $this->faker->word,
+            'title' => "python案件",
             'cost' => $cost,
             'description' => $this->faker->realText(200),
             'required_skills' => json_encode($required_skills),
