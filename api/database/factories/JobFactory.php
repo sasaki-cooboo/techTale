@@ -21,12 +21,14 @@ class JobFactory extends Factory
         $required_skills = [
             "スキル1", "スキル2", "スキル3",
         ];
+        $randomNumber = $this->faker->numberBetween(100000, 1000000);
+        $cost = floor($randomNumber / 100000) * 100000;
         return [
             'title' => $this->faker->word,
-            'cost' => $this->faker->numberBetween(100000, 1000000),
-            'description' => $this->faker->sentence,
+            'cost' => $cost,
+            'description' => $this->faker->realText(200),
             'required_skills' => json_encode($required_skills),
-            'message' => $this->faker->sentence,
+            'message' => $this->faker->realText(200),
             'created_at' => $now,
             'updated_at' => $now,
         ];
