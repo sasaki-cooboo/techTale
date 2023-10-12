@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\EnginnerType;
+use App\Models\EngineerType;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class EnginnerTypeSeeder extends Seeder
+class EngineerTypeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -31,7 +31,7 @@ class EnginnerTypeSeeder extends Seeder
             "プロジェクトマネージャ",
         ];
         foreach ($jobRoles as $jobRole) {
-            EnginnerType::create([
+            EngineerType::create([
                 "name" => $jobRole
             ]);
         }

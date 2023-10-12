@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('job_enginner_type', function (Blueprint $table) {
+        Schema::create('job_engineer_type', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('job_id')->comment('案件ID');
-            $table->unsignedBigInteger('enginner_type_id')->comment('エンジニア種別ID');
+            $table->unsignedBigInteger('engineer_type_id')->comment('エンジニア種別ID');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('job_enginner_type');
+        Schema::dropIfExists('job_engineer_type');
     }
 };
