@@ -37,6 +37,8 @@ class CreateJobCommand extends Command
         "Webアプリケーションサービス開発経験（2年以上）", "Gitでのチーム開発経験", "テックリード経験",
     ];
 
+    private const TIMES = 100;
+
     /**
      * Execute the console command.
      *
@@ -46,59 +48,62 @@ class CreateJobCommand extends Command
     {
         $faker = Faker::create();
 
-        $languages = Language::inRandomOrder()
-            ->take(2)->get();
-        $language1 = $languages->get(0);
-        $language2 = $languages->get(1);
+        for ($i = 0; $i < self::TIMES; $i++) {
 
-        $title = $batchProcessingService->getJobTitle($language1->name . " " . $language2->name);
-        $now = Carbon::now();
+            $languages = Language::inRandomOrder()
+                ->take(2)->get();
+            $language1 = $languages->get(0);
+            $language2 = $languages->get(1);
 
-        $randomNumber = $faker->numberBetween(100000, 1000000);
-        $cost = floor($randomNumber / 100000) * 100000;
-        $job = Job::create([
-            'title' => $title,
-            'cost' => $cost,
-            'description' => $this->descriptions[rand(0, count($this->descriptions) - 1)],
-            'required_skills' => json_encode($this->required_skills),
-            'message' => $this->messages[rand(0, count($this->messages) - 1)],
-            'created_at' => $now,
-            'updated_at' => $now,
-        ]);
+            $title = $batchProcessingService->getJobTitle($language1->name . " " . $language2->name);
+            $now = Carbon::now();
 
-        $featureIds = Feature::all()->pluck("id")->toArray();
-        $areaIds = Area::all()->pluck("id")->toArray();
-        $engineerIds = EngineerType::all()->pluck("id")->toArray();
-        $skillIds = Skill::all()->pluck("id")->toArray();
+            $randomNumber = $faker->numberBetween(100000, 1000000);
+            $cost = floor($randomNumber / 100000) * 100000;
+            $job = Job::create([
+                'title' => $title,
+                'cost' => $cost,
+                'description' => $this->descriptions[rand(0, count($this->descriptions) - 1)],
+                'required_skills' => json_encode($this->required_skills),
+                'message' => $this->messages[rand(0, count($this->messages) - 1)],
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]);
 
-        // 言語は最大2つ
-        $job->languages()->syncWithoutDetaching([$language1->id, $language2->id]);
+            $featureIds = Feature::all()->pluck("id")->toArray();
+            $areaIds = Area::all()->pluck("id")->toArray();
+            $engineerIds = EngineerType::all()->pluck("id")->toArray();
+            $skillIds = Skill::all()->pluck("id")->toArray();
 
-        // 特徴は最大5つ
-        $featureId1 = $featureIds[rand(0, count($featureIds) - 1)];
-        $featureId2 = $featureIds[rand(0, count($featureIds) - 1)];
-        $featureId3 = $featureIds[rand(0, count($featureIds) - 1)];
-        $featureId4 = $featureIds[rand(0, count($featureIds) - 1)];
-        $featureId5 = $featureIds[rand(0, count($featureIds) - 1)];
-        $job->features()->syncWithoutDetaching([$featureId1, $featureId2, $featureId3, $featureId4, $featureId5]);
+            // 言語は最大2つ
+            $job->languages()->syncWithoutDetaching([$language1->id, $language2->id]);
 
-        // 地域は最大2つ
-        $areaId1 = $areaIds[rand(0, count($areaIds) - 1)];
-        $areaId2 = $areaIds[rand(0, count($areaIds) - 1)];
-        $job->areas()->syncWithoutDetaching([$areaId1, $areaId2]);
+            // 特徴は最大5つ
+            $featureId1 = $featureIds[rand(0, count($featureIds) - 1)];
+            $featureId2 = $featureIds[rand(0, count($featureIds) - 1)];
+            $featureId3 = $featureIds[rand(0, count($featureIds) - 1)];
+            $featureId4 = $featureIds[rand(0, count($featureIds) - 1)];
+            $featureId5 = $featureIds[rand(0, count($featureIds) - 1)];
+            $job->features()->syncWithoutDetaching([$featureId1, $featureId2, $featureId3, $featureId4, $featureId5]);
 
-        // 職種は最大2つ
-        $engineerId1 = $engineerIds[rand(0, count($engineerIds) - 1)];
-        $engineerId2 = $engineerIds[rand(0, count($engineerIds) - 1)];
-        $job->engineerTypes()->syncWithoutDetaching([$engineerId1, $engineerId2]);
+            // 地域は最大2つ
+            $areaId1 = $areaIds[rand(0, count($areaIds) - 1)];
+            $areaId2 = $areaIds[rand(0, count($areaIds) - 1)];
+            $job->areas()->syncWithoutDetaching([$areaId1, $areaId2]);
 
-        // スキルは最大3つ
-        $skillId1 = $skillIds[rand(0, count($skillIds) - 1)];
-        $skillId2 = $skillIds[rand(0, count($skillIds) - 1)];
-        $skillId3 = $skillIds[rand(0, count($skillIds) - 1)];
-        $job->skills()->syncWithoutDetaching([$skillId1, $skillId2, $skillId3]);
+            // 職種は最大2つ
+            $engineerId1 = $engineerIds[rand(0, count($engineerIds) - 1)];
+            $engineerId2 = $engineerIds[rand(0, count($engineerIds) - 1)];
+            $job->engineerTypes()->syncWithoutDetaching([$engineerId1, $engineerId2]);
 
-        $this->info($title);
+            // スキルは最大3つ
+            $skillId1 = $skillIds[rand(0, count($skillIds) - 1)];
+            $skillId2 = $skillIds[rand(0, count($skillIds) - 1)];
+            $skillId3 = $skillIds[rand(0, count($skillIds) - 1)];
+            $job->skills()->syncWithoutDetaching([$skillId1, $skillId2, $skillId3]);
+        }
+
+        $this->info('Bulk insert completed.');
         return Command::SUCCESS;
     }
 }
