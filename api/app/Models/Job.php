@@ -9,6 +9,8 @@ class Job extends Model
 {
     use HasFactory;
 
+    protected $fillable = ["title", "cost", "description", "required_skills", "message"];
+
     public function languages()
     {
         return $this->belongsToMany(Language::class)->withTimestamps();
