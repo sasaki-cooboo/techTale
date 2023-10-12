@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Area;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -14,7 +15,7 @@ class AreaSeeder extends Seeder
      */
     public function run()
     {
-        $regionsInJapan = [
+        $areas = [
             "東京都",
             "渋谷",
             "原宿",
@@ -22,7 +23,6 @@ class AreaSeeder extends Seeder
             "港区",
             "品川",
             "浜松町",
-            "港南",
             "銀座",
             "秋葉原",
             "千代田区",
@@ -31,9 +31,7 @@ class AreaSeeder extends Seeder
             "中野",
             "世田谷",
             "横浜",
-            "横浜市",
             "川崎",
-            "川崎市",
             "横須賀",
             "神奈川県",
             "札幌",
@@ -41,7 +39,7 @@ class AreaSeeder extends Seeder
             "成田",
             "千葉県",
             "沖縄県",
-            "那覇市",
+            "那覇",
             "大宮",
             "埼玉県",
             "心斎橋",
@@ -52,5 +50,11 @@ class AreaSeeder extends Seeder
             "京都府",
             "福岡県",
         ];
+
+        foreach ($areas as $area) {
+            Area::create([
+                "name" => $area
+            ]);
+        }
     }
 }
