@@ -19,7 +19,7 @@ class JobFactory extends Factory
     {
         $now = Carbon::now();
         $required_skills = [
-            "スキル1", "スキル2", "スキル3",
+            "Webアプリケーションサービス開発経験（2年以上）", "Gitでのチーム開発経験", "テックリード経験",
         ];
         $randomNumber = $this->faker->numberBetween(100000, 1000000);
         $cost = floor($randomNumber / 100000) * 100000;
