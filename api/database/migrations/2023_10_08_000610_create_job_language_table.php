@@ -16,7 +16,13 @@ return new class extends Migration
         Schema::create('job_language', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('job_id')->comment('案件ID');
+            $table->foreign('job_id')
+                ->references('id')
+                ->on('jobs');
             $table->unsignedBigInteger('language_id')->comment('言語ID');
+            $table->foreign('language_id')
+                ->references('id')
+                ->on('languages');
             $table->timestamps();
         });
     }

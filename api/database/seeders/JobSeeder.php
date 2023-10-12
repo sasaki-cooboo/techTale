@@ -26,7 +26,7 @@ class JobSeeder extends Seeder
         $engineerIds = EngineerType::all()->pluck("id")->toArray();
         $skillIds = Skill::all()->pluck("id")->toArray();
 
-        Job::factory(1000)->create()->each(function (Job $job) use ($languageIds, $featureIds, $areaIds, $engineerIds, $skillIds) {
+        Job::factory(10)->create()->each(function (Job $job) use ($languageIds, $featureIds, $areaIds, $engineerIds, $skillIds) {
             // 言語は最大2つ
             $languageId1 = $languageIds[rand(0, count($languageIds) - 1)];
             $languageId2 = $languageIds[rand(0, count($languageIds) - 1)];
