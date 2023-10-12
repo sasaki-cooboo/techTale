@@ -16,7 +16,7 @@ const theme = createTheme({
       main: blue[800],
     },
     secondary: {
-      main: blue[200],
+      main: "#f4f6fc",
     },
     error: {
       main: red.A400,
