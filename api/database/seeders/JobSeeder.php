@@ -34,10 +34,10 @@ class JobSeeder extends Seeder
 
             // 特徴は最大5つ
             $featureId1 = $featureIds[rand(0, count($featureIds) - 1)];
-            $featureId2 = $languageIds[rand(0, count($languageIds) - 1)];
-            $featureId3 = $languageIds[rand(0, count($languageIds) - 1)];
-            $featureId4 = $languageIds[rand(0, count($languageIds) - 1)];
-            $featureId5 = $languageIds[rand(0, count($languageIds) - 1)];
+            $featureId2 = $featureIds[rand(0, count($featureIds) - 1)];
+            $featureId3 = $featureIds[rand(0, count($featureIds) - 1)];
+            $featureId4 = $featureIds[rand(0, count($featureIds) - 1)];
+            $featureId5 = $featureIds[rand(0, count($featureIds) - 1)];
             $job->features()->syncWithoutDetaching([$featureId1, $featureId2, $featureId3, $featureId4, $featureId5]);
 
             // 地域は最大2つ
