@@ -1,8 +1,7 @@
 import Head from "next/head";
 import { Noto_Sans_JP } from "next/font/google";
 import Layout from "@/components/Layout";
-import JobList from "@/features/jobs/JobList";
-import { Typography } from "@mui/material";
+import SearchContents from "@/features/jobs/SearchContents";
 
 const notojp = Noto_Sans_JP({ subsets: ["latin"], display: "swap" });
 
@@ -17,10 +16,7 @@ export default function Search() {
       </Head>
       <div className={notojp.className}>
         <Layout>
-          <Typography fontSize={24} mb={2} fontWeight={500} variant="h2">
-            求人・開発案件一覧
-          </Typography>
-          <JobList />
+          <SearchContents />
         </Layout>
       </div>
     </>

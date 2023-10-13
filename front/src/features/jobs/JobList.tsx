@@ -8,9 +8,16 @@ const JobList = () => {
       {jobs.map((job, i) => (
         <JobCard
           key={i}
-          title={"タイトル"}
-          description={"説明文"}
+          title={
+            "【PHP/AWS/長期/高単価】エンタメ業界向けアプリケーション開発の求人・案件"
+          }
+          cost={700000}
           applyLink={""}
+          tags={[
+            { name: "高単価", link: "" },
+            { name: "長期プロジェクト", link: "" },
+            { name: "参画実績あり", link: "" },
+          ]}
         />
       ))}
     </Stack>
