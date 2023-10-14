@@ -12,7 +12,7 @@ const JobList = () => {
             "【PHP/AWS/長期/高単価】エンタメ業界向けアプリケーション開発の求人・案件"
           }
           cost={700000}
-          applyLink={""}
+          applyLink={"/job/detail/1"}
           area="東京"
           tags={[
             { name: "高単価", link: "" },

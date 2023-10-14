@@ -11,6 +11,7 @@ import {
   useTheme,
   Stack,
   Chip,
+  Link,
 } from "@mui/material";
 import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
 import RoomIcon from "@mui/icons-material/Room";
@@ -60,9 +61,16 @@ const JobCard = ({ title, area, cost, applyLink, tags }: Props) => {
   return (
     <Card sx={{ p: 1 }}>
       <CardContent>
-        <Typography variant="h3" style={titleStyle}>
+        <Link
+          variant="h3"
+          style={titleStyle}
+          href={applyLink}
+          underline="hover"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           {title}
-        </Typography>
+        </Link>
         <Stack direction={"row"} alignItems={"center"}>
           <Typography variant="body2" style={descriptionStyle}>
             <CurrencyYenIcon

@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { Noto_Sans_JP } from "next/font/google";
 import Layout from "@/features/jobs/Layout";
-import SearchContents from "@/features/jobs/SearchContents";
+import DetailContents from "@/features/jobs/detail/DetailContents";
 
 const notojp = Noto_Sans_JP({ subsets: ["latin"], display: "swap" });
 
@@ -16,7 +16,7 @@ export default function Detail() {
       </Head>
       <div className={notojp.className}>
         <Layout>
-          <SearchContents />
+          <DetailContents />
         </Layout>
       </div>
     </>
