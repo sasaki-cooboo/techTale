@@ -13,15 +13,17 @@ import {
   Chip,
 } from "@mui/material";
 import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
+import RoomIcon from "@mui/icons-material/Room";
 
 type Props = {
   title: string;
+  area: string;
   cost: number;
   applyLink: string;
   tags: { name: string; link: string }[];
 };
 
-const JobCard = ({ title, cost, applyLink, tags }: Props) => {
+const JobCard = ({ title, area, cost, applyLink, tags }: Props) => {
   const { palette } = useTheme();
   const titleStyle = {
     fontSize: 18,
@@ -61,21 +63,31 @@ const JobCard = ({ title, cost, applyLink, tags }: Props) => {
         <Typography variant="h3" style={titleStyle}>
           {title}
         </Typography>
-        <Typography variant="body2" style={descriptionStyle}>
-          <CurrencyYenIcon sx={{ color: palette.warning.main, fontSize: 16 }} />
-          <span
-            style={{
-              color: palette.warning.main,
-              fontSize: 24,
-              paddingLeft: 4,
-              paddingRight: 8,
-              fontWeight: 500,
-            }}
-          >
-            ~{cost}
-          </span>
-          円 / 月
-        </Typography>
+        <Stack direction={"row"} alignItems={"center"}>
+          <Typography variant="body2" style={descriptionStyle}>
+            <CurrencyYenIcon
+              sx={{ color: palette.warning.main, fontSize: 16 }}
+            />
+            <span
+              style={{
+                color: palette.warning.main,
+                fontSize: 24,
+                paddingLeft: 4,
+                paddingRight: 8,
+                fontWeight: 500,
+              }}
+            >
+              ~{cost}
+            </span>
+            円 / 月
+          </Typography>
+          <Stack ml={4} mt={2} direction={"row"} alignItems={"center"}>
+            <RoomIcon color="info" />
+            <Typography fontSize={14} ml={1}>
+              {area}
+            </Typography>
+          </Stack>
+        </Stack>
         <Stack my={2} direction={"row"} gap={1}>
           {tags.map((tag, i) => (
             <Button variant="text" key={i} sx={tagStyle}>

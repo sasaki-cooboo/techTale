@@ -7,8 +7,11 @@ import {
   Grid,
   Box,
   useTheme,
+  Breadcrumbs,
+  Link,
 } from "@mui/material";
 import { SideNav } from "./SideNav";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 type Props = {
   children: ReactNode;
@@ -16,6 +19,20 @@ type Props = {
 
 const Layout = ({ children }: Props) => {
   const { palette } = useTheme();
+  const breadcrumbs = [
+    <Link
+      sx={{ fontSize: 14 }}
+      underline="hover"
+      key="1"
+      color="inherit"
+      href="/"
+    >
+      HOME
+    </Link>,
+    <Typography sx={{ fontSize: 14 }} key="2" color="text.primary">
+      案件一覧
+    </Typography>,
+  ];
   return (
     <div>
       <AppBar
@@ -33,7 +50,14 @@ const Layout = ({ children }: Props) => {
         </Container>
       </AppBar>
       <Box mt={0} py={1}>
-        <Container>ここにぱんくず</Container>
+        <Container>
+          <Breadcrumbs
+            separator={<NavigateNextIcon fontSize="small" />}
+            aria-label="breadcrumb"
+          >
+            {breadcrumbs}
+          </Breadcrumbs>
+        </Container>
       </Box>
       <Box mt={4} bgcolor={palette.secondary.main}>
         <Container>
@@ -44,7 +68,6 @@ const Layout = ({ children }: Props) => {
               </Box>
             </Grid>
             <Grid item xs={12} sm={9}>
-              {/* 右側のメインエリアに案件一覧を表示するコンポーネントをここに配置 */}
               {children}
             </Grid>
           </Grid>

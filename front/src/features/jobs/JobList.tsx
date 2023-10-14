@@ -13,6 +13,7 @@ const JobList = () => {
           }
           cost={700000}
           applyLink={""}
+          area="東京"
           tags={[
             { name: "高単価", link: "" },
             { name: "長期プロジェクト", link: "" },
