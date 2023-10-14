@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { Container, Box, useTheme } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import Header from "@/features/jobs/Header";
 
 type Props = {
@@ -13,9 +13,7 @@ const Layout = ({ children }: Props) => {
     <div>
       <Header isDetail />
       <Box py={6} bgcolor={palette.secondary.main}>
-        <Container sx={{ py: 4, mt: -4, bgcolor: "white" }}>
-          {children}
-        </Container>
+        {children}
       </Box>
     </div>
   );

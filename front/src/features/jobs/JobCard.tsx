@@ -110,7 +110,14 @@ const JobCard = ({ title, area, cost, applyLink, tags }: Props) => {
             </TableRow>
             <TableRow>
               <TableCell style={tableHeaderStyle}>職種</TableCell>
-              <TableCell>{"バックエンドエンジニア"}</TableCell>
+              <TableCell>
+                <Chip
+                  label={"バックエンドエンジニア"}
+                  sx={{ fontSize: 14 }}
+                  variant="outlined"
+                  onClick={() => console.log("clicked")}
+                />
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell style={tableHeaderStyle}>必要なスキル</TableCell>
