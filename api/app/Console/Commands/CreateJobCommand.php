@@ -60,7 +60,7 @@ class CreateJobCommand extends Command
         "要件定義 / 基本設計 / 詳細設計経験（3年以上）"
     ];
 
-    private const TIMES = 100;
+    private const TIMES = 1;
 
     /**
      * Execute the console command.
@@ -71,7 +71,6 @@ class CreateJobCommand extends Command
     {
         $faker = Faker::create();
 
-        $ramdomRequiredSkills = shuffle($this->required_skills);
 
         for ($i = 0; $i < self::TIMES; $i++) {
 
@@ -85,12 +84,13 @@ class CreateJobCommand extends Command
 
             $randomNumber = $faker->numberBetween(100000, 1000000);
             $cost = floor($randomNumber / 100000) * 100000;
+            shuffle($this->required_skills);
             $job = Job::create([
                 'title' => $title,
                 'cost' => $cost,
                 'description' => $this->descriptions[rand(0, count($this->descriptions) - 1)],
                 // 必要なスキルはランダムに3つ抽出する
-                'required_skills' => json_encode([$ramdomRequiredSkills[0], $ramdomRequiredSkills[1], $ramdomRequiredSkills[2]]),
+                'required_skills' => json_encode([$this->required_skills[0], $this->required_skills[1], $this->required_skills[2]]),
                 'message' => $this->messages[rand(0, count($this->messages) - 1)],
                 'created_at' => $now,
                 'updated_at' => $now,
