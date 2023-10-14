@@ -12,7 +12,7 @@ const Layout = ({ children }: Props) => {
 
   return (
     <div>
-      <Header />
+      <Header isDetail={false} />
       <Box mt={4} bgcolor={palette.secondary.main}>
         <Container>
           <Grid container spacing={4}>

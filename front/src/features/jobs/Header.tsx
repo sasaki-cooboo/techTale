@@ -10,8 +10,13 @@ import {
 } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
-const Header = () => {
+type Props = {
+  isDetail: boolean;
+};
+
+const Header = ({ isDetail }: Props) => {
   const { palette } = useTheme();
+
   const breadcrumbs = [
     <Link
       sx={{ fontSize: 14 }}
@@ -22,9 +27,26 @@ const Header = () => {
     >
       HOME
     </Link>,
-    <Typography sx={{ fontSize: 14 }} key="2" color="text.primary">
-      案件一覧
-    </Typography>,
+    isDetail ? (
+      <Link
+        sx={{ fontSize: 14 }}
+        underline="hover"
+        key="1"
+        color="inherit"
+        href="/job/search"
+      >
+        案件一覧
+      </Link>
+    ) : (
+      <Typography sx={{ fontSize: 14 }} key="2" color="text.primary">
+        案件一覧
+      </Typography>
+    ),
+    isDetail ? (
+      <Typography sx={{ fontSize: 14 }} key="3" color="text.primary">
+        案件名が入ります
+      </Typography>
+    ) : null,
   ];
   return (
     <>

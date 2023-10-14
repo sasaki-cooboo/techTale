@@ -1,7 +1,6 @@
 import React, { ReactNode } from "react";
-import { Container, Grid, Box, useTheme } from "@mui/material";
+import { Container, Box, useTheme } from "@mui/material";
 import Header from "@/features/jobs/Header";
-import { SideNav } from "@/components/SideNav";
 
 type Props = {
   children: ReactNode;
@@ -12,20 +11,9 @@ const Layout = ({ children }: Props) => {
 
   return (
     <div>
-      <Header />
+      <Header isDetail />
       <Box mt={4} bgcolor={palette.secondary.main}>
-        <Container>
-          <Grid container spacing={4}>
-            <Grid item xs={12} sm={3}>
-              <Box>
-                <SideNav />
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={9}>
-              {children}
-            </Grid>
-          </Grid>
-        </Container>
+        <Container sx={{ py: 4, mt: -4 }}>{children}</Container>
       </Box>
     </div>
   );
