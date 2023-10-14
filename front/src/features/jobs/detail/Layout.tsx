@@ -12,8 +12,10 @@ const Layout = ({ children }: Props) => {
   return (
     <div>
       <Header isDetail />
-      <Box mt={4} bgcolor={palette.secondary.main}>
-        <Container sx={{ py: 4, mt: -4 }}>{children}</Container>
+      <Box py={6} bgcolor={palette.secondary.main}>
+        <Container sx={{ py: 4, mt: -4, bgcolor: "white" }}>
+          {children}
+        </Container>
       </Box>
     </div>
   );

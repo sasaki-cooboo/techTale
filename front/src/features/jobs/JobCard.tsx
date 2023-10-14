@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
 import RoomIcon from "@mui/icons-material/Room";
+import { useTableStyle } from "./useTableStyle";
 
 type Props = {
   title: string;
@@ -26,6 +27,8 @@ type Props = {
 
 const JobCard = ({ title, area, cost, applyLink, tags }: Props) => {
   const { palette } = useTheme();
+  const { tableHeaderStyle, tagStyle } = useTableStyle();
+
   const titleStyle = {
     fontSize: 18,
     color: palette.primary.main,
@@ -40,22 +43,6 @@ const JobCard = ({ title, area, cost, applyLink, tags }: Props) => {
   const buttonStyle = {
     marginTop: "16px",
     width: 200,
-  };
-
-  const tableHeaderStyle = {
-    background: palette.secondary.main, // 青色の背景色
-    width: 200,
-  };
-
-  const tagStyle = {
-    background: palette.secondary.main, // 青色の背景色
-    padding: "4px 8px",
-    borderRadius: "4px",
-    fontSize: "12px",
-    color: "rgba(0, 0, 0, 0.87)",
-    "&:hover": {
-      opacity: 0.7,
-    },
   };
 
   return (
@@ -85,7 +72,7 @@ const JobCard = ({ title, area, cost, applyLink, tags }: Props) => {
                 fontWeight: 500,
               }}
             >
-              ~{cost}
+              ~{cost.toLocaleString("ja-JP")}
             </span>
             円 / 月
           </Typography>
