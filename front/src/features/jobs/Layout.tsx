@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import { Container, Grid, Box, useTheme } from "@mui/material";
-import { SideNav } from "./SideNav";
-import Header from "./Header";
+import { SideNav } from "../../components/SideNav";
+import Header from "../../components/Header";
 
 type Props = {
   children: ReactNode;

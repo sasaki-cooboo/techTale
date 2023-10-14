@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { Noto_Sans_JP } from "next/font/google";
-import Layout from "@/components/Layout";
+import Layout from "@/features/jobs/Layout";
 import SearchContents from "@/features/jobs/SearchContents";
 
 const notojp = Noto_Sans_JP({ subsets: ["latin"], display: "swap" });
