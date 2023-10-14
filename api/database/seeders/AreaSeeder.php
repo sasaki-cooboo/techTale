@@ -16,11 +16,11 @@ class AreaSeeder extends Seeder
     public function run()
     {
         $areas = [
-            "東京都",
+            "横浜",
             "渋谷",
             "原宿",
             "新宿",
-            "港区",
+            "さいたま",
             "品川",
             "浜松町",
             "銀座",

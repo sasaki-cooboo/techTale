@@ -11,6 +11,6 @@ class Area extends Model
 
     public function jobs()
     {
-        return $this->belongsToMany(Job::class, "job_area")->withTimestamps();
+        return $this->hasMany(Job::class);
     }
 }

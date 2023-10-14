@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Area;
 use App\Models\Job;
 use Illuminate\Console\Command;
 
@@ -56,11 +57,13 @@ class UpdateJobCommand extends Command
     public function handle()
     {
         $jobCount = Job::count();
+        $areaCount = Area::count();
         // 10個ほど多めに実行しておく
         for ($i = 1; $i < $jobCount + 10; $i++) {
             shuffle($this->required_skills);
             Job::query()->where("id", $i)->update([
                 'required_skills' => json_encode([$this->required_skills[0], $this->required_skills[1], $this->required_skills[2]]),
+                'area_id' => rand(1, $areaCount)
             ]);
         }
         $this->info('Bulk update completed.');

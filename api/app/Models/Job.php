@@ -23,7 +23,7 @@ class Job extends Model
 
     public function areas()
     {
-        return $this->belongsToMany(Area::class, "job_area")->withTimestamps();
+        return $this->belongsTo(Area::class);
     }
 
     public function engineerTypes()
