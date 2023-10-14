@@ -1,6 +1,7 @@
-import { Stack, Typography, useTheme } from "@mui/material";
+import { Box, Stack, Typography, useTheme } from "@mui/material";
 import SortMenu from "./SortMenu";
 import JobList from "./JobList";
+import BasicPagination from "@/components/BasicPagination";
 
 const SearchContents = () => {
   const { palette } = useTheme();
@@ -28,6 +29,9 @@ const SearchContents = () => {
         <SortMenu />
       </Stack>
       <JobList />
+      <Box pt={2} pb={8}>
+        <BasicPagination />
+      </Box>
     </>
   );
 };
