@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Area;
+use App\Models\Feature;
 use App\Models\Job;
 use Illuminate\Console\Command;
 
@@ -57,14 +57,16 @@ class UpdateJobCommand extends Command
     public function handle()
     {
         $jobCount = Job::count();
-        $areaCount = Area::count();
+        $featureIds = Feature::all()->pluck("id")->toArray();
         // 10個ほど多めに実行しておく
-        for ($i = 1; $i < $jobCount + 10; $i++) {
-            shuffle($this->required_skills);
-            Job::query()->where("id", $i)->update([
-                'required_skills' => json_encode([$this->required_skills[0], $this->required_skills[1], $this->required_skills[2]]),
-                'area_id' => rand(1, $areaCount)
-            ]);
+        for ($i = 2; $i < $jobCount + 10; $i++) {
+            $featureId1 = $featureIds[rand(0, count($featureIds) - 1)];
+            $featureId2 = $featureIds[rand(0, count($featureIds) - 1)];
+            $featureId3 = $featureIds[rand(0, count($featureIds) - 1)];
+            $featureId4 = $featureIds[rand(0, count($featureIds) - 1)];
+            $featureId5 = $featureIds[rand(0, count($featureIds) - 1)];
+            // 特徴は最大5つ
+            Job::query()->find($i)->features()->sync([$featureId1, $featureId2, $featureId3, $featureId4, $featureId5]);
         }
         $this->info('Bulk update completed.');
         return Command::SUCCESS;
