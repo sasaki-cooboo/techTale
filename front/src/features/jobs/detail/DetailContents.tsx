@@ -16,16 +16,27 @@ import {
 import { useTableStyle } from "../useTableStyle";
 import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
 import RelatedCard from "./RelatedCard";
+import Loading from "@/components/Loading";
+import { useGetJobDetailQuery } from "@/store/job";
+import { useRouter } from "next/router";
 
 const DetailContents = () => {
-  const { tableHeaderStyle, tagStyle } = useTableStyle();
+  const { tableHeaderStyle } = useTableStyle();
   const { palette } = useTheme();
+  const router = useRouter();
+  const { id } = router.query;
+  const { data, isLoading } = useGetJobDetailQuery(Number(id), {
+    skip: !id, // idがない時に取得するのを防ぐ
+  });
 
-  const cost = 1000000;
+  if (!data || isLoading) {
+    return <Loading open />;
+  }
 
   const headingStyle = {
     position: "relative",
     pl: 2,
+    flexShrink: 0,
     "&:before": {
       content: '""',
       width: 4,
@@ -40,9 +51,7 @@ const DetailContents = () => {
   return (
     <>
       <Container sx={{ py: 4, mt: -4, bgcolor: "white" }}>
-        <Typography variant="h5">
-          【PHP/AWS/長期/高単価】エンタメ業界向けアプリケーション開発の求人・案件
-        </Typography>
+        <Typography variant="h5">{data.title}</Typography>
         <Box mt={4}>
           <Table>
             <TableBody>
@@ -62,7 +71,7 @@ const DetailContents = () => {
                         fontWeight: 500,
                       }}
                     >
-                      ~{cost.toLocaleString("ja-JP")}
+                      ~{data.cost.toLocaleString("ja-JP")}
                     </span>
                     円 / 月
                   </Typography>
@@ -72,7 +81,7 @@ const DetailContents = () => {
                 <TableCell style={tableHeaderStyle}>地域</TableCell>
                 <TableCell>
                   <Chip
-                    label={"渋谷"}
+                    label={data.area.name}
                     sx={{ fontSize: 14 }}
                     variant="outlined"
                     onClick={() => console.log("clicked")}
@@ -83,10 +92,10 @@ const DetailContents = () => {
                 <TableCell style={tableHeaderStyle}>言語</TableCell>
                 <TableCell>
                   <Stack gap={1} direction={"row"}>
-                    {["React", "Python", "TypeScript"].map((item) => (
+                    {data.languages.map((language) => (
                       <Chip
-                        key={item}
-                        label={item}
+                        key={language.id}
+                        label={language.name}
                         sx={{ fontSize: 14 }}
                         variant="outlined"
                         onClick={() => console.log("clicked")}
@@ -99,10 +108,10 @@ const DetailContents = () => {
                 <TableCell style={tableHeaderStyle}>スキル</TableCell>
                 <TableCell>
                   <Stack gap={1} direction={"row"}>
-                    {["Docker", "Laravel", "MySQL"].map((item) => (
+                    {data.skills.map((skill) => (
                       <Chip
-                        key={item}
-                        label={item}
+                        key={skill.id}
+                        label={skill.name}
                         sx={{ fontSize: 14 }}
                         variant="outlined"
                         onClick={() => console.log("clicked")}
@@ -115,18 +124,15 @@ const DetailContents = () => {
                 <TableCell style={tableHeaderStyle}>職種</TableCell>
                 <TableCell>
                   <Stack gap={1} direction={"row"}>
-                    <Chip
-                      label={"フロントエンドエンジニア"}
-                      sx={{ fontSize: 14 }}
-                      variant="outlined"
-                      onClick={() => console.log("clicked")}
-                    />
-                    <Chip
-                      label={"バックエンドエンジニア"}
-                      sx={{ fontSize: 14 }}
-                      variant="outlined"
-                      onClick={() => console.log("clicked")}
-                    />
+                    {data.engineerTypes.map((engineerType) => (
+                      <Chip
+                        key={engineerType.id}
+                        label={engineerType.name}
+                        sx={{ fontSize: 14 }}
+                        variant="outlined"
+                        onClick={() => console.log("clicked")}
+                      />
+                    ))}
                   </Stack>
                 </TableCell>
               </TableRow>
@@ -134,9 +140,9 @@ const DetailContents = () => {
                 <TableCell style={tableHeaderStyle}>必要なスキル</TableCell>
                 <TableCell>
                   <ul style={{ margin: 0, paddingLeft: "16px" }}>
-                    <li>PHPでの開発経験（4年以上）</li>
-                    <li>Dockerの経験</li>
-                    <li>GitHubの経験</li>
+                    {data.requiredSkills.map((requiredSkill, i) => (
+                      <li key={i}>{requiredSkill}</li>
+                    ))}
                   </ul>
                 </TableCell>
               </TableRow>
@@ -159,11 +165,8 @@ const DetailContents = () => {
           <Typography width={300} fontSize={18} variant="h6" sx={headingStyle}>
             業務内容
           </Typography>
-          <Typography mt={1} ml={4} variant="body2">
-            エンタメ業界向けのサービス開発をご担当いただきます。
-            エンタメ業界向けのサービス開発をご担当いただきます。
-            エンタメ業界向けのサービス開発をご担当いただきます。
-            エンタメ業界向けのサービス開発をご担当いただきます。
+          <Typography mt={1} variant="body2">
+            {data.description}
           </Typography>
         </Stack>
         <Divider sx={{ my: 4 }} />
@@ -171,24 +174,27 @@ const DetailContents = () => {
           <Typography width={300} fontSize={18} variant="h6" sx={headingStyle}>
             こだわりポイント
           </Typography>
-          {/* TODO こだわりポイントにリンク設置*/}
-          <Typography mt={1} ml={4} variant="body2">
-            エンタメ業界向けのサービス開発をご担当いただきます。
-            エンタメ業界向けのサービス開発をご担当いただきます。
-            エンタメ業界向けのサービス開発をご担当いただきます。
-            エンタメ業界向けのサービス開発をご担当いただきます。
-          </Typography>
+          <Box mt={1}>
+            <Stack gap={1} direction={"row"}>
+              {data.features.map((feature) => (
+                <Chip
+                  key={feature.id}
+                  label={feature.name}
+                  sx={{ fontSize: 14 }}
+                  variant="outlined"
+                  onClick={() => console.log("clicked")}
+                />
+              ))}
+            </Stack>
+          </Box>
         </Stack>
         <Divider sx={{ my: 4 }} />
         <Stack direction={"row"}>
           <Typography width={300} fontSize={18} variant="h6" sx={headingStyle}>
             担当者から一言
           </Typography>
-          <Typography mt={1} ml={4} variant="body2">
-            エンタメ業界向けのサービス開発をご担当いただきます。
-            エンタメ業界向けのサービス開発をご担当いただきます。
-            エンタメ業界向けのサービス開発をご担当いただきます。
-            エンタメ業界向けのサービス開発をご担当いただきます。
+          <Typography mt={1} variant="body2">
+            {data.message}
           </Typography>
         </Stack>
       </Container>
