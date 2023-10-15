@@ -22,10 +22,20 @@ type Props = {
   area: string;
   cost: number;
   applyLink: string;
-  tags: { name: string; link: string }[];
+  tags: { name: string; id: number }[];
+  languages: { name: string; id: number }[];
+  engineerTypes: { name: string; id: number }[];
 };
 
-const JobCard = ({ title, area, cost, applyLink, tags }: Props) => {
+const JobCard = ({
+  title,
+  area,
+  cost,
+  applyLink,
+  tags,
+  languages,
+  engineerTypes,
+}: Props) => {
   const { palette } = useTheme();
   const { tableHeaderStyle, tagStyle } = useTableStyle();
 
@@ -96,10 +106,10 @@ const JobCard = ({ title, area, cost, applyLink, tags }: Props) => {
               <TableCell style={tableHeaderStyle}>言語・スキル</TableCell>
               <TableCell>
                 <Stack gap={1} direction={"row"}>
-                  {["React", "Python", "TypeScript"].map((item) => (
+                  {languages.map((language) => (
                     <Chip
-                      key={item}
-                      label={item}
+                      key={language.id}
+                      label={language.name}
                       sx={{ fontSize: 14 }}
                       variant="outlined"
                       onClick={() => console.log("clicked")}
@@ -111,12 +121,17 @@ const JobCard = ({ title, area, cost, applyLink, tags }: Props) => {
             <TableRow>
               <TableCell style={tableHeaderStyle}>職種</TableCell>
               <TableCell>
-                <Chip
-                  label={"バックエンドエンジニア"}
-                  sx={{ fontSize: 14 }}
-                  variant="outlined"
-                  onClick={() => console.log("clicked")}
-                />
+                <Stack gap={1} direction={"row"}>
+                  {engineerTypes.map((engineerType) => (
+                    <Chip
+                      key={engineerType.id}
+                      label={engineerType.name}
+                      sx={{ fontSize: 14 }}
+                      variant="outlined"
+                      onClick={() => console.log("clicked")}
+                    />
+                  ))}
+                </Stack>
               </TableCell>
             </TableRow>
             <TableRow>

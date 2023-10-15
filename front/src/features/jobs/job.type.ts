@@ -27,7 +27,9 @@ export type JobType = {
   }[];
 };
 
-export type JobListState = {
+export type JobListResponse = {
   jobList: JobType[];
-  totalCount: number;
+  meta: {
+    count: number;
+  };
 };

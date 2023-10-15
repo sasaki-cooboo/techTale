@@ -2,29 +2,10 @@ import Head from "next/head";
 import { Noto_Sans_JP } from "next/font/google";
 import Layout from "@/features/jobs/Layout";
 import SearchContents from "@/features/jobs/SearchContents";
-import { GetServerSideProps } from "next";
-import fetch from "@/libs/fetch";
-import { JobType } from "@/features/jobs/job.type";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { setJobList } from "@/features/jobs/JobSlice";
 
 const notojp = Noto_Sans_JP({ subsets: ["latin"], display: "swap" });
 
-type Props = {
-  jobList: JobType[];
-  meta: {
-    count: number;
-  };
-};
-
-export default function Search({ jobList }: Props) {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(setJobList(jobList));
-  }, [dispatch, jobList]);
-
+export default function Search() {
   return (
     <>
       <Head>
@@ -41,13 +22,3 @@ export default function Search({ jobList }: Props) {
     </>
   );
 }
-
-/**
- * getServerSideProps
- */
-export const getServerSideProps: GetServerSideProps = async () => {
-  const result = await fetch.get("/api/v1/jobs");
-  return {
-    props: result.data,
-  };
-};
