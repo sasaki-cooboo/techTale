@@ -6,6 +6,7 @@ use App\Services\AIChatService;
 use App\Services\AIChatServiceInterface;
 use App\Services\BatchProcessingService;
 use App\Services\BatchProcessingServiceInterface;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -28,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // 最も外側のリソースのラッピング（dataでラップされる）を無効にする
+        JsonResource::withoutWrapping();
     }
 }

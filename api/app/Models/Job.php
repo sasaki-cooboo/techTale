@@ -21,7 +21,7 @@ class Job extends Model
         return $this->belongsToMany(Feature::class, "job_feature")->withTimestamps();
     }
 
-    public function areas()
+    public function area()
     {
         return $this->belongsTo(Area::class);
     }
