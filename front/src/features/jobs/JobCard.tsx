@@ -25,6 +25,7 @@ type Props = {
   tags: { name: string; id: number }[];
   languages: { name: string; id: number }[];
   engineerTypes: { name: string; id: number }[];
+  requiredSkills: string[];
 };
 
 const JobCard = ({
@@ -35,6 +36,7 @@ const JobCard = ({
   tags,
   languages,
   engineerTypes,
+  requiredSkills,
 }: Props) => {
   const { palette } = useTheme();
   const { tableHeaderStyle, tagStyle } = useTableStyle();
@@ -138,9 +140,9 @@ const JobCard = ({
               <TableCell style={tableHeaderStyle}>必要なスキル</TableCell>
               <TableCell>
                 <ul style={{ margin: 0, paddingLeft: "16px" }}>
-                  <li>PHPでの開発経験（4年以上）</li>
-                  <li>Dockerの経験</li>
-                  <li>GitHubの経験</li>
+                  {requiredSkills.map((skill, i) => (
+                    <li key={i}>{skill}</li>
+                  ))}
                 </ul>
               </TableCell>
             </TableRow>

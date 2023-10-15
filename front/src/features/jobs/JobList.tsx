@@ -19,6 +19,7 @@ const JobList = ({ jobList }: Props) => {
           tags={job.features}
           languages={job.languages}
           engineerTypes={job.engineerTypes}
+          requiredSkills={job.requiredSkills}
         />
       ))}
     </Stack>

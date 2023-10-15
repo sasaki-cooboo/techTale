@@ -19,7 +19,7 @@ class JobResource extends JsonResource
             'title' => $this->title,
             'cost' => $this->cost,
             'description' => $this->description,
-            'requiredSkills' => $this->required_skills,
+            'requiredSkills' => json_decode($this->required_skills),
             'message' => $this->message,
             "area" => AreaResource::collection([$this->area])->first(), // areaは1つしかない
             "languages" => LanguageResource::collection($this->languages),
