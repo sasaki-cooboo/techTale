@@ -5,26 +5,11 @@ export type JobType = {
   description: string;
   requiredSkills: string[];
   message: string;
-  area: {
-    id: number;
-    name: string;
-  };
-  languages: {
-    id: number;
-    name: string;
-  }[];
-  features: {
-    id: number;
-    name: string;
-  }[];
-  skills: {
-    id: number;
-    name: string;
-  }[];
-  engineerTypes: {
-    id: number;
-    name: string;
-  }[];
+  area: Area;
+  languages: Language[];
+  features: Feature[];
+  skills: Skill[];
+  engineerTypes: EngineerType[];
 };
 
 export type JobListResponse = {
@@ -32,4 +17,41 @@ export type JobListResponse = {
   meta: {
     count: number;
   };
+};
+
+export type Area = {
+  id: number;
+  name: string;
+};
+
+export type Language = {
+  id: number;
+  name: string;
+};
+
+export type Feature = {
+  id: number;
+  name: string;
+};
+
+export type Skill = {
+  id: number;
+  name: string;
+};
+
+export type EngineerType = {
+  id: number;
+  name: string;
+};
+
+export type JobAttributesType = {
+  areas: Area[];
+  languages: Language[];
+  features: Feature[];
+  skills: {
+    frameworks: Skill[];
+    databases: Skill[];
+    clouds: Skill[];
+  };
+  engineerTypes: EngineerType[];
 };

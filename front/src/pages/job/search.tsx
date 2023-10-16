@@ -2,10 +2,17 @@ import Head from "next/head";
 import { Noto_Sans_JP } from "next/font/google";
 import Layout from "@/features/jobs/Layout";
 import SearchContents from "@/features/jobs/SearchContents";
+import { GetServerSideProps } from "next";
+import fetch from "@/libs/fetch";
+import { JobAttributesType } from "@/features/jobs/job.type";
 
 const notojp = Noto_Sans_JP({ subsets: ["latin"], display: "swap" });
 
-export default function Search() {
+type Props = {
+  jobAttributes: JobAttributesType;
+};
+
+export default function Search({ jobAttributes }: Props) {
   return (
     <>
       <Head>
@@ -15,10 +22,30 @@ export default function Search() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={notojp.className}>
-        <Layout>
+        <Layout jobAttributes={jobAttributes}>
           <SearchContents />
         </Layout>
       </div>
     </>
   );
 }
+
+/**
+ * getServerSideProps
+ */
+export const getServerSideProps: GetServerSideProps = async () => {
+  try {
+    const { data } = await fetch.get<JobAttributesType>(
+      `/api/v1/jobAttributes`
+    );
+    return {
+      props: {
+        jobAttributes: data,
+      },
+    };
+  } catch (error) {
+    return {
+      notFound: true,
+    };
+  }
+};

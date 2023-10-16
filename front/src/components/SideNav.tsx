@@ -10,35 +10,20 @@ import {
   useTheme,
 } from "@mui/material";
 import SideNavItem from "./SideNavItem";
+import { JobAttributesType } from "@/features/jobs/job.type";
 
-export const SideNav = () => {
-  const areas = [{ name: "東京" }, { name: "神奈川" }, { name: "埼玉" }];
-  const languages = [
-    { name: "TypeScript" },
-    { name: "Python" },
-    { name: "Java" },
-  ];
-  const frameWork = [
-    { name: "React" },
-    { name: "Laravel" },
-    { name: "Spring" },
-  ];
-  const databases = [
-    { name: "MySQL" },
-    { name: "PostgreSQL" },
-    { name: "Oracle Database" },
-  ];
-  const cloud = [{ name: "AWS" }, { name: "GCP" }, { name: "Azure" }];
-  const engineerTypes = [
-    { name: "フロントエンジニア" },
-    { name: "バックエンドエンジニア" },
-    { name: "インフラエンジニア" },
-  ];
-  const features = [
-    { name: "高単価" },
-    { name: "リモート可" },
-    { name: "服装カジュアル" },
-  ];
+type Props = {
+  jobAttributes: JobAttributesType;
+};
+
+export const SideNav = ({ jobAttributes }: Props) => {
+  const {
+    areas,
+    languages,
+    engineerTypes,
+    features,
+    skills: { frameworks, databases, clouds },
+  } = jobAttributes;
   const { palette } = useTheme();
 
   return (
@@ -60,11 +45,11 @@ export const SideNav = () => {
         <Divider sx={{ mx: 2 }} />
         <SideNavItem title="言語" details={languages} />
         <Divider sx={{ mx: 2 }} />
-        <SideNavItem title="フレームワーク" details={frameWork} />
+        <SideNavItem title="フレームワーク" details={frameworks} />
         <Divider sx={{ mx: 2 }} />
         <SideNavItem title="データベース" details={databases} />
         <Divider sx={{ mx: 2 }} />
-        <SideNavItem title="クラウド" details={cloud} />
+        <SideNavItem title="クラウド" details={clouds} />
         <Divider sx={{ mx: 2 }} />
         <SideNavItem title="職種" details={engineerTypes} />
         <Divider sx={{ mx: 2 }} />

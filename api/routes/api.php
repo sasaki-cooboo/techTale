@@ -23,5 +23,6 @@ Route::prefix('v1')->group(
     function () {
         Route::get("/jobs", [JobController::class, "index"]);
         Route::get("/job/{id}", [JobController::class, "show"]);
+        Route::get("/jobAttributes", [JobController::class, "getAttributes"]);
     }
 );

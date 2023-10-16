@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class SkillType extends Model
 {
     use HasFactory;
+
+    public function skills()
+    {
+        return $this->hasMany(Skill::class);
+    }
 }
