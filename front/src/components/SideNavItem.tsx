@@ -24,7 +24,7 @@ type Props = {
 const SideNavItem = ({ title, details }: Props) => {
   return (
     <ListItem sx={{ p: 0, border: 0, my: 1 }}>
-      <Accordion defaultExpanded sx={{ boxShadow: "none" }}>
+      <Accordion defaultExpanded={false} sx={{ boxShadow: "none" }}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon color="primary" />}
           aria-controls="panel1a-content"

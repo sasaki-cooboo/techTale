@@ -53,6 +53,9 @@ export const SideNav = ({ jobAttributes }: Props) => {
         <Divider sx={{ mx: 2 }} />
         <SideNavItem title="職種" details={engineerTypes} />
         <Divider sx={{ mx: 2 }} />
+        {/* TODO:単価はラジオボタン */}
+        {/* <SideNavItem title="単価" details={features} />
+        <Divider sx={{ mx: 2 }} /> */}
         <SideNavItem title="特徴" details={features} />
         <Divider sx={{ mx: 2 }} />
       </List>
