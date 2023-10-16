@@ -2,10 +2,13 @@ import Head from "next/head";
 import { Noto_Sans_JP } from "next/font/google";
 import DetailContents from "@/features/jobs/detail/DetailContents";
 import Layout from "@/features/jobs/detail/Layout";
+import { GetServerSideProps } from "next";
+import fetch from "@/libs/fetch";
+import { JobType } from "@/features/jobs/job.type";
 
 const notojp = Noto_Sans_JP({ subsets: ["latin"], display: "swap" });
 
-export default function Detail() {
+export default function Detail(props: JobType) {
   return (
     <>
       <Head>
@@ -16,9 +19,30 @@ export default function Detail() {
       </Head>
       <div className={notojp.className}>
         <Layout>
-          <DetailContents />
+          <DetailContents {...props} />
         </Layout>
       </div>
     </>
   );
 }
+
+/**
+ * getServerSideProps
+ */
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  if (typeof query?.id !== "string" || !query.id) {
+    return {
+      notFound: true,
+    };
+  }
+  try {
+    const { data } = await fetch.get<JobType>(`/api/v1/job/${query.id}`);
+    return {
+      props: data,
+    };
+  } catch (error) {
+    return {
+      notFound: true,
+    };
+  }
+};

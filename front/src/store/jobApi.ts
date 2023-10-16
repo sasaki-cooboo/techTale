@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getApiPath } from "@/libs/fetch";
-import { JobListResponse, JobType } from "@/features/jobs/job.type";
+import { JobListResponse } from "@/features/jobs/job.type";
 
 export const jobApi = createApi({
   reducerPath: "jobApi",
@@ -9,10 +9,7 @@ export const jobApi = createApi({
     getJobList: builder.query<JobListResponse, void>({
       query: () => `jobs`,
     }),
-    getJobDetail: builder.query<JobType, number>({
-      query: (id) => `job/${id}`,
-    }),
   }),
 });
 
-export const { useGetJobListQuery, useGetJobDetailQuery } = jobApi;
+export const { useGetJobListQuery } = jobApi;

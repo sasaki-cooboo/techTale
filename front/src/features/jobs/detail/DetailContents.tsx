@@ -16,22 +16,22 @@ import {
 import { useTableStyle } from "../useTableStyle";
 import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
 import RelatedCard from "./RelatedCard";
-import Loading from "@/components/Loading";
-import { useGetJobDetailQuery } from "@/store/jobApi";
-import { useRouter } from "next/router";
+import { JobType } from "../job.type";
 
-const DetailContents = () => {
+const DetailContents = ({
+  title,
+  cost,
+  description,
+  requiredSkills,
+  message,
+  area,
+  languages,
+  skills,
+  engineerTypes,
+  features,
+}: JobType) => {
   const { tableHeaderStyle } = useTableStyle();
   const { palette } = useTheme();
-  const router = useRouter();
-  const { id } = router.query;
-  const { data, isLoading } = useGetJobDetailQuery(Number(id), {
-    skip: !id, // idがない時に取得するのを防ぐ
-  });
-
-  if (!data || isLoading) {
-    return <Loading open />;
-  }
 
   const headingStyle = {
     position: "relative",
@@ -51,7 +51,7 @@ const DetailContents = () => {
   return (
     <>
       <Container sx={{ py: 4, mt: -4, bgcolor: "white" }}>
-        <Typography variant="h5">{data.title}</Typography>
+        <Typography variant="h5">{title}</Typography>
         <Box mt={4}>
           <Table>
             <TableBody>
@@ -71,7 +71,7 @@ const DetailContents = () => {
                         fontWeight: 500,
                       }}
                     >
-                      ~{data.cost.toLocaleString("ja-JP")}
+                      ~{cost.toLocaleString("ja-JP")}
                     </span>
                     円 / 月
                   </Typography>
@@ -81,7 +81,7 @@ const DetailContents = () => {
                 <TableCell style={tableHeaderStyle}>地域</TableCell>
                 <TableCell>
                   <Chip
-                    label={data.area.name}
+                    label={area.name}
                     sx={{ fontSize: 14 }}
                     variant="outlined"
                     onClick={() => console.log("clicked")}
@@ -92,7 +92,7 @@ const DetailContents = () => {
                 <TableCell style={tableHeaderStyle}>言語</TableCell>
                 <TableCell>
                   <Stack gap={1} direction={"row"}>
-                    {data.languages.map((language) => (
+                    {languages.map((language) => (
                       <Chip
                         key={language.id}
                         label={language.name}
@@ -108,7 +108,7 @@ const DetailContents = () => {
                 <TableCell style={tableHeaderStyle}>スキル</TableCell>
                 <TableCell>
                   <Stack gap={1} direction={"row"}>
-                    {data.skills.map((skill) => (
+                    {skills.map((skill) => (
                       <Chip
                         key={skill.id}
                         label={skill.name}
@@ -124,7 +124,7 @@ const DetailContents = () => {
                 <TableCell style={tableHeaderStyle}>職種</TableCell>
                 <TableCell>
                   <Stack gap={1} direction={"row"}>
-                    {data.engineerTypes.map((engineerType) => (
+                    {engineerTypes.map((engineerType) => (
                       <Chip
                         key={engineerType.id}
                         label={engineerType.name}
@@ -140,7 +140,7 @@ const DetailContents = () => {
                 <TableCell style={tableHeaderStyle}>必要なスキル</TableCell>
                 <TableCell>
                   <ul style={{ margin: 0, paddingLeft: "16px" }}>
-                    {data.requiredSkills.map((requiredSkill, i) => (
+                    {requiredSkills.map((requiredSkill, i) => (
                       <li key={i}>{requiredSkill}</li>
                     ))}
                   </ul>
@@ -166,7 +166,7 @@ const DetailContents = () => {
             業務内容
           </Typography>
           <Typography mt={1} variant="body2">
-            {data.description}
+            {description}
           </Typography>
         </Stack>
         <Divider sx={{ my: 4 }} />
@@ -176,7 +176,7 @@ const DetailContents = () => {
           </Typography>
           <Box mt={1}>
             <Stack gap={1} direction={"row"}>
-              {data.features.map((feature) => (
+              {features.map((feature) => (
                 <Chip
                   key={feature.id}
                   label={feature.name}
@@ -194,7 +194,7 @@ const DetailContents = () => {
             担当者から一言
           </Typography>
           <Typography mt={1} variant="body2">
-            {data.message}
+            {message}
           </Typography>
         </Stack>
       </Container>
