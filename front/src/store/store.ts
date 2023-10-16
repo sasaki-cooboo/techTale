@@ -1,4 +1,4 @@
-import { jobApi } from "@/store/job";
+import { jobApi } from "@/store/jobApi";
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({

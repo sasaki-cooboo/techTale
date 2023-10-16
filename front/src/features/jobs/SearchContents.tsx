@@ -3,7 +3,7 @@ import SortMenu from "./SortMenu";
 import JobList from "./JobList";
 import BasicPagination from "@/components/BasicPagination";
 import Loading from "@/components/Loading";
-import { useGetJobListQuery } from "@/store/job";
+import { useGetJobListQuery } from "@/store/jobApi";
 
 const SearchContents = () => {
   const { palette } = useTheme();

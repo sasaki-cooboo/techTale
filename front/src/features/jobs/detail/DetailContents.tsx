@@ -17,7 +17,7 @@ import { useTableStyle } from "../useTableStyle";
 import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
 import RelatedCard from "./RelatedCard";
 import Loading from "@/components/Loading";
-import { useGetJobDetailQuery } from "@/store/job";
+import { useGetJobDetailQuery } from "@/store/jobApi";
 import { useRouter } from "next/router";
 
 const DetailContents = () => {
