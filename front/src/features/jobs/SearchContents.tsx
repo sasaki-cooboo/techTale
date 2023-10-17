@@ -3,14 +3,24 @@ import SortMenu from "./SortMenu";
 import JobList from "./JobList";
 import BasicPagination from "@/components/BasicPagination";
 import Loading from "@/components/Loading";
-import useSWR from "swr";
-import { fetcher } from "@/libs/fetch";
+import { useEffect, useState } from "react";
+import fetch from "@/libs/fetch";
+import { JobListResponse } from "./job.type";
 
 const SearchContents = () => {
   const { palette } = useTheme();
-  const { data, isLoading } = useSWR("/api/v1/jobs", fetcher);
+  const [data, setData] = useState<JobListResponse | null>(null);
 
-  if (!data || isLoading) {
+  const fetchJobs = async () => {
+    const { data } = await fetch.get<JobListResponse>("/api/v1/jobs");
+    setData(data);
+  };
+
+  useEffect(() => {
+    fetchJobs();
+  }, []);
+
+  if (!data) {
     return <Loading open />;
   }
   return (
