@@ -25,10 +25,27 @@ class JobController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        sleep(1);
-        $jobs = Job::query()->with(["area", "languages", "skills", "engineerTypes"])->latest()->get();
+        $area = $request->area;
+        $language = $request->language;
+        $engineerType = $request->engineerType;
+        $feature = $request->feature;
+        $jobs = Job::query()
+            ->with(["area", "languages", "skills", "engineerTypes"])
+            ->whereHas("area", function ($query) use ($area) {
+                $query->where("name", 'like', '%' . $area . '%');
+            })
+            ->whereHas("languages", function ($query) use ($language) {
+                $query->where("name", 'like', '%' . $language . '%');
+            })
+            ->whereHas("engineerTypes", function ($query) use ($engineerType) {
+                $query->where("name", 'like', '%' . $engineerType . '%');
+            })
+            ->whereHas("features", function ($query) use ($feature) {
+                $query->where("name", 'like', '%' . $feature . '%');
+            })
+            ->latest()->get();
         return new JobCollection($jobs);
     }
 

@@ -3,11 +3,12 @@ import SortMenu from "./SortMenu";
 import JobList from "./JobList";
 import BasicPagination from "@/components/BasicPagination";
 import Loading from "@/components/Loading";
-import { useGetJobListQuery } from "@/store/jobApi";
+import useSWR from "swr";
+import { fetcher } from "@/libs/fetch";
 
 const SearchContents = () => {
   const { palette } = useTheme();
-  const { data, isLoading } = useGetJobListQuery();
+  const { data, isLoading } = useSWR("/api/v1/jobs", fetcher);
 
   if (!data || isLoading) {
     return <Loading open />;

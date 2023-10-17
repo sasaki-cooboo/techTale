@@ -25,6 +25,7 @@ export const SideNav = ({ jobAttributes }: Props) => {
     skills: { frameworks, databases, clouds },
   } = jobAttributes;
   const { palette } = useTheme();
+  const handleClick = () => {};
 
   return (
     <Paper>
@@ -76,7 +77,12 @@ export const SideNav = ({ jobAttributes }: Props) => {
           件
         </Typography>
         <Box pb={2} textAlign={"center"}>
-          <Button size="large" variant="contained" sx={{ width: 200 }}>
+          <Button
+            onClick={handleClick}
+            size="large"
+            variant="contained"
+            sx={{ width: 200 }}
+          >
             検索する
           </Button>
         </Box>

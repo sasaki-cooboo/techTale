@@ -16,3 +16,10 @@ const fetch = Axios.create({
 });
 
 export default fetch;
+
+/**
+ * fetch関数、SWRに使用
+ *
+ * @param url - url
+ */
+export const fetcher = (url: string) => fetch.get(url).then((res) => res.data);

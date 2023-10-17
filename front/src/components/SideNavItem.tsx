@@ -37,8 +37,12 @@ const SideNavItem = ({ title, details }: Props) => {
           {details.map((detail, i) => (
             <FormControlLabel
               key={i}
-              control={<Checkbox />}
-              label={detail.name}
+              control={<Checkbox size="small" />}
+              label={
+                <Typography pt={0.25} fontSize={14}>
+                  {detail.name}
+                </Typography>
+              }
             />
           ))}
         </AccordionDetails>
