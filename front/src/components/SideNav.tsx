@@ -34,7 +34,7 @@ export const SideNav = ({ jobAttributes }: Props) => {
     try {
       setLoading(true);
       const { data } = await fetch.get<JobListResponse>(
-        "/api/v1/jobs?language=java"
+        "/api/v1/jobs?language=2"
       );
       setData(data);
     } catch (error) {

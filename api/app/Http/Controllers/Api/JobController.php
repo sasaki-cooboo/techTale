@@ -28,25 +28,45 @@ class JobController extends Controller
     public function index(Request $request)
     {
         sleep(1);
-        $area = $request->area;
-        $language = $request->language;
-        $engineerType = $request->engineerType;
-        $feature = $request->feature;
-        $jobs = Job::query()
-            ->with(["area", "languages", "skills", "engineerTypes"])
-            ->whereHas("area", function ($query) use ($area) {
-                $query->where("name", 'like', '%' . $area . '%');
-            })
-            ->whereHas("languages", function ($query) use ($language) {
-                $query->where("name", 'like', '%' . $language . '%');
-            })
-            ->whereHas("engineerTypes", function ($query) use ($engineerType) {
-                $query->where("name", 'like', '%' . $engineerType . '%');
-            })
-            ->whereHas("features", function ($query) use ($feature) {
-                $query->where("name", 'like', '%' . $feature . '%');
-            })
-            ->latest()->get();
+        $selectedArea = $request->area;
+        $selectedLanguage = $request->language;
+        $selectedEngineerType = $request->engineerType;
+        $selectedFeature = $request->feature;
+        $query = Job::query()
+            ->with(["area", "languages", "skills", "engineerTypes"]);
+
+        // 地域で検索
+        $query->when($selectedArea, function ($query) use ($selectedArea) {
+            return $query->whereHas("area", fn ($q) => $q->whereIn("areas.id", [$selectedArea]));
+        });
+
+        // 言語で検索
+        $query->when($selectedLanguage, function ($query) use ($selectedLanguage) {
+            return $query->whereHas("languages", fn ($q) => $q->whereIn("languages.id", [$selectedLanguage]));
+        });
+
+        // 職種で検索
+        $query->when($selectedEngineerType, function ($query) use ($selectedEngineerType) {
+            return $query->whereHas("engineerTypes", fn ($q) => $q->whereIn("engineer_types.id", [$selectedEngineerType]));
+        });
+
+        // 職種で検索
+        $query->when($selectedEngineerType, function ($query) use ($selectedEngineerType) {
+            return $query->whereHas("engineerTypes", fn ($q) => $q->whereIn("engineer_types.id", [$selectedEngineerType]));
+        });
+
+
+        // 職種で検索
+        $query->when($selectedFeature, function ($query) use ($selectedFeature) {
+            return $query->whereHas("features", fn ($q) => $q->whereIn("features.id", [$selectedFeature]));
+        });
+
+        // TODO:キーワード検索
+        // ->whereHas("area", function ($query) use ($area) {
+        //     $query->where("name", 'like', '%' . $area . '%');
+        // })
+
+        $jobs = $query->latest()->get();
         return new JobCollection($jobs);
     }
 
