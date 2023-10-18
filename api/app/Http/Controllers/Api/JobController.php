@@ -27,6 +27,7 @@ class JobController extends Controller
      */
     public function index(Request $request)
     {
+        sleep(1);
         $area = $request->area;
         $language = $request->language;
         $engineerType = $request->engineerType;

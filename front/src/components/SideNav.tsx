@@ -10,7 +10,10 @@ import {
   useTheme,
 } from "@mui/material";
 import SideNavItem from "./SideNavItem";
-import { JobAttributesType } from "@/features/jobs/job.type";
+import { JobAttributesType, JobListResponse } from "@/features/jobs/job.type";
+import { useSetAtom } from "jotai";
+import { jobAtom, loadingAtom } from "@/atoms/atoms";
+import fetch from "@/libs/fetch";
 
 type Props = {
   jobAttributes: JobAttributesType;
@@ -25,7 +28,21 @@ export const SideNav = ({ jobAttributes }: Props) => {
     skills: { frameworks, databases, clouds },
   } = jobAttributes;
   const { palette } = useTheme();
-  const handleClick = () => {};
+  const setData = useSetAtom(jobAtom);
+  const setLoading = useSetAtom(loadingAtom);
+  const handleClick = async () => {
+    try {
+      setLoading(true);
+      const { data } = await fetch.get<JobListResponse>(
+        "/api/v1/jobs?language=java"
+      );
+      setData(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Paper>

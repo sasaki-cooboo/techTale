@@ -4,15 +4,23 @@ import Layout from "@/features/jobs/Layout";
 import SearchContents from "@/features/jobs/SearchContents";
 import { GetServerSideProps } from "next";
 import fetch from "@/libs/fetch";
-import { JobAttributesType } from "@/features/jobs/job.type";
+import { JobAttributesType, JobListResponse } from "@/features/jobs/job.type";
+import Loading from "@/components/Loading";
+import { useAtomValue } from "jotai";
+import { jobAtom, loadingAtom } from "@/atoms/atoms";
+import { Typography } from "@mui/material";
+import { useHydrateAtoms } from "jotai/utils";
 
 const notojp = Noto_Sans_JP({ subsets: ["latin"], display: "swap" });
 
 type Props = {
   jobAttributes: JobAttributesType;
+  jobs: JobListResponse;
 };
 
-export default function Search({ jobAttributes }: Props) {
+export default function Search({ jobAttributes, jobs }: Props) {
+  const isLoading = useAtomValue(loadingAtom);
+  useHydrateAtoms([[jobAtom, jobs]]);
   return (
     <>
       <Head>
@@ -23,9 +31,13 @@ export default function Search({ jobAttributes }: Props) {
       </Head>
       <div className={notojp.className}>
         <Layout jobAttributes={jobAttributes}>
+          <Typography fontSize={24} mb={2} fontWeight={500} variant="h2">
+            求人・開発案件一覧
+          </Typography>
           <SearchContents />
         </Layout>
       </div>
+      <Loading open={isLoading} />
     </>
   );
 }
@@ -35,12 +47,14 @@ export default function Search({ jobAttributes }: Props) {
  */
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
-    const { data } = await fetch.get<JobAttributesType>(
+    const { data: jobAttributes } = await fetch.get<JobAttributesType>(
       `/api/v1/jobAttributes`
     );
+    const { data: jobs } = await fetch.get<JobListResponse>(`/api/v1/jobs`);
     return {
       props: {
-        jobAttributes: data,
+        jobAttributes,
+        jobs,
       },
     };
   } catch (error) {
