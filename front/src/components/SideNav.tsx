@@ -38,7 +38,6 @@ export const SideNav = ({ jobAttributes }: Props) => {
   const setData = useSetAtom(jobAtom);
   const setLoading = useSetAtom(loadingAtom);
   const [condition, setCondition] = useAtom(jobConditionAtom);
-  console.log(condition);
 
   const handleClickSearch = async () => {
     try {
