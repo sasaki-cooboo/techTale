@@ -3,21 +3,33 @@ import Layout from "@/features/jobs/Layout";
 import SearchContents from "@/features/jobs/SearchContents";
 import { GetServerSideProps } from "next";
 import fetch from "@/libs/fetch";
-import { JobAttributesType, JobListResponse } from "@/features/jobs/job.type";
+import {
+  JobAttributesType,
+  JobConditionType,
+  JobListResponse,
+} from "@/features/jobs/job.type";
 import Loading from "@/components/Loading";
 import { useAtomValue } from "jotai";
-import { jobAtom, loadingAtom } from "@/atoms/atoms";
+import {
+  initialJobCondition,
+  jobAtom,
+  jobConditionAtom,
+  loadingAtom,
+} from "@/atoms/atoms";
 import { Typography } from "@mui/material";
 import { useHydrateAtoms } from "jotai/utils";
+import { convertQueryStringToObject } from "@/libs/convertQuery";
 
 type Props = {
   jobAttributes: JobAttributesType;
   jobs: JobListResponse;
+  condition: JobConditionType;
 };
 
-export default function Search({ jobAttributes, jobs }: Props) {
+export default function Search({ jobAttributes, jobs, condition }: Props) {
   const isLoading = useAtomValue(loadingAtom);
   useHydrateAtoms([[jobAtom, jobs]]);
+  useHydrateAtoms([[jobConditionAtom, condition]]);
   return (
     <>
       <Head>
@@ -42,16 +54,33 @@ export default function Search({ jobAttributes, jobs }: Props) {
 /**
  * getServerSideProps
  */
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   try {
+    const queryParams = Object.keys(query)
+      .map((key) => `${key}=${query[key]}`)
+      .join("&");
+
+    // 属性取得
     const { data: jobAttributes } = await fetch.get<JobAttributesType>(
       `/api/v1/jobAttributes`
     );
-    const { data: jobs } = await fetch.get<JobListResponse>(`/api/v1/jobs`);
+
+    // 求人取得
+    const { data: jobs } = await fetch.get<JobListResponse>(
+      `/api/v1/jobs?${queryParams}`
+    );
+
+    // 絞り込み条件を作成
+    const condition = {
+      ...initialJobCondition,
+      ...convertQueryStringToObject(queryParams),
+    };
+
     return {
       props: {
         jobAttributes,
         jobs,
+        condition,
       },
     };
   } catch (error) {

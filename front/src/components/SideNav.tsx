@@ -19,7 +19,8 @@ import {
   loadingAtom,
 } from "@/atoms/atoms";
 import fetch from "@/libs/fetch";
-import { convertObjectToQueryString } from "@/libs/convertObjectToQueryString";
+import { convertObjectToQueryString } from "@/libs/convertQuery";
+import { useRouter } from "next/router";
 
 type Props = {
   jobAttributes: JobAttributesType;
@@ -38,6 +39,7 @@ export const SideNav = ({ jobAttributes }: Props) => {
   const setData = useSetAtom(jobAtom);
   const setLoading = useSetAtom(loadingAtom);
   const [condition, setCondition] = useAtom(jobConditionAtom);
+  const router = useRouter();
 
   const handleClickSearch = async () => {
     try {
@@ -47,6 +49,7 @@ export const SideNav = ({ jobAttributes }: Props) => {
         `/api/v1/jobs${queryString}`
       );
       setData(data);
+      router.push(`/job/search/${queryString}`, undefined, { shallow: true });
     } catch (error) {
       console.error(error);
     } finally {
