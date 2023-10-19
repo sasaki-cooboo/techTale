@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { Noto_Sans_JP } from "next/font/google";
 import Layout from "@/features/jobs/Layout";
 import SearchContents from "@/features/jobs/SearchContents";
 import { GetServerSideProps } from "next";
@@ -10,8 +9,6 @@ import { useAtomValue } from "jotai";
 import { jobAtom, loadingAtom } from "@/atoms/atoms";
 import { Typography } from "@mui/material";
 import { useHydrateAtoms } from "jotai/utils";
-
-const notojp = Noto_Sans_JP({ subsets: ["latin"], display: "swap" });
 
 type Props = {
   jobAttributes: JobAttributesType;
@@ -29,7 +26,7 @@ export default function Search({ jobAttributes, jobs }: Props) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className={notojp.className}>
+      <div>
         <Layout jobAttributes={jobAttributes}>
           <Typography fontSize={24} mb={2} fontWeight={500} variant="h2">
             求人・開発案件一覧

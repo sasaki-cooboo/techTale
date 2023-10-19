@@ -1,12 +1,9 @@
 import Head from "next/head";
-import { Noto_Sans_JP } from "next/font/google";
 import DetailContents from "@/features/jobs/detail/DetailContents";
 import Layout from "@/features/jobs/detail/Layout";
 import { GetServerSideProps } from "next";
 import fetch from "@/libs/fetch";
 import { JobType } from "@/features/jobs/job.type";
-
-const notojp = Noto_Sans_JP({ subsets: ["latin"], display: "swap" });
 
 export default function Detail(props: JobType) {
   return (
@@ -17,7 +14,7 @@ export default function Detail(props: JobType) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className={notojp.className}>
+      <div>
         <Layout>
           <DetailContents {...props} />
         </Layout>

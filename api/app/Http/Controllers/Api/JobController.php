@@ -27,11 +27,10 @@ class JobController extends Controller
      */
     public function index(Request $request)
     {
-        sleep(1);
-        $selectedArea = $request->area;
-        $selectedLanguage = $request->language;
-        $selectedEngineerType = $request->engineerType;
-        $selectedFeature = $request->feature;
+        $selectedArea = $request->areas;
+        $selectedLanguage = $request->languages;
+        $selectedEngineerType = $request->engineerTypes;
+        $selectedFeature = $request->features;
         $query = Job::query()
             ->with(["area", "languages", "skills", "engineerTypes"]);
 
@@ -55,7 +54,6 @@ class JobController extends Controller
             return $query->whereHas("engineerTypes", fn ($q) => $q->whereIn("engineer_types.id", [$selectedEngineerType]));
         });
 
-
         // 職種で検索
         $query->when($selectedFeature, function ($query) use ($selectedFeature) {
             return $query->whereHas("features", fn ($q) => $q->whereIn("features.id", [$selectedFeature]));
@@ -78,7 +76,6 @@ class JobController extends Controller
      */
     public function show($id)
     {
-        sleep(1);
         $job = Job::query()->with(["area", "languages", "skills", "engineerTypes"])->findOrFail($id);
         return new JobResource($job);
     }
@@ -90,7 +87,6 @@ class JobController extends Controller
      */
     public function getAttributes()
     {
-        sleep(1);
         $areas = Area::all();
         $languages = Language::all();
         // スキルタイプ別にスキルをグループ化

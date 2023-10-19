@@ -55,3 +55,11 @@ export type JobAttributesType = {
   };
   engineerTypes: EngineerType[];
 };
+
+export type JobConditionType = {
+  areas: number[];
+  languages: number[];
+  features: number[];
+  skills: number[];
+  engineerTypes: number[];
+};

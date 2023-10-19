@@ -2,16 +2,21 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Checkbox,
   FormControlLabel,
   ListItem,
   Typography,
+  Checkbox,
 } from "@mui/material";
+
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { JobConditionType } from "@/features/jobs/job.type";
+import { useAtom } from "jotai";
+import { jobConditionAtom } from "@/atoms/atoms";
 
 type Props = {
   title: string;
-  details: { name: string }[];
+  conditionKey: keyof JobConditionType;
+  details: { id: number; name: string }[];
 };
 
 /**
@@ -21,7 +26,25 @@ type Props = {
  * @returns SideNavItem
  */
 /** */
-const SideNavItem = ({ title, details }: Props) => {
+const SideNavItem = ({ title, details, conditionKey }: Props) => {
+  const [condition, setCondition] = useAtom(jobConditionAtom);
+
+  const handleChange = (checked: boolean, id: number) => {
+    setCondition((prevState) => ({
+      ...prevState,
+      // チェックされたidを追加し、重複削除
+      [conditionKey]: [...new Set([...prevState[conditionKey], id])].filter(
+        (num) => {
+          if (num === id) {
+            // チェックない場合削除
+            return checked;
+          }
+          return true;
+        }
+      ),
+    }));
+  };
+
   return (
     <ListItem sx={{ p: 0, border: 0, my: 1 }}>
       <Accordion defaultExpanded={false} sx={{ boxShadow: "none" }}>
@@ -37,7 +60,13 @@ const SideNavItem = ({ title, details }: Props) => {
           {details.map((detail, i) => (
             <FormControlLabel
               key={i}
-              control={<Checkbox size="small" />}
+              control={
+                <Checkbox
+                  checked={condition[conditionKey].includes(detail.id)}
+                  size="small"
+                  onChange={(_, checked) => handleChange(checked, detail.id)}
+                />
+              }
               label={
                 <Typography pt={0.25} fontSize={14}>
                   {detail.name}
