@@ -6,7 +6,9 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import theme from "@/libs/theme";
 import createEmotionCache from "@/libs/createEmotionCache";
-import "@fontsource/noto-sans-jp";
+import "@fontsource/noto-sans-jp/400.css";
+import "@fontsource/noto-sans-jp/500.css";
+import "@fontsource/noto-sans-jp/600.css";
 import "@fontsource/inter";
 
 // Client-side cache, shared for the whole session of the user in the browser.
