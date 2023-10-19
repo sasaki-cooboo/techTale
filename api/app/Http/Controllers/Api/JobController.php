@@ -31,13 +31,12 @@ class JobController extends Controller
     {
         $selectedArea = $request->areas ? explode(",", $request->areas) : false;
         $selectedLanguage = $request->languages ? explode(",", $request->languages) : false;
+        $selectedSkill = $request->skills ? explode(",", $request->skills) : false;
         $selectedEngineerType =
             $request->engineerTypes ? explode(",", $request->engineerTypes) : false;
         $selectedFeature =
             $request->features ? explode(",", $request->features) : false;
 
-        Log::info($request->areas);
-        Log::info($selectedArea);
         $query = Job::query()
             ->with(["area", "languages", "skills", "engineerTypes"]);
 
@@ -51,9 +50,9 @@ class JobController extends Controller
             return $query->whereHas("languages", fn ($q) => $q->whereIn("languages.id", $selectedLanguage));
         });
 
-        // 職種で検索
-        $query->when($selectedEngineerType, function ($query) use ($selectedEngineerType) {
-            return $query->whereHas("engineerTypes", fn ($q) => $q->whereIn("engineer_types.id", $selectedEngineerType));
+        // スキルで検索
+        $query->when($selectedSkill, function ($query) use ($selectedSkill) {
+            return $query->whereHas("skills", fn ($q) => $q->whereIn("skills.id", $selectedSkill));
         });
 
         // 職種で検索
@@ -72,7 +71,8 @@ class JobController extends Controller
         // })
 
         $jobs = $query->latest()->get();
-        Log::info($query->toSql());
+        // TODO:削除
+        // Log::info($query->toSql());
         return new JobCollection($jobs);
     }
 

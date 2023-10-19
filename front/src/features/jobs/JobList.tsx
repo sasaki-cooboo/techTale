@@ -12,14 +12,9 @@ const JobList = ({ jobList }: Props) => {
       {jobList.map((job, i) => (
         <JobCard
           key={i}
-          title={job.title}
-          cost={job.cost}
-          applyLink={`/job/detail/${job.id}`}
+          {...job}
           area={job.area.name}
-          tags={job.features}
-          languages={job.languages}
-          engineerTypes={job.engineerTypes}
-          requiredSkills={job.requiredSkills}
+          applyLink={`/job/detail/${job.id}`}
         />
       ))}
     </Stack>

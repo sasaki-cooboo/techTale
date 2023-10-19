@@ -22,8 +22,9 @@ type Props = {
   area: string;
   cost: number;
   applyLink: string;
-  tags: { name: string; id: number }[];
+  features: { name: string; id: number }[];
   languages: { name: string; id: number }[];
+  skills: { name: string; id: number }[];
   engineerTypes: { name: string; id: number }[];
   requiredSkills: string[];
 };
@@ -33,8 +34,9 @@ const JobCard = ({
   area,
   cost,
   applyLink,
-  tags,
+  features,
   languages,
+  skills,
   engineerTypes,
   requiredSkills,
 }: Props) => {
@@ -96,9 +98,9 @@ const JobCard = ({
           </Stack>
         </Stack>
         <Stack my={2} direction={"row"} gap={1}>
-          {tags.map((tag, i) => (
+          {features.map((feature, i) => (
             <Button variant="text" key={i} sx={tagStyle}>
-              {tag.name}
+              {feature.name}
             </Button>
           ))}
         </Stack>
@@ -108,10 +110,10 @@ const JobCard = ({
               <TableCell style={tableHeaderStyle}>言語・スキル</TableCell>
               <TableCell>
                 <Stack gap={1} direction={"row"}>
-                  {languages.map((language) => (
+                  {[...languages, ...skills].map((item, i) => (
                     <Chip
-                      key={language.id}
-                      label={language.name}
+                      key={i}
+                      label={item.name}
                       sx={{ fontSize: 14 }}
                       variant="outlined"
                       onClick={() => console.log("clicked")}

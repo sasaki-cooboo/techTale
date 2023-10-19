@@ -10,7 +10,7 @@ const SearchContents = () => {
   const data = useAtomValue(jobAtom);
   const loading = useAtomValue(loadingAtom);
 
-  if (loading) {
+  if (loading || !data) {
     return (
       <Typography
         textAlign={"center"}
