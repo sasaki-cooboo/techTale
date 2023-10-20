@@ -17,7 +17,6 @@ use App\Models\Job;
 use App\Models\Language;
 use App\Models\Skill;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class JobController extends Controller
@@ -70,9 +69,19 @@ class JobController extends Controller
         //     $query->where("name", 'like', '%' . $area . '%');
         // })
 
-        $jobs = $query->latest()->get();
+        // 新着順にソート
+        $query->when($request->sort === "latest", function ($query) {
+            return $query->latest();
+        });
+
+        // 高単価順にソート
+        $query->when($request->sort === "cost", function ($query) {
+            return $query->orderBy("cost", "desc");
+        });
+
+        $jobs = $query->get();
         // TODO:削除
-        // Log::info($query->toSql());
+        Log::info($query->toSql());
         return new JobCollection($jobs);
     }
 

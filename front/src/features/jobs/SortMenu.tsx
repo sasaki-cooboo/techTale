@@ -40,7 +40,11 @@ export default function SortMenu() {
       setLoading(true);
       const queryString = convertObjectToQueryString(condition);
       const sortQuery =
-        option === "高単価順" ? "&sort=cost" : "新着順" ? "&sort=latest" : null;
+        option === "高単価順"
+          ? "&sort=cost"
+          : option === "新着順"
+          ? "&sort=latest"
+          : "&sort=related";
       const { data } = await fetch.get<JobListResponse>(
         `/api/v1/jobs${queryString}${sortQuery}`
       );

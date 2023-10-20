@@ -53,8 +53,8 @@ export const SideNav = ({ jobAttributes }: Props) => {
     } catch (error) {
       console.error(error);
     } finally {
-      window.scrollTo({ top: 0 });
       setLoading(false);
+      window.scrollTo({ top: 0 });
     }
   };
 
