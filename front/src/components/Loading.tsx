@@ -7,7 +7,7 @@ type Props = {
 
 const Loading = ({ open }: Props) => {
   const theme = useTheme();
-  return (
+  return open ? (
     <Backdrop
       sx={{
         zIndex: theme.zIndex.drawer + 1,
@@ -17,7 +17,7 @@ const Loading = ({ open }: Props) => {
     >
       <CircularProgress color="inherit" />
     </Backdrop>
-  );
+  ) : null;
 };
 
 export default Loading;
