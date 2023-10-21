@@ -48,11 +48,11 @@ export const SideNav = ({ jobAttributes }: Props) => {
       setLoading(true);
       const queryString = convertObjectToQueryString(condition);
       const { data } = await fetch.get<JobListResponse>(
-        `/api/v1/jobs${queryString}`
+        `/api/v1/jobs?${queryString}`
       );
       setJobData(data);
       setConditionDisplay(condition);
-      router.push(`/job/search/${queryString}`, undefined, { shallow: true });
+      router.push(`/job/search?${queryString}`, undefined, { shallow: true });
     } catch (error) {
       console.error(error);
     } finally {

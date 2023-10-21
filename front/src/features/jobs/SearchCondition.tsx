@@ -13,7 +13,8 @@ import {
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useRouter } from "next/router";
 import fetch from "@/libs/fetch";
-import { JobListResponse } from "./job.type";
+import { JobConditionType, JobListResponse } from "./job.type";
+import { convertObjectToQueryString } from "@/libs/convertQuery";
 
 const SearchCondition = () => {
   const setCondition = useSetAtom(jobConditionAtom);
@@ -26,6 +27,9 @@ const SearchCondition = () => {
   const setLoading = useSetAtom(loadingAtom);
   const router = useRouter();
 
+  /**
+   * リセット押下時の処理
+   */
   const handleClickClear = async () => {
     setCondition(initialJobCondition);
     setConditionDisplay(initialJobCondition);
@@ -43,6 +47,47 @@ const SearchCondition = () => {
       );
       setJobData(data);
       router.push(`/job/search${sortQuery}`, undefined, {
+        shallow: true,
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /**
+   * 検索条件削除時の処理
+   */
+  const handleClickDelete = async (
+    conditionKey: keyof JobConditionType,
+    id: number
+  ) => {
+    const newCondition = {
+      // setConditionの表示用のstoreの値を使用して問題なし
+      ...conditionDisplay,
+      // クリックされたもの以外をstoreに保存
+      [conditionKey]: conditionDisplay[conditionKey].filter(
+        (item) => item !== id
+      ),
+    };
+    setCondition(newCondition);
+    setConditionDisplay(newCondition);
+    const queryString = convertObjectToQueryString(newCondition);
+    const sortQuery =
+      sortOption === "高単価順"
+        ? "&sort=cost"
+        : sortOption === "新着順"
+        ? "&sort=latest"
+        : "";
+    try {
+      setLoading(true);
+      // 求人情報を再取得
+      const { data } = await fetch.get<JobListResponse>(
+        `/api/v1/jobs?${queryString}${sortQuery}`
+      );
+      setJobData(data);
+      router.push(`/job/search?${queryString}${sortQuery}`, undefined, {
         shallow: true,
       });
     } catch (error) {
@@ -91,8 +136,7 @@ const SearchCondition = () => {
       <Stack pt={1.5} gap={1} direction={"row"} flexWrap={"wrap"}>
         {Object.keys(conditionDisplay).map((conditionKey) => {
           // 型キャストする
-          const castConditionKey =
-            conditionKey as keyof typeof conditionDisplay;
+          const castConditionKey = conditionKey as keyof JobConditionType;
           return conditionDisplay[castConditionKey].map((id, i) => {
             const label = createLabel(castConditionKey, id);
             return label ? (
@@ -100,9 +144,7 @@ const SearchCondition = () => {
                 key={i}
                 label={label}
                 variant="outlined"
-                onDelete={() => {
-                  console.log(conditionKey);
-                }}
+                onDelete={() => handleClickDelete(castConditionKey, id)}
               />
             ) : null;
           });

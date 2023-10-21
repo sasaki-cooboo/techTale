@@ -12,7 +12,7 @@ export function convertObjectToQueryString(
       queryParams.push(`${key}=${obj[key].join(",")}`);
     }
   }
-  return `?${queryParams.join("&")}`;
+  return `${queryParams.join("&")}`;
 }
 /**
  * クエリパラメータからconditionオブジェクトに変換する関数

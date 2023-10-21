@@ -46,10 +46,10 @@ export default function SortMenu() {
           ? "&sort=latest"
           : "&sort=related";
       const { data } = await fetch.get<JobListResponse>(
-        `/api/v1/jobs${queryString}${sortQuery}`
+        `/api/v1/jobs?${queryString}${sortQuery}`
       );
       setJobData(data);
-      router.push(`/job/search/${queryString}${sortQuery}`, undefined, {
+      router.push(`/job/search?${queryString}${sortQuery}`, undefined, {
         shallow: true,
       });
     } catch (error) {
