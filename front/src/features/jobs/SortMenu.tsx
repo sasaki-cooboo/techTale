@@ -20,7 +20,7 @@ export default function SortMenu() {
   const [sortOption, setSortOption] = useAtom(jobSortAtom);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const setData = useSetAtom(jobAtom);
+  const setJobData = useSetAtom(jobAtom);
   const setLoading = useSetAtom(loadingAtom);
   const [condition, setCondition] = useAtom(jobConditionAtom);
   const router = useRouter();
@@ -48,7 +48,7 @@ export default function SortMenu() {
       const { data } = await fetch.get<JobListResponse>(
         `/api/v1/jobs${queryString}${sortQuery}`
       );
-      setData(data);
+      setJobData(data);
       router.push(`/job/search/${queryString}${sortQuery}`, undefined, {
         shallow: true,
       });

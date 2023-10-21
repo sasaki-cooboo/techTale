@@ -3,11 +3,17 @@ import SearchIcon from "@mui/icons-material/Search";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import {
   initialJobCondition,
+  jobAtom,
   jobAttributesAtom,
   jobConditionAtom,
   jobConditionDisplayAtom,
+  jobSortAtom,
+  loadingAtom,
 } from "@/atoms/atoms";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useRouter } from "next/router";
+import fetch from "@/libs/fetch";
+import { JobListResponse } from "./job.type";
 
 const SearchCondition = () => {
   const setCondition = useSetAtom(jobConditionAtom);
@@ -15,11 +21,35 @@ const SearchCondition = () => {
   const [conditionDisplay, setConditionDisplay] = useAtom(
     jobConditionDisplayAtom
   );
+  const sortOption = useAtomValue(jobSortAtom);
+  const setJobData = useSetAtom(jobAtom);
+  const setLoading = useSetAtom(loadingAtom);
+  const router = useRouter();
 
-  const handleClickClear = () => {
+  const handleClickClear = async () => {
     setCondition(initialJobCondition);
     setConditionDisplay(initialJobCondition);
-    //   リセット後に再取得
+    const sortQuery =
+      sortOption === "高単価順"
+        ? "?sort=cost"
+        : sortOption === "新着順"
+        ? "?sort=latest"
+        : "";
+    try {
+      setLoading(true);
+      // リセット後に再取得
+      const { data } = await fetch.get<JobListResponse>(
+        `/api/v1/jobs${sortQuery}`
+      );
+      setJobData(data);
+      router.push(`/job/search${sortQuery}`, undefined, {
+        shallow: true,
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const createLabel = (
@@ -63,16 +93,19 @@ const SearchCondition = () => {
           // 型キャストする
           const castConditionKey =
             conditionKey as keyof typeof conditionDisplay;
-          return conditionDisplay[castConditionKey].map((id, i) => (
-            <Chip
-              key={i}
-              label={createLabel(castConditionKey, id)}
-              variant="outlined"
-              onDelete={() => {
-                console.log(conditionKey);
-              }}
-            />
-          ));
+          return conditionDisplay[castConditionKey].map((id, i) => {
+            const label = createLabel(castConditionKey, id);
+            return label ? (
+              <Chip
+                key={i}
+                label={label}
+                variant="outlined"
+                onDelete={() => {
+                  console.log(conditionKey);
+                }}
+              />
+            ) : null;
+          });
         })}
       </Stack>
     </Paper>

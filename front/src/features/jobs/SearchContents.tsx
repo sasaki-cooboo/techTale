@@ -5,6 +5,8 @@ import BasicPagination from "@/components/BasicPagination";
 import { useAtomValue } from "jotai";
 import { jobAtom, loadingAtom } from "@/atoms/atoms";
 
+const MAX_JOB_COUNT_PER_PAGE = 40;
+
 const SearchContents = () => {
   const { palette } = useTheme();
   const data = useAtomValue(jobAtom);
@@ -42,7 +44,11 @@ const SearchContents = () => {
               >
                 {data.meta.count.toLocaleString("ja-JP")}
               </span>
-              件中 1~40件を表示中
+              {`件中 1~${
+                data.meta.count < MAX_JOB_COUNT_PER_PAGE
+                  ? data.meta.count
+                  : MAX_JOB_COUNT_PER_PAGE
+              }件を表示中`}
             </Typography>
             <SortMenu />
           </Stack>
