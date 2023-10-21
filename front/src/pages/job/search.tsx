@@ -21,6 +21,7 @@ import {
 import { Typography } from "@mui/material";
 import { useHydrateAtoms } from "jotai/utils";
 import { convertQueryStringToObject } from "@/libs/convertQuery";
+import SearchCondition from "@/features/jobs/SearchCondition";
 
 type Props = {
   jobAttributes: JobAttributesType;
@@ -54,6 +55,7 @@ export default function Search({
           <Typography fontSize={24} mb={2} fontWeight={500} variant="h2">
             求人・開発案件一覧
           </Typography>
+          <SearchCondition />
           <SearchContents />
         </Layout>
       </div>
