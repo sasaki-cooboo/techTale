@@ -1,17 +1,27 @@
 import { Chip, Paper, Stack, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { initialJobCondition, jobConditionAtom } from "@/atoms/atoms";
-import { useAtom } from "jotai";
+import {
+  initialJobCondition,
+  jobConditionAtom,
+  jobConditionDisplayAtom,
+} from "@/atoms/atoms";
+import { useAtom, useSetAtom } from "jotai";
 
 const SearchCondition = () => {
-  const [condition, setCondition] = useAtom(jobConditionAtom);
+  const setCondition = useSetAtom(jobConditionAtom);
+  const [conditionDisplay, setConditionDisplay] = useAtom(
+    jobConditionDisplayAtom
+  );
+
   const handleClickClear = () => {
     setCondition(initialJobCondition);
-    console.log(condition);
+    setConditionDisplay(initialJobCondition);
+    //   リセット後に再取得
   };
+
   // 条件なしの場合、非表示
-  if (Object.values(condition).every((item) => item.length === 0)) {
+  if (Object.values(conditionDisplay).every((item) => item.length === 0)) {
     return null;
   }
   return (
@@ -33,11 +43,11 @@ const SearchCondition = () => {
       </Stack>
       <Stack pt={1.5} gap={1} direction={"row"}>
         {[
-          ...condition.areas,
-          ...condition.engineerTypes,
-          ...condition.features,
-          ...condition.languages,
-          ...condition.skills,
+          ...conditionDisplay.areas,
+          ...conditionDisplay.engineerTypes,
+          ...conditionDisplay.features,
+          ...conditionDisplay.languages,
+          ...conditionDisplay.skills,
         ].map((item, i) => (
           <Chip key={i} label={item} variant="outlined" onDelete={() => {}} />
         ))}

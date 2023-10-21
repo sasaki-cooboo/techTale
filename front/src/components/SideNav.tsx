@@ -16,6 +16,7 @@ import {
   initialJobCondition,
   jobAtom,
   jobConditionAtom,
+  jobConditionDisplayAtom,
   loadingAtom,
 } from "@/atoms/atoms";
 import fetch from "@/libs/fetch";
@@ -36,9 +37,10 @@ export const SideNav = ({ jobAttributes }: Props) => {
   } = jobAttributes;
 
   const { palette } = useTheme();
-  const setData = useSetAtom(jobAtom);
+  const setJobData = useSetAtom(jobAtom);
   const setLoading = useSetAtom(loadingAtom);
   const [condition, setCondition] = useAtom(jobConditionAtom);
+  const setConditionDisplay = useSetAtom(jobConditionDisplayAtom);
   const router = useRouter();
 
   const handleClickSearch = async () => {
@@ -48,7 +50,8 @@ export const SideNav = ({ jobAttributes }: Props) => {
       const { data } = await fetch.get<JobListResponse>(
         `/api/v1/jobs${queryString}`
       );
-      setData(data);
+      setJobData(data);
+      setConditionDisplay(condition);
       router.push(`/job/search/${queryString}`, undefined, { shallow: true });
     } catch (error) {
       console.error(error);

@@ -15,6 +15,7 @@ import {
   initialJobCondition,
   jobAtom,
   jobConditionAtom,
+  jobConditionDisplayAtom,
   jobSortAtom,
   loadingAtom,
 } from "@/atoms/atoms";
@@ -40,6 +41,7 @@ export default function Search({
   useHydrateAtoms([
     [jobAtom, jobs],
     [jobConditionAtom, condition],
+    [jobConditionDisplayAtom, condition],
     [jobSortAtom, sort],
   ]);
   return (
