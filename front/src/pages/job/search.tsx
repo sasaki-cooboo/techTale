@@ -14,6 +14,7 @@ import {
   MENU_LIST,
   initialJobCondition,
   jobAtom,
+  jobAttributesAtom,
   jobConditionAtom,
   jobConditionDisplayAtom,
   jobSortAtom,
@@ -43,6 +44,7 @@ export default function Search({
     [jobConditionAtom, condition],
     [jobConditionDisplayAtom, condition],
     [jobSortAtom, sort],
+    [jobAttributesAtom, jobAttributes],
   ]);
   return (
     <>

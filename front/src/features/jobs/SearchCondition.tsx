@@ -3,13 +3,15 @@ import SearchIcon from "@mui/icons-material/Search";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import {
   initialJobCondition,
+  jobAttributesAtom,
   jobConditionAtom,
   jobConditionDisplayAtom,
 } from "@/atoms/atoms";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 
 const SearchCondition = () => {
   const setCondition = useSetAtom(jobConditionAtom);
+  const jobAttributes = useAtomValue(jobAttributesAtom);
   const [conditionDisplay, setConditionDisplay] = useAtom(
     jobConditionDisplayAtom
   );
@@ -20,10 +22,21 @@ const SearchCondition = () => {
     //   リセット後に再取得
   };
 
-  // 条件なしの場合、非表示
-  if (Object.values(conditionDisplay).every((item) => item.length === 0)) {
-    return null;
-  }
+  const createLabel = (
+    conditionKey: keyof typeof conditionDisplay,
+    id: number
+  ) => {
+    if (conditionKey !== "skills") {
+      return jobAttributes[conditionKey].find((item) => item.id === id)?.name;
+    }
+    // スキルは3つに分かれているので別で記述
+    const targetSkill =
+      jobAttributes.skills.frameworks.find((item) => item.id === id) ||
+      jobAttributes.skills.databases.find((item) => item.id === id) ||
+      jobAttributes.skills.clouds.find((item) => item.id === id);
+    return targetSkill?.name;
+  };
+
   return (
     <Paper sx={{ p: 2, my: 2 }}>
       <Stack direction={"row"} justifyContent={"space-between"}>
@@ -41,18 +54,29 @@ const SearchCondition = () => {
           icon={<DeleteForeverIcon />}
         />
       </Stack>
-      <Stack pt={1.5} gap={1} direction={"row"}>
-        {[
-          ...conditionDisplay.areas,
-          ...conditionDisplay.engineerTypes,
-          ...conditionDisplay.features,
-          ...conditionDisplay.languages,
-          ...conditionDisplay.skills,
-        ].map((item, i) => (
-          <Chip key={i} label={item} variant="outlined" onDelete={() => {}} />
-        ))}
+      <Stack pt={1.5} gap={1} direction={"row"} flexWrap={"wrap"}>
+        {Object.keys(conditionDisplay).map((conditionKey) => {
+          // 型キャストする
+          const castConditionKey =
+            conditionKey as keyof typeof conditionDisplay;
+          return conditionDisplay[castConditionKey].map((id, i) => (
+            <Chip
+              key={i}
+              label={createLabel(castConditionKey, id)}
+              variant="outlined"
+              onDelete={() => {
+                console.log(conditionKey);
+              }}
+            />
+          ));
+        })}
       </Stack>
     </Paper>
   );
 };
 export default SearchCondition;
+// ...conditionDisplay.areas,
+//   ...conditionDisplay.engineerTypes,
+//   ...conditionDisplay.features,
+//   ...conditionDisplay.languages,
+//   ...conditionDisplay.skills,
