@@ -26,8 +26,11 @@ export function convertQueryStringToObject(
   const queryParameters = new URLSearchParams(queryString);
 
   queryParameters.forEach((value, key) => {
-    const values = value.split(",").map(Number); // カンマ区切りの値を数値の配列に変換
-    obj[key] = values;
+    if (key !== "sort" && key !== "q") {
+      // ソートとキーワード検索は別管理
+      const values = value.split(",").map(Number); // カンマ区切りの値を数値の配列に変換
+      obj[key] = values;
+    }
   });
 
   return obj;

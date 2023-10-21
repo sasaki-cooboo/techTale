@@ -11,9 +11,11 @@ import {
 import Loading from "@/components/Loading";
 import { useAtomValue } from "jotai";
 import {
+  MENU_LIST,
   initialJobCondition,
   jobAtom,
   jobConditionAtom,
+  jobSortAtom,
   loadingAtom,
 } from "@/atoms/atoms";
 import { Typography } from "@mui/material";
@@ -24,12 +26,21 @@ type Props = {
   jobAttributes: JobAttributesType;
   jobs: JobListResponse;
   condition: JobConditionType;
+  sort: (typeof MENU_LIST)[number];
 };
 
-export default function Search({ jobAttributes, jobs, condition }: Props) {
+export default function Search({
+  jobAttributes,
+  jobs,
+  condition,
+  sort,
+}: Props) {
   const isLoading = useAtomValue(loadingAtom);
-  useHydrateAtoms([[jobAtom, jobs]]);
-  useHydrateAtoms([[jobConditionAtom, condition]]);
+  useHydrateAtoms([
+    [jobAtom, jobs],
+    [jobConditionAtom, condition],
+    [jobSortAtom, sort],
+  ]);
   return (
     <>
       <Head>
@@ -76,11 +87,19 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       ...convertQueryStringToObject(queryParams),
     };
 
+    const sort =
+      query.sort === "latest"
+        ? MENU_LIST[1]
+        : query.sort === "cost"
+        ? MENU_LIST[2]
+        : MENU_LIST[0];
     return {
       props: {
         jobAttributes,
         jobs,
         condition,
+        sort,
+        q: query.q || "",
       },
     };
   } catch (error) {
