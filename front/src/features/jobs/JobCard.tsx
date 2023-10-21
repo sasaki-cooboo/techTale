@@ -109,7 +109,7 @@ const JobCard = ({
             <TableRow sx={{ borderTop: `1px solid rgba(224, 224, 224)` }}>
               <TableCell style={tableHeaderStyle}>言語・スキル</TableCell>
               <TableCell>
-                <Stack gap={1} direction={"row"}>
+                <Stack gap={1} direction={"row"} flexWrap={"wrap"}>
                   {[...languages, ...skills].map((item, i) => (
                     <Chip
                       key={i}
@@ -125,7 +125,7 @@ const JobCard = ({
             <TableRow>
               <TableCell style={tableHeaderStyle}>職種</TableCell>
               <TableCell>
-                <Stack gap={1} direction={"row"}>
+                <Stack gap={1} direction={"row"} flexWrap={"wrap"}>
                   {engineerTypes.map((engineerType) => (
                     <Chip
                       key={engineerType.id}
