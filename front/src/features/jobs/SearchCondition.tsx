@@ -37,6 +37,10 @@ const SearchCondition = () => {
     return targetSkill?.name;
   };
 
+  if (Object.values(conditionDisplay).every((item) => item.length === 0)) {
+    return null;
+  }
+
   return (
     <Paper sx={{ p: 2, my: 2 }}>
       <Stack direction={"row"} justifyContent={"space-between"}>
@@ -75,8 +79,3 @@ const SearchCondition = () => {
   );
 };
 export default SearchCondition;
-// ...conditionDisplay.areas,
-//   ...conditionDisplay.engineerTypes,
-//   ...conditionDisplay.features,
-//   ...conditionDisplay.languages,
-//   ...conditionDisplay.skills,
