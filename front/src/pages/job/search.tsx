@@ -18,6 +18,7 @@ import {
   jobConditionAtom,
   jobConditionDisplayAtom,
   jobSortAtom,
+  jobTotalCountAtom,
   loadingAtom,
 } from "@/atoms/atoms";
 import { Typography } from "@mui/material";
@@ -45,6 +46,7 @@ export default function Search({
     [jobConditionDisplayAtom, condition],
     [jobSortAtom, sort],
     [jobAttributesAtom, jobAttributes],
+    [jobTotalCountAtom, jobs.meta.total],
   ]);
   return (
     <>
