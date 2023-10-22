@@ -7,6 +7,7 @@ import {
   jobAttributesAtom,
   jobConditionAtom,
   jobConditionDisplayAtom,
+  jobSearchKeywordAtom,
   jobSortAtom,
   loadingAtom,
 } from "@/atoms/atoms";
@@ -25,6 +26,7 @@ const SearchCondition = () => {
   const sortOption = useAtomValue(jobSortAtom);
   const setJobData = useSetAtom(jobAtom);
   const setLoading = useSetAtom(loadingAtom);
+  const searchKeyword = useAtomValue(jobSearchKeywordAtom);
   const router = useRouter();
 
   /**
@@ -80,16 +82,21 @@ const SearchCondition = () => {
         : sortOption === "新着順"
         ? "&sort=latest"
         : "";
+    const keywordParam = searchKeyword ? `&q=${searchKeyword}` : "";
     try {
       setLoading(true);
       // 求人情報を再取得
       const { data } = await fetch.get<JobListResponse>(
-        `/api/v1/jobs?${queryString}${sortQuery}`
+        `/api/v1/jobs?${queryString}${sortQuery}${keywordParam}`
       );
       setJobData(data);
-      router.push(`/job/search?${queryString}${sortQuery}`, undefined, {
-        shallow: true,
-      });
+      router.push(
+        `/job/search?${queryString}${sortQuery}${keywordParam}`,
+        undefined,
+        {
+          shallow: true,
+        }
+      );
     } catch (error) {
       console.error(error);
     } finally {
@@ -112,7 +119,12 @@ const SearchCondition = () => {
     return targetSkill?.name;
   };
 
-  if (Object.values(conditionDisplay).every((item) => item.length === 0)) {
+  const keyword = router.query.q;
+
+  if (
+    Object.values(conditionDisplay).every((item) => item.length === 0) &&
+    !keyword
+  ) {
     return null;
   }
 
@@ -133,6 +145,11 @@ const SearchCondition = () => {
           icon={<DeleteForeverIcon />}
         />
       </Stack>
+      {keyword ? (
+        <Typography mt={1} fontSize={16}>
+          フリーワード: {keyword}
+        </Typography>
+      ) : null}
       <Stack pt={1.5} gap={1} direction={"row"} flexWrap={"wrap"}>
         {Object.keys(conditionDisplay).map((conditionKey) => {
           // 型キャストする

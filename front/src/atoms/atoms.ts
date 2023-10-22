@@ -19,7 +19,7 @@ export const initialJobCondition = {
 
 export const jobConditionAtom = atom<JobConditionType>(initialJobCondition);
 
-// 検索条件表示に使うatom、検索時のみ更新かける
+// 検索条件表示に使うatom、検索時のみ更新かける、urlパラメータ使えばいらなかったかも？
 export const jobConditionDisplayAtom =
   atom<JobConditionType>(initialJobCondition);
 

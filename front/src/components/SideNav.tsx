@@ -63,14 +63,14 @@ export const SideNav = ({ jobAttributes }: Props) => {
           : sortOption === "新着順"
           ? "&sort=latest"
           : "";
-      const keywordParam = searchKeyword ? `q=${searchKeyword}` : "";
+      const keywordParam = searchKeyword ? `&q=${searchKeyword}` : "";
       const { data } = await fetch.get<JobListResponse>(
-        `/api/v1/jobs?${keywordParam}${queryString}${sortQuery}`
+        `/api/v1/jobs?${queryString}${sortQuery}${keywordParam}`
       );
       setJobData(data);
       setConditionDisplay(condition);
       router.push(
-        `/job/search?${keywordParam}${queryString}${sortQuery}`,
+        `/job/search?${queryString}${sortQuery}${keywordParam}`,
         undefined,
         {
           shallow: true,
@@ -104,13 +104,14 @@ export const SideNav = ({ jobAttributes }: Props) => {
       // TODO:atom内部に移行できない？？
       // 条件が変わるたびに求人再取得、個数だけ返すAPI作成していいかも
       const queryString = convertObjectToQueryString(condition);
+      const keywordParam = searchKeyword ? `&q=${searchKeyword}` : "";
       const { data: jobs } = await fetch.get<JobListResponse>(
-        `/api/v1/jobs?${queryString}`
+        `/api/v1/jobs?${queryString}${keywordParam}`
       );
       setTotalCount(jobs.meta.total);
     };
     setCount();
-  }, [condition, setTotalCount]);
+  }, [condition, setTotalCount, searchKeyword]);
 
   return (
     <Paper>
