@@ -30,6 +30,13 @@ const RelatedCard = ({ id, title, cost, languages, area }: Props) => {
           fontWeight={500}
           fontSize={16}
           href={`/job/detail/${id}`}
+          sx={{
+            display: "-webkit-box",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+          }}
         >
           {title}
         </Link>
