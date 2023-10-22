@@ -6,13 +6,21 @@ import { Link, Stack, useTheme } from "@mui/material";
 import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
 import RoomIcon from "@mui/icons-material/Room";
 import CodeIcon from "@mui/icons-material/Code";
+
+type Props = {
+  id: number;
+  title: string;
+  cost: number;
+  languages: string[];
+  area: string;
+};
+
 /**
  * 関連する案件のカードコンポーネント
  *
  **/
-export default function RelatedCard() {
+const RelatedCard = ({ id, title, cost, languages, area }: Props) => {
   const { palette } = useTheme();
-  const cost = 700000;
 
   return (
     <Card sx={{ minWidth: 275 }}>
@@ -21,9 +29,9 @@ export default function RelatedCard() {
           underline="hover"
           fontWeight={500}
           fontSize={16}
-          href="/job/detail/2"
+          href={`/job/detail/${id}`}
         >
-          【PHP/高単価】業務システムバックエンド開発の求人・案件
+          {title}
         </Link>
         <Typography mt={1} variant="body2">
           <CurrencyYenIcon sx={{ color: palette.warning.main, fontSize: 16 }} />
@@ -43,16 +51,17 @@ export default function RelatedCard() {
         <Stack mt={1} direction={"row"} alignItems={"center"}>
           <CodeIcon color="info" />
           <Typography fontSize={14} ml={1}>
-            {"Python"}
+            {languages.join(",")}
           </Typography>
         </Stack>
         <Stack mt={1} direction={"row"} alignItems={"center"}>
           <RoomIcon color="info" />
           <Typography fontSize={14} ml={1}>
-            {"新宿"}
+            {area}
           </Typography>
         </Stack>
       </CardContent>
     </Card>
   );
-}
+};
+export default RelatedCard;

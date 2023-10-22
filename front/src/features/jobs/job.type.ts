@@ -12,6 +12,11 @@ export type JobType = {
   engineerTypes: EngineerType[];
 };
 
+export type JobDetailResponse = {
+  detail: JobType;
+  relatedJobs: JobType[];
+};
+
 export type JobListResponse = {
   jobList: JobType[];
   meta: {

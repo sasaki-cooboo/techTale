@@ -16,20 +16,21 @@ import {
 import { useTableStyle } from "../useTableStyle";
 import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
 import RelatedCard from "./RelatedCard";
-import { JobType } from "../job.type";
+import { JobDetailResponse } from "../job.type";
 
-const DetailContents = ({
-  title,
-  cost,
-  description,
-  requiredSkills,
-  message,
-  area,
-  languages,
-  skills,
-  engineerTypes,
-  features,
-}: JobType) => {
+const DetailContents = ({ detail, relatedJobs }: JobDetailResponse) => {
+  const {
+    title,
+    cost,
+    description,
+    requiredSkills,
+    message,
+    area,
+    languages,
+    skills,
+    engineerTypes,
+    features,
+  } = detail;
   const { tableHeaderStyle } = useTableStyle();
   const { palette } = useTheme();
 
@@ -205,9 +206,13 @@ const DetailContents = ({
         {/* 工数削減のため、カード並べるのみでカールセルにはしない */}
         {/* 4件のみ表示 */}
         <Grid mt={1} container spacing={2}>
-          {[1, 2, 3, 4].map((item) => (
-            <Grid key={item} item sm={3}>
-              <RelatedCard />
+          {relatedJobs.map((item, i) => (
+            <Grid key={i} item sm={3}>
+              <RelatedCard
+                {...item}
+                languages={item.languages.map((language) => language.name)}
+                area={item.area.name}
+              />
             </Grid>
           ))}
         </Grid>

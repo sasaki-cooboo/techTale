@@ -3,9 +3,9 @@ import DetailContents from "@/features/jobs/detail/DetailContents";
 import Layout from "@/features/jobs/detail/Layout";
 import { GetServerSideProps } from "next";
 import fetch from "@/libs/fetch";
-import { JobType } from "@/features/jobs/job.type";
+import { JobDetailResponse, JobType } from "@/features/jobs/job.type";
 
-export default function Detail(props: JobType) {
+export default function Detail(props: JobDetailResponse) {
   return (
     <>
       <Head>

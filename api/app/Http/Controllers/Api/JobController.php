@@ -92,7 +92,14 @@ class JobController extends Controller
     public function show($id)
     {
         $job = Job::query()->with(["area", "languages", "skills", "engineerTypes"])->findOrFail($id);
-        return new JobResource($job);
+        $relatedJobs = Job::query()
+            // TODO:ランダムでなく関連付けさせる
+            // 自分は除外したい
+            ->with(["area", "languages", "skills", "engineerTypes"])->inRandomOrder()->take(4)->get();
+        return [
+            "detail" => new JobResource($job),
+            "relatedJobs" => new JobCollection($relatedJobs),
+        ];
     }
 
     /**
