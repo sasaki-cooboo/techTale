@@ -17,6 +17,7 @@ import {
   jobAtom,
   jobConditionAtom,
   jobConditionDisplayAtom,
+  jobSearchKeywordAtom,
   jobSortAtom,
   jobTotalCountAtom,
   loadingAtom,
@@ -24,7 +25,7 @@ import {
 import fetch from "@/libs/fetch";
 import { convertObjectToQueryString } from "@/libs/convertQuery";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { ChangeEvent, useEffect } from "react";
 
 type Props = {
   jobAttributes: JobAttributesType;
@@ -46,6 +47,7 @@ export const SideNav = ({ jobAttributes }: Props) => {
   const setConditionDisplay = useSetAtom(jobConditionDisplayAtom);
   const sortOption = useAtomValue(jobSortAtom);
   const [totalCount, setTotalCount] = useAtom(jobTotalCountAtom);
+  const [searchKeyword, setSearchKeyword] = useAtom(jobSearchKeywordAtom);
   const router = useRouter();
 
   /**
@@ -61,14 +63,19 @@ export const SideNav = ({ jobAttributes }: Props) => {
           : sortOption === "新着順"
           ? "&sort=latest"
           : "";
+      const keywordParam = searchKeyword ? `q=${searchKeyword}` : "";
       const { data } = await fetch.get<JobListResponse>(
-        `/api/v1/jobs?${queryString}${sortQuery}`
+        `/api/v1/jobs?${keywordParam}${queryString}${sortQuery}`
       );
       setJobData(data);
       setConditionDisplay(condition);
-      router.push(`/job/search?${queryString}${sortQuery}`, undefined, {
-        shallow: true,
-      });
+      router.push(
+        `/job/search?${keywordParam}${queryString}${sortQuery}`,
+        undefined,
+        {
+          shallow: true,
+        }
+      );
     } catch (error) {
       console.error(error);
     } finally {
@@ -82,6 +89,14 @@ export const SideNav = ({ jobAttributes }: Props) => {
    */
   const handleClickClear = async () => {
     setCondition(initialJobCondition);
+    setSearchKeyword("");
+  };
+
+  /**
+   * フリーワード検索
+   */
+  const handleChangeKeyword = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchKeyword(e.target.value);
   };
 
   useEffect(() => {
@@ -105,6 +120,8 @@ export const SideNav = ({ jobAttributes }: Props) => {
             フリーワード検索
           </Typography>
           <TextField
+            onChange={handleChangeKeyword}
+            value={searchKeyword || ""}
             type="search"
             size="small"
             label="エリア 言語 リモート等"

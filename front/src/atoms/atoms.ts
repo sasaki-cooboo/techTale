@@ -40,3 +40,6 @@ export const jobAttributesAtom = atom<JobAttributesType>({
 
 // この条件に一致する案件数
 export const jobTotalCountAtom = atom<number>(0);
+
+// キーワード保持用
+export const jobSearchKeywordAtom = atom<string>("");
