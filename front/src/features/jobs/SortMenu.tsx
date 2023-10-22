@@ -44,7 +44,7 @@ export default function SortMenu() {
           ? "&sort=cost"
           : option === "新着順"
           ? "&sort=latest"
-          : "&sort=related";
+          : "&sort=related"; // relatedはいらないかも、一応つけておく
       const { data } = await fetch.get<JobListResponse>(
         `/api/v1/jobs?${queryString}${sortQuery}`
       );

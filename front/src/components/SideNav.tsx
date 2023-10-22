@@ -11,12 +11,13 @@ import {
 } from "@mui/material";
 import SideNavItem from "./SideNavItem";
 import { JobAttributesType, JobListResponse } from "@/features/jobs/job.type";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
   initialJobCondition,
   jobAtom,
   jobConditionAtom,
   jobConditionDisplayAtom,
+  jobSortAtom,
   loadingAtom,
 } from "@/atoms/atoms";
 import fetch from "@/libs/fetch";
@@ -41,18 +42,27 @@ export const SideNav = ({ jobAttributes }: Props) => {
   const setLoading = useSetAtom(loadingAtom);
   const [condition, setCondition] = useAtom(jobConditionAtom);
   const setConditionDisplay = useSetAtom(jobConditionDisplayAtom);
+  const sortOption = useAtomValue(jobSortAtom);
   const router = useRouter();
 
   const handleClickSearch = async () => {
     try {
       setLoading(true);
       const queryString = convertObjectToQueryString(condition);
+      const sortQuery =
+        sortOption === "高単価順"
+          ? "&sort=cost"
+          : sortOption === "新着順"
+          ? "&sort=latest"
+          : "";
       const { data } = await fetch.get<JobListResponse>(
-        `/api/v1/jobs?${queryString}`
+        `/api/v1/jobs?${queryString}${sortQuery}`
       );
       setJobData(data);
       setConditionDisplay(condition);
-      router.push(`/job/search?${queryString}`, undefined, { shallow: true });
+      router.push(`/job/search?${queryString}${sortQuery}`, undefined, {
+        shallow: true,
+      });
     } catch (error) {
       console.error(error);
     } finally {
