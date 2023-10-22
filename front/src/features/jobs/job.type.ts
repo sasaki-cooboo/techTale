@@ -15,7 +15,9 @@ export type JobType = {
 export type JobListResponse = {
   jobList: JobType[];
   meta: {
-    count: number;
+    per_page: number;
+    current_page: number;
+    total: number;
   };
 };
 

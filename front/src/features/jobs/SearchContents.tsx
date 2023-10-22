@@ -5,8 +5,6 @@ import BasicPagination from "@/components/BasicPagination";
 import { useAtomValue } from "jotai";
 import { jobAtom, loadingAtom } from "@/atoms/atoms";
 
-const MAX_JOB_COUNT_PER_PAGE = 40;
-
 const SearchContents = () => {
   const { palette } = useTheme();
   const data = useAtomValue(jobAtom);
@@ -28,7 +26,7 @@ const SearchContents = () => {
 
   return (
     <>
-      {data.meta.count ? (
+      {data.meta.total ? (
         <>
           <Stack my={1} justifyContent={"space-between"} direction={"row"}>
             <Typography fontSize={14}>
@@ -42,12 +40,12 @@ const SearchContents = () => {
                   fontWeight: 500,
                 }}
               >
-                {data.meta.count.toLocaleString("ja-JP")}
+                {data.meta.total.toLocaleString("ja-JP")}
               </span>
               {`件中 1~${
-                data.meta.count < MAX_JOB_COUNT_PER_PAGE
-                  ? data.meta.count
-                  : MAX_JOB_COUNT_PER_PAGE
+                data.meta.total < data.meta.per_page
+                  ? data.meta.total
+                  : data.meta.per_page
               }件を表示中`}
             </Typography>
             <SortMenu />

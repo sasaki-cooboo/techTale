@@ -23,13 +23,4 @@ class JobCollection extends ResourceCollection
     {
         return $this->collection;
     }
-
-    public function with($request)
-    {
-        return [
-            'meta' => [
-                'count' => $this->count(),
-            ],
-        ];
-    }
 }

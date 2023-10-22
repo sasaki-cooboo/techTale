@@ -79,9 +79,7 @@ class JobController extends Controller
             return $query->orderBy("cost", "desc");
         });
 
-        $jobs = $query->get();
-        // TODO:削除
-        Log::info($query->toSql());
+        $jobs = $query->paginate(40);
         return new JobCollection($jobs);
     }
 
