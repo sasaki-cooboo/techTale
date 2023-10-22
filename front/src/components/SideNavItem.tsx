@@ -9,9 +9,11 @@ import {
 } from "@mui/material";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { JobConditionType } from "@/features/jobs/job.type";
+import { JobConditionType, JobListResponse } from "@/features/jobs/job.type";
 import { useAtom } from "jotai";
-import { jobConditionAtom } from "@/atoms/atoms";
+import { jobConditionAtom, jobTotalCountAtom } from "@/atoms/atoms";
+import fetch from "@/libs/fetch";
+import { convertObjectToQueryString } from "@/libs/convertQuery";
 
 type Props = {
   title: string;
@@ -28,12 +30,16 @@ type Props = {
 /** */
 const SideNavItem = ({ title, details, conditionKey }: Props) => {
   const [condition, setCondition] = useAtom(jobConditionAtom);
+  const [totalCount, setTotalCount] = useAtom(jobTotalCountAtom);
 
-  const handleChange = (checked: boolean, id: number) => {
-    setCondition((prevState) => ({
-      ...prevState,
+  /**
+   * チェック変更時
+   */
+  const handleChange = async (checked: boolean, id: number) => {
+    const newCondition = {
+      ...condition,
       // チェックされたidを追加し、重複削除
-      [conditionKey]: [...new Set([...prevState[conditionKey], id])].filter(
+      [conditionKey]: [...new Set([...condition[conditionKey], id])].filter(
         (num) => {
           if (num === id) {
             // チェックない場合削除
@@ -42,7 +48,14 @@ const SideNavItem = ({ title, details, conditionKey }: Props) => {
           return true;
         }
       ),
-    }));
+    };
+    setCondition(newCondition);
+    // 求人取得
+    const queryString = convertObjectToQueryString(newCondition);
+    const { data: jobs } = await fetch.get<JobListResponse>(
+      `/api/v1/jobs?${queryString}`
+    );
+    setTotalCount(jobs.meta.total);
   };
 
   return (

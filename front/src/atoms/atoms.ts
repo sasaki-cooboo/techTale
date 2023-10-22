@@ -37,3 +37,6 @@ export const jobAttributesAtom = atom<JobAttributesType>({
   },
   engineerTypes: [],
 });
+
+// この条件に一致する案件数
+export const jobTotalCountAtom = atom<number>(0);

@@ -18,6 +18,7 @@ import {
   jobConditionAtom,
   jobConditionDisplayAtom,
   jobSortAtom,
+  jobTotalCountAtom,
   loadingAtom,
 } from "@/atoms/atoms";
 import fetch from "@/libs/fetch";
@@ -38,13 +39,18 @@ export const SideNav = ({ jobAttributes }: Props) => {
   } = jobAttributes;
 
   const { palette } = useTheme();
-  const setJobData = useSetAtom(jobAtom);
+  const [jobData, setJobData] = useAtom(jobAtom);
   const setLoading = useSetAtom(loadingAtom);
   const [condition, setCondition] = useAtom(jobConditionAtom);
   const setConditionDisplay = useSetAtom(jobConditionDisplayAtom);
   const sortOption = useAtomValue(jobSortAtom);
+  // 連動atomでもいいか？
+  const [totalCount, setTotalCount] = useAtom(jobTotalCountAtom);
   const router = useRouter();
 
+  /**
+   * 検索する
+   */
   const handleClickSearch = async () => {
     try {
       setLoading(true);
@@ -71,8 +77,14 @@ export const SideNav = ({ jobAttributes }: Props) => {
     }
   };
 
-  const handleClickClear = () => {
+  /**
+   * 条件をクリア
+   */
+  const handleClickClear = async () => {
     setCondition(initialJobCondition);
+    // 求人取得
+    const { data: jobs } = await fetch.get<JobListResponse>(`/api/v1/jobs`);
+    setTotalCount(jobs.meta.total);
   };
 
   return (
@@ -136,7 +148,7 @@ export const SideNav = ({ jobAttributes }: Props) => {
               fontWeight: 500,
             }}
           >
-            1127
+            {totalCount}
           </span>
           件
         </Typography>
@@ -146,6 +158,7 @@ export const SideNav = ({ jobAttributes }: Props) => {
             size="large"
             variant="contained"
             sx={{ width: 200 }}
+            disabled={!totalCount}
           >
             検索する
           </Button>
