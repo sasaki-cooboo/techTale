@@ -1,5 +1,5 @@
 import React from "react";
-import { CircularProgress, Backdrop, useTheme } from "@mui/material";
+import { Backdrop, CircularProgress, useTheme } from "@mui/material";
 
 type Props = {
   open: boolean;
@@ -15,7 +15,11 @@ const Loading = ({ open }: Props) => {
       }}
       open={open}
     >
-      <CircularProgress color="inherit" />
+      <CircularProgress
+        disableShrink
+        sx={{ animationDuration: "500ms" }}
+        color="inherit"
+      />
     </Backdrop>
   ) : null;
 };
