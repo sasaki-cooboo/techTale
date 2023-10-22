@@ -37,16 +37,12 @@ const SearchContents = () => {
                   fontSize: 24,
                   paddingLeft: 4,
                   paddingRight: 4,
-                  fontWeight: 500,
+                  fontWeight: 600,
                 }}
               >
                 {data.meta.total.toLocaleString("ja-JP")}
               </span>
-              {`件中 1~${
-                data.meta.total < data.meta.per_page
-                  ? data.meta.total
-                  : data.meta.per_page
-              }件を表示中`}
+              {`件中 ${data.meta.from}~${data.meta.to}件を表示中`}
             </Typography>
             <SortMenu />
           </Stack>
