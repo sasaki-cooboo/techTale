@@ -24,6 +24,7 @@ import {
 import fetch from "@/libs/fetch";
 import { convertObjectToQueryString } from "@/libs/convertQuery";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 type Props = {
   jobAttributes: JobAttributesType;
@@ -44,7 +45,6 @@ export const SideNav = ({ jobAttributes }: Props) => {
   const [condition, setCondition] = useAtom(jobConditionAtom);
   const setConditionDisplay = useSetAtom(jobConditionDisplayAtom);
   const sortOption = useAtomValue(jobSortAtom);
-  // 連動atomでもいいか？
   const [totalCount, setTotalCount] = useAtom(jobTotalCountAtom);
   const router = useRouter();
 
@@ -82,10 +82,20 @@ export const SideNav = ({ jobAttributes }: Props) => {
    */
   const handleClickClear = async () => {
     setCondition(initialJobCondition);
-    // 求人取得
-    const { data: jobs } = await fetch.get<JobListResponse>(`/api/v1/jobs`);
-    setTotalCount(jobs.meta.total);
   };
+
+  useEffect(() => {
+    const setCount = async () => {
+      // TODO:atom内部に移行できない？？
+      // 条件が変わるたびに求人再取得、個数だけ返すAPI作成していいかも
+      const queryString = convertObjectToQueryString(condition);
+      const { data: jobs } = await fetch.get<JobListResponse>(
+        `/api/v1/jobs?${queryString}`
+      );
+      setTotalCount(jobs.meta.total);
+    };
+    setCount();
+  }, [condition, setTotalCount]);
 
   return (
     <Paper>

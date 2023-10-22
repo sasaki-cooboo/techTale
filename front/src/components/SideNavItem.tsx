@@ -9,11 +9,9 @@ import {
 } from "@mui/material";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { JobConditionType, JobListResponse } from "@/features/jobs/job.type";
+import { JobConditionType } from "@/features/jobs/job.type";
 import { useAtom } from "jotai";
 import { jobConditionAtom, jobTotalCountAtom } from "@/atoms/atoms";
-import fetch from "@/libs/fetch";
-import { convertObjectToQueryString } from "@/libs/convertQuery";
 
 type Props = {
   title: string;
@@ -50,12 +48,6 @@ const SideNavItem = ({ title, details, conditionKey }: Props) => {
       ),
     };
     setCondition(newCondition);
-    // 求人取得
-    const queryString = convertObjectToQueryString(newCondition);
-    const { data: jobs } = await fetch.get<JobListResponse>(
-      `/api/v1/jobs?${queryString}`
-    );
-    setTotalCount(jobs.meta.total);
   };
 
   return (
