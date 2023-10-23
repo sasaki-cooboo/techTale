@@ -198,7 +198,7 @@ class UpdateJobCommand extends Command
         "新技術とトレンドに関する常に学習し続ける姿勢",
     ];
 
-    private const COUNT = 1;
+    private const COUNT = 700;
 
     /**
      * Execute the console command.
@@ -208,12 +208,13 @@ class UpdateJobCommand extends Command
     public function handle()
     {
         for ($i = 1; $i < self::COUNT; $i++) {
-            shuffle($this->required_skills);
+            // shuffle($this->required_skills);
             Job::where("id", $i)->update([
-                'description' => $this->descriptions[rand(0, count($this->descriptions) - 1)],
-                'required_skills' => json_encode([$this->required_skills[0], $this->required_skills[1], $this->required_skills[2]]),
-                'message' => $this->messages[rand(0, count($this->messages) - 1)],
-                'updated_at' => Carbon::now(),
+                'area_id' => rand(1, 14),
+                // 'description' => $this->descriptions[rand(0, count($this->descriptions) - 1)],
+                // 'required_skills' => json_encode([$this->required_skills[0], $this->required_skills[1], $this->required_skills[2]]),
+                // 'message' => $this->messages[rand(0, count($this->messages) - 1)],
+                // 'updated_at' => Carbon::now(),
             ]);
         }
         $this->info('Bulk update completed.');
