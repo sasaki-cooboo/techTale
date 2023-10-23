@@ -26,3 +26,9 @@ Route::prefix('v1')->group(
         Route::get("/jobAttributes", [JobController::class, "getAttributes"]);
     }
 );
+
+
+// test
+Route::get("/test", function () {
+    return response()->json(["test" => "hello2"]);
+});
