@@ -19,7 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('v1')->group(
+Route::middleware('basicAuth')->prefix('v1')->group(
     function () {
         Route::get("/jobs", [JobController::class, "index"]);
         Route::get("/job/{id}", [JobController::class, "show"]);
@@ -29,6 +29,6 @@ Route::prefix('v1')->group(
 
 
 // test
-Route::get("/test", function () {
+Route::middleware('basicAuth')->get("/test", function () {
     return response()->json(["test" => "hello2"]);
 });
