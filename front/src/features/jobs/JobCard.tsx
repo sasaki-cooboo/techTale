@@ -116,7 +116,7 @@ const JobCard = ({
                       label={item.name}
                       sx={{ fontSize: 14 }}
                       variant="outlined"
-                      onClick={() => console.log("clicked")}
+                      onClick={() => alert("実装中です。")}
                     />
                   ))}
                 </Stack>
@@ -132,7 +132,7 @@ const JobCard = ({
                       label={engineerType.name}
                       sx={{ fontSize: 14 }}
                       variant="outlined"
-                      onClick={() => console.log("clicked")}
+                      onClick={() => alert("実装中です。")}
                     />
                   ))}
                 </Stack>

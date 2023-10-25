@@ -85,7 +85,7 @@ const DetailContents = ({ detail, relatedJobs }: JobDetailResponse) => {
                     label={area.name}
                     sx={{ fontSize: 14 }}
                     variant="outlined"
-                    onClick={() => console.log("clicked")}
+                    onClick={() => alert("実装中です。")}
                   />
                 </TableCell>
               </TableRow>
@@ -99,7 +99,7 @@ const DetailContents = ({ detail, relatedJobs }: JobDetailResponse) => {
                         label={language.name}
                         sx={{ fontSize: 14 }}
                         variant="outlined"
-                        onClick={() => console.log("clicked")}
+                        onClick={() => alert("実装中です。")}
                       />
                     ))}
                   </Stack>
@@ -115,7 +115,7 @@ const DetailContents = ({ detail, relatedJobs }: JobDetailResponse) => {
                         label={skill.name}
                         sx={{ fontSize: 14 }}
                         variant="outlined"
-                        onClick={() => console.log("clicked")}
+                        onClick={() => alert("実装中です。")}
                       />
                     ))}
                   </Stack>
@@ -131,7 +131,7 @@ const DetailContents = ({ detail, relatedJobs }: JobDetailResponse) => {
                         label={engineerType.name}
                         sx={{ fontSize: 14 }}
                         variant="outlined"
-                        onClick={() => console.log("clicked")}
+                        onClick={() => alert("実装中です。")}
                       />
                     ))}
                   </Stack>
@@ -183,7 +183,7 @@ const DetailContents = ({ detail, relatedJobs }: JobDetailResponse) => {
                   label={feature.name}
                   sx={{ fontSize: 14 }}
                   variant="outlined"
-                  onClick={() => console.log("clicked")}
+                  onClick={() => alert("実装中です。")}
                 />
               ))}
             </Stack>
