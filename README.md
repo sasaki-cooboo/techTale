@@ -1,5 +1,20 @@
 # エンジニア求人サイト
 
+ローカル環境では docker、デプロイには serverless を使用しています。
+
+## 使用技術
+
+### フロントエンド
+
+- Next.js 12
+- mui
+- jotai
+
+### バックエンド
+
+- Laravel 9
+- bref （デプロイ用）
+
 ## 起動
 
 ```
@@ -14,7 +29,7 @@ docker compose down
 
 ## front
 
-Next.js 13
+Next.js 12
 node サーバー立てています
 
 ```
@@ -37,9 +52,11 @@ docker compose exec api bash
 
 fastcgi_pass で api の 9000 番ポート を指定
 
-## 必要な環境変数
+##　デプロイ
 
-- AWS_ACCESS_KEY_ID : アクセスキー ID
-- AWS_ACCOUNT_ID : アカウント ID
-- AWS_REGION : リージョン
-- AWS_SECRET_ACCESS_KEY : アクセスキー
+- front
+
+  - cd front && components-v1
+
+- api
+  - cd api && serverless deploy

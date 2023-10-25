@@ -25,7 +25,10 @@ const fetch = Axios.create({
   withCredentials: true,
   headers: {
     Authorization:
-      "Basic " + btoa(`${authHeader.username}:${authHeader.password}`),
+      "Basic " +
+      Buffer.from(`${authHeader.username}:${authHeader.password}`).toString(
+        "base64"
+      ),
   },
 });
 
