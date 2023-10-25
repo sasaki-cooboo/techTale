@@ -22,7 +22,7 @@ export default function SortMenu() {
   const open = Boolean(anchorEl);
   const setJobData = useSetAtom(jobAtom);
   const setLoading = useSetAtom(loadingAtom);
-  const [condition, setCondition] = useAtom(jobConditionAtom);
+  const [condition] = useAtom(jobConditionAtom);
   const router = useRouter();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -45,13 +45,19 @@ export default function SortMenu() {
           : option === "新着順"
           ? "&sort=latest"
           : "&sort=related"; // relatedはいらないかも、一応つけておく
+      const searchKeyword = router.query.q;
+      const keywordParam = searchKeyword ? `&q=${searchKeyword}` : "";
       const { data } = await fetch.get<JobListResponse>(
-        `/api/v1/jobs?${queryString}${sortQuery}`
+        `/api/v1/jobs?${queryString}${sortQuery}${keywordParam}`
       );
       setJobData(data);
-      router.push(`/job/search?${queryString}${sortQuery}`, undefined, {
-        shallow: true,
-      });
+      router.push(
+        `/job/search?${queryString}${sortQuery}${keywordParam}`,
+        undefined,
+        {
+          shallow: true,
+        }
+      );
     } catch (error) {
       console.error(error);
     } finally {
