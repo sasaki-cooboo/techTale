@@ -26,7 +26,7 @@ const SearchCondition = () => {
   const sortOption = useAtomValue(jobSortAtom);
   const setJobData = useSetAtom(jobAtom);
   const setLoading = useSetAtom(loadingAtom);
-  const searchKeyword = useAtomValue(jobSearchKeywordAtom);
+  const [searchKeyword, setSearchKeyword] = useAtom(jobSearchKeywordAtom);
   const router = useRouter();
 
   /**
@@ -48,6 +48,8 @@ const SearchCondition = () => {
         `/api/v1/jobs${sortQuery}`
       );
       setJobData(data);
+      // キーワードをクリア
+      setSearchKeyword("");
       router.push(`/job/search${sortQuery}`, undefined, {
         shallow: true,
       });
