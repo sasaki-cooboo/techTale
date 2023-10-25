@@ -10,9 +10,23 @@ export const getApiPath = () => {
   return `http://localhost`; // csr
 };
 
+// Basic認証に使用するユーザー名とパスワード
+const username = process.env.NEXT_PUBLIC_BASIC_USER;
+const password = process.env.NEXT_PUBLIC_BASIC_PASS;
+
+// ベーシック認証用のヘッダーを作成
+const authHeader = {
+  username,
+  password,
+};
+
 const fetch = Axios.create({
   baseURL: getApiPath(),
   withCredentials: true,
+  headers: {
+    Authorization:
+      "Basic " + btoa(`${authHeader.username}:${authHeader.password}`),
+  },
 });
 
 export default fetch;

@@ -22,15 +22,19 @@ provider:
       - ${self:custom.secret.SG_ID}
     subnetIds:
       - ${self:custom.secret.SUBNET_ID_1}
-      - ${self:custom.secret.SUBNET_ID_2}
+      # - ${self:custom.secret.SUBNET_ID_2}
 
   environment:
     APP_ENV: production # Or use ${sls:stage} if you want the environment to match the stage
     LOG_LEVEL: error
-    DB_PORT: ${self:custom.secret.DB_PORT}
+    DB_CONNECTION: mysql
     DB_HOST: ${self:custom.secret.DB_HOST}
+    DB_PORT: ${self:custom.secret.DB_PORT}
+    DB_DATABASE: ${self:custom.secret.DB_DATABASE}
     DB_USERNAME: ${self:custom.secret.DB_USERNAME}
     DB_PASSWORD: ${self:custom.secret.DB_PASSWORD}
+    BASIC_USER: ${self:custom.secret.BASIC_USER}
+    BASIC_PASS: ${self:custom.secret.BASIC_PASS}
 
 custom:
   secret: ${file(.secret.yml)}
