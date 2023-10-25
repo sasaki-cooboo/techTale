@@ -99,7 +99,12 @@ const JobCard = ({
         </Stack>
         <Stack my={2} direction={"row"} gap={1}>
           {features.map((feature, i) => (
-            <Button variant="text" key={i} sx={tagStyle}>
+            <Button
+              onClick={() => alert("実装中です。")}
+              variant="text"
+              key={i}
+              sx={tagStyle}
+            >
               {feature.name}
             </Button>
           ))}
