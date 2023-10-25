@@ -11,10 +11,10 @@ import {
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 type Props = {
-  isDetail: boolean;
+  jobName?: string; // 案件名
 };
 
-const Header = ({ isDetail }: Props) => {
+const Header = ({ jobName }: Props) => {
   const { palette } = useTheme();
 
   const breadcrumbs = [
@@ -27,7 +27,7 @@ const Header = ({ isDetail }: Props) => {
     >
       HOME
     </Link>,
-    isDetail ? (
+    jobName ? (
       <Link
         sx={{ fontSize: 14 }}
         underline="hover"
@@ -42,9 +42,9 @@ const Header = ({ isDetail }: Props) => {
         案件一覧
       </Typography>
     ),
-    isDetail ? (
+    jobName ? (
       <Typography sx={{ fontSize: 14 }} key="3" color="text.primary">
-        案件名が入ります
+        {jobName}
       </Typography>
     ) : null,
   ];

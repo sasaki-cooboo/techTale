@@ -15,7 +15,7 @@ export default function Detail(props: JobDetailResponse) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div>
-        <Layout>
+        <Layout jobName={props.detail.title}>
           <DetailContents {...props} />
         </Layout>
       </div>
