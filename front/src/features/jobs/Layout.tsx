@@ -14,7 +14,7 @@ const Layout = ({ children, jobAttributes }: Props) => {
 
   return (
     <div>
-      <Header isDetail={false} />
+      <Header />
       <Box mt={4} bgcolor={palette.secondary.main}>
         <Container>
           <Grid container spacing={4}>
