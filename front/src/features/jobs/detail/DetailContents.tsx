@@ -156,7 +156,7 @@ const DetailContents = ({ detail, relatedJobs }: JobDetailResponse) => {
             variant="contained"
             color="warning"
             sx={{ width: 300 }}
-            onClick={() => alert("応募ありがとう！")}
+            onClick={() => alert("応募処理は後日実装予定です！")}
           >
             この案件に応募する
           </Button>
