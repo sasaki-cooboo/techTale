@@ -19,6 +19,7 @@ use App\Models\Skill;
 use App\Services\JobService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class JobController extends Controller
 {
@@ -101,19 +102,8 @@ class JobController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, int $id, JobService $jobService)
+    public function show(int $id, JobService $jobService)
     {
-        $prevHistory = session('job_history_views');
-        $prevHistoryCollection = collect($prevHistory);
-        // 先頭に新しい履歴idを追加
-        $newHistoryCollection = $prevHistoryCollection->prepend($id);
-        // 新しい順で重複削除し保存。values->allでキーをリセット
-        // uniqueの前後でreverseし、重複のものは最新にする
-        $uniqHistory = $newHistoryCollection->reverse()->unique()->reverse()->values()->all();
-        $request->session()->put('job_history_views', $uniqHistory);
-
-        // 最新4件の閲覧履歴を取得、historyで並べ替え
-        $historyJobs = $jobService->getHistoryJobs($prevHistoryCollection);
 
         $job = Job::query()->with(["area", "languages", "skills", "engineerTypes"])->findOrFail($id);
 
@@ -121,6 +111,16 @@ class JobController extends Controller
             // TODO:ランダムでなく関連付けさせる
             // 自分は除外したい
             ->with(["area", "languages", "skills", "engineerTypes"])->inRandomOrder()->take(4)->get();
+
+
+        $prevHistoryCollection = collect(session('job_history_views'));
+
+        // 最新4件の閲覧履歴を取得、historyで並べ替え
+        $historyJobs = $jobService->getHistoryJobs($prevHistoryCollection);
+
+        // セッションに履歴を保存
+        $jobService->setHistoryToSession($id, $prevHistoryCollection);
+
         return [
             "detail" => new JobResource($job),
             "relatedJobs" => new JobCollection($relatedJobs),
