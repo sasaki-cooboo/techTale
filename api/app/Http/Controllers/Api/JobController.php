@@ -16,6 +16,7 @@ use App\Models\Feature;
 use App\Models\Job;
 use App\Models\Language;
 use App\Models\Skill;
+use App\Services\JobService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -100,7 +101,7 @@ class JobController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, int $id)
+    public function show(Request $request, int $id, JobService $jobService)
     {
         $prevHistory = session('job_history_views');
         $prevHistoryCollection = collect($prevHistory);
@@ -112,10 +113,7 @@ class JobController extends Controller
         $request->session()->put('job_history_views', $uniqHistory);
 
         // 最新4件の閲覧履歴を取得、historyで並べ替え
-        $historyJobs = Job::query()
-            ->with(["area", "languages", "skills", "engineerTypes"])->whereIn("id", $prevHistoryCollection)
-            ->orderByRaw(DB::raw("FIELD(id, " . implode(',', $prevHistoryCollection->toArray()) . ")"))
-            ->take(4)->get();
+        $historyJobs = $jobService->getHistoryJobs($prevHistoryCollection);
 
         $job = Job::query()->with(["area", "languages", "skills", "engineerTypes"])->findOrFail($id);
 
