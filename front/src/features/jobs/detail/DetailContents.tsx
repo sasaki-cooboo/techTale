@@ -18,7 +18,11 @@ import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
 import RelatedCard from "./RelatedCard";
 import { JobDetailResponse } from "../job.type";
 
-const DetailContents = ({ detail, relatedJobs }: JobDetailResponse) => {
+const DetailContents = ({
+  detail,
+  relatedJobs,
+  historyJobs,
+}: JobDetailResponse) => {
   const {
     title,
     cost,
@@ -199,6 +203,25 @@ const DetailContents = ({ detail, relatedJobs }: JobDetailResponse) => {
           </Typography>
         </Stack>
       </Container>
+      {historyJobs.length ? (
+        <Container sx={{ py: 4, mt: 4, bgcolor: "white" }}>
+          <Typography variant="h6" fontWeight={500}>
+            閲覧した案件
+          </Typography>
+          {/* 4件のみ表示 */}
+          <Grid mt={1} container spacing={2}>
+            {historyJobs.map((item, i) => (
+              <Grid key={i} item sm={3}>
+                <RelatedCard
+                  {...item}
+                  languages={item.languages.map((language) => language.name)}
+                  area={item.area.name}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      ) : null}
       <Container sx={{ py: 4, mt: 4, bgcolor: "white" }}>
         <Typography variant="h6" fontWeight={500}>
           条件が似ている案件

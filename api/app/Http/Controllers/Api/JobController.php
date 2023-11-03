@@ -17,7 +17,7 @@ use App\Models\Job;
 use App\Models\Language;
 use App\Models\Skill;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class JobController extends Controller
 {
@@ -100,9 +100,25 @@ class JobController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, int $id)
     {
+        $prevHistory = session('job_history_views');
+        $prevHistoryCollection = collect($prevHistory);
+        // 先頭に新しい履歴idを追加
+        $newHistoryCollection = $prevHistoryCollection->prepend($id);
+        // 新しい順で重複削除し保存。values->allでキーをリセット
+        // uniqueの前後でreverseし、重複のものは最新にする
+        $uniqHistory = $newHistoryCollection->reverse()->unique()->reverse()->values()->all();
+        $request->session()->put('job_history_views', $uniqHistory);
+
+        // 最新4件の閲覧履歴を取得、historyで並べ替え
+        $historyJobs = Job::query()
+            ->with(["area", "languages", "skills", "engineerTypes"])->whereIn("id", $prevHistoryCollection)
+            ->orderByRaw(DB::raw("FIELD(id, " . implode(',', $prevHistoryCollection->toArray()) . ")"))
+            ->take(4)->get();
+
         $job = Job::query()->with(["area", "languages", "skills", "engineerTypes"])->findOrFail($id);
+
         $relatedJobs = Job::query()
             // TODO:ランダムでなく関連付けさせる
             // 自分は除外したい
@@ -110,6 +126,7 @@ class JobController extends Controller
         return [
             "detail" => new JobResource($job),
             "relatedJobs" => new JobCollection($relatedJobs),
+            "historyJobs" => new JobCollection($historyJobs),
         ];
     }
 
