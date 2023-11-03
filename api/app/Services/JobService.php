@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Job;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class JobService
@@ -10,11 +11,11 @@ class JobService
     /**
      * 閲覧した案件を最新4件取得する
      * 
-     * @param mixed $historyCollection 案件idのコレクション
+     * @param Collection $historyCollection 案件idのコレクション
      * 
-     * @return mixed 案件のコレクション
+     * @return Collection 案件のコレクション
      */
-    public function getHistoryJobs($historyCollection): mixed
+    public function getHistoryJobs(Collection $historyCollection): Collection
     {
         return
             Job::query()
