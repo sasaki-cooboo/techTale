@@ -7,6 +7,7 @@ const LoadPage = () => {
       fontSize={18}
       mt={10}
       fontWeight={500}
+      height={"100vh"}
       variant="h3"
     >
       読み込み中...

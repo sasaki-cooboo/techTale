@@ -7,10 +7,12 @@ import Loading from "@/components/Loading";
 import { useAtom, useSetAtom } from "jotai";
 import { jobDetailAtom, loadingAtom } from "@/atoms/atoms";
 import DetailContentsWrap from "@/features/jobs/detail/DetailContentsWrap";
+import { useRouter } from "next/router";
 
 export default function Detail({ id }: { id: string }) {
   const [isLoading, setIsLoading] = useAtom(loadingAtom);
   const setDetail = useSetAtom(jobDetailAtom);
+  const router = useRouter();
   useEffect(() => {
     setIsLoading(true);
     fetch
@@ -18,10 +20,14 @@ export default function Detail({ id }: { id: string }) {
       .then((res) => {
         setDetail(res.data);
       })
+      .catch(() => {
+        // 該当の案件がない場合、404ページにリダイレクト
+        router.replace("/404.html");
+      })
       .finally(() => {
         setIsLoading(false);
       });
-  }, [id, setDetail, setIsLoading]);
+  }, [id, setDetail, setIsLoading, router]);
   return (
     <>
       <Head>
