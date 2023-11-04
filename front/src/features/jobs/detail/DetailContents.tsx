@@ -206,7 +206,7 @@ const DetailContents = ({
       {historyJobs.length ? (
         <Container sx={{ py: 4, mt: 4, bgcolor: "white" }}>
           <Typography variant="h6" fontWeight={500}>
-            閲覧した案件
+            閲覧した案件(最新4件)
           </Typography>
           {/* 4件のみ表示 */}
           <Grid mt={1} container spacing={2}>
