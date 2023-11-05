@@ -12,10 +12,10 @@ class ExampleTest extends TestCase
      *
      * @return void
      */
-    public function test_the_application_returns_a_successful_response()
+    public function test_basic認証がかかっていること()
     {
-        $response = $this->get('/');
+        $response = $this->get('/api/test');
 
-        $response->assertStatus(200);
+        $response->assertStatus(401);
     }
 }

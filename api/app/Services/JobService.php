@@ -40,9 +40,20 @@ class JobService
     {
         // 先頭に新しい履歴idを追加
         $newHistoryCollection = $historyCollection->prepend($id);
+        $uniqueHistory = $this->removeDuplicateHistory($newHistoryCollection);
+        session(['job_history_views' => $uniqueHistory]);
+    }
+
+    /**
+     * 履歴の重複削除する
+     *
+     * @param Collection $historyCollection
+     * @return array
+     */
+    public function removeDuplicateHistory(Collection $historyCollection): array
+    {
         // 新しい順で重複削除し保存。values->allでキーをリセット
         // uniqueの前後でreverseし、重複のものは最新にする
-        $uniqHistory = $newHistoryCollection->reverse()->unique()->reverse()->values()->all();
-        session(['job_history_views' => $uniqHistory]);
+        return $historyCollection->reverse()->unique()->reverse()->values()->all();
     }
 }
