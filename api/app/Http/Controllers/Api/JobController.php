@@ -104,7 +104,6 @@ class JobController extends Controller
      */
     public function show(int $id, JobService $jobService)
     {
-
         $job = Job::query()->with(["area", "languages", "skills", "engineerTypes"])->findOrFail($id);
 
         $relatedJobs = Job::query()
@@ -112,11 +111,10 @@ class JobController extends Controller
             // 自分は除外したい
             ->with(["area", "languages", "skills", "engineerTypes"])->inRandomOrder()->take(4)->get();
 
-
         $prevHistoryCollection = collect(session('job_history_views'));
 
-        // 最新4件の閲覧履歴を取得、historyで並べ替え
-        $historyJobs = $jobService->getHistoryJobs($prevHistoryCollection);
+        // 最新4件の閲覧履歴を取得、逆順にして渡す
+        $historyJobs = $jobService->getHistoryJobs($prevHistoryCollection->reverse());
 
         // セッションに履歴を保存
         $jobService->setHistoryToSession($id, $prevHistoryCollection);
