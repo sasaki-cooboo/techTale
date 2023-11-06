@@ -5,7 +5,7 @@ const LoadPage = () => {
     <Typography
       textAlign={"center"}
       fontSize={18}
-      mt={10}
+      pt={20}
       fontWeight={500}
       height={"100vh"}
       variant="h3"
