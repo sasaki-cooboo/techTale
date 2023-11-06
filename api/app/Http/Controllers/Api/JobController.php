@@ -111,7 +111,8 @@ class JobController extends Controller
             // 自分は除外したい
             ->with(["area", "languages", "skills", "engineerTypes"])->inRandomOrder()->take(4)->get();
 
-        $prevHistoryCollection = collect(session('job_history_views'));
+        // 初回も履歴に表示されるように、現在閲覧中のidをpush
+        $prevHistoryCollection = collect(session('job_history_views'))->push($id);
 
         // 最新4件の閲覧履歴を取得、逆順にして渡す
         $historyJobs = $jobService->getHistoryJobs($prevHistoryCollection->reverse());
