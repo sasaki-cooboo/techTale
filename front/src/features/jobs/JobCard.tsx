@@ -67,8 +67,6 @@ const JobCard = ({
           style={titleStyle}
           href={applyLink}
           underline="hover"
-          target="_blank"
-          rel="noopener noreferrer"
         >
           {title}
         </Link>
@@ -161,8 +159,6 @@ const JobCard = ({
             color="primary"
             style={buttonStyle}
             href={applyLink}
-            target="_blank"
-            rel="noopener noreferrer"
           >
             詳細を見る
           </Button>
