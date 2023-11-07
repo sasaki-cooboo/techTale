@@ -53,7 +53,6 @@ const JobCard = ({
 }: Props) => {
   const { palette } = useTheme();
   const { tableHeaderStyle, tagStyle } = useTableStyle();
-  const router = useRouter();
 
   const titleStyle = {
     fontSize: 18,
@@ -71,6 +70,7 @@ const JobCard = ({
     width: 200,
   };
 
+  const router = useRouter();
   const setLoading = useSetAtom(loadingAtom);
   const setJobData = useSetAtom(jobAtom);
   const setCondition = useSetAtom(jobConditionAtom);
