@@ -52,11 +52,16 @@ docker compose exec api bash
 
 fastcgi_pass で api の 9000 番ポート を指定
 
-##　デプロイ
+## デプロイ
 
 - front
 
-  - cd front && components-v1
+```
+cd front && components-v1
+```
 
 - api
-  - cd api && serverless deploy
+
+```
+cd api && serverless deploy
+```
