@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { useTableStyle } from "../useTableStyle";
 import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
-import RelatedCard from "./RelatedCard";
+import JobCardSmall from "./JobCardSmall";
 import { JobDetailResponse } from "../job.type";
 
 const DetailContents = ({
@@ -212,7 +212,7 @@ const DetailContents = ({
           <Grid mt={1} container spacing={2}>
             {historyJobs.map((item, i) => (
               <Grid key={i} item sm={3}>
-                <RelatedCard
+                <JobCardSmall
                   {...item}
                   languages={item.languages.map((language) => language.name)}
                   area={item.area.name}
@@ -231,7 +231,7 @@ const DetailContents = ({
         <Grid mt={1} container spacing={2}>
           {relatedJobs.map((item, i) => (
             <Grid key={i} item sm={3}>
-              <RelatedCard
+              <JobCardSmall
                 {...item}
                 languages={item.languages.map((language) => language.name)}
                 area={item.area.name}
