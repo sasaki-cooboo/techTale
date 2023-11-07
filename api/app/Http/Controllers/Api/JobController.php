@@ -16,7 +16,9 @@ use App\Models\Feature;
 use App\Models\Job;
 use App\Models\Language;
 use App\Models\Skill;
+use App\Services\JobService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class JobController extends Controller
@@ -100,16 +102,28 @@ class JobController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id, JobService $jobService)
     {
         $job = Job::query()->with(["area", "languages", "skills", "engineerTypes"])->findOrFail($id);
+
         $relatedJobs = Job::query()
             // TODO:ランダムでなく関連付けさせる
             // 自分は除外したい
             ->with(["area", "languages", "skills", "engineerTypes"])->inRandomOrder()->take(4)->get();
+
+        // 初回も履歴に表示されるように、現在閲覧中のidをpush
+        $prevHistoryCollection = collect(session('job_history_views'))->push($id);
+
+        // 最新4件の閲覧履歴を取得、逆順にして渡す
+        $historyJobs = $jobService->getHistoryJobs($prevHistoryCollection->reverse());
+
+        // セッションに履歴を保存
+        $jobService->setHistoryToSession($id, $prevHistoryCollection);
+
         return [
             "detail" => new JobResource($job),
             "relatedJobs" => new JobCollection($relatedJobs),
+            "historyJobs" => new JobCollection($historyJobs),
         ];
     }
 

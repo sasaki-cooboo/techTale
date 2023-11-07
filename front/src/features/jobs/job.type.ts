@@ -15,6 +15,7 @@ export type JobType = {
 export type JobDetailResponse = {
   detail: JobType;
   relatedJobs: JobType[];
+  historyJobs: JobType[];
 };
 
 export type JobListResponse = {

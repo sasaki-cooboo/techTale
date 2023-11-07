@@ -1,11 +1,33 @@
 import Head from "next/head";
-import DetailContents from "@/features/jobs/detail/DetailContents";
-import Layout from "@/features/jobs/detail/Layout";
 import { GetServerSideProps } from "next";
 import fetch from "@/libs/fetch";
-import { JobDetailResponse, JobType } from "@/features/jobs/job.type";
+import { JobDetailResponse } from "@/features/jobs/job.type";
+import { useEffect } from "react";
+import Loading from "@/components/Loading";
+import { useAtom, useSetAtom } from "jotai";
+import { jobDetailAtom, loadingAtom } from "@/atoms/atoms";
+import DetailContentsWrap from "@/features/jobs/detail/DetailContentsWrap";
+import { useRouter } from "next/router";
 
-export default function Detail(props: JobDetailResponse) {
+export default function Detail({ id }: { id: string }) {
+  const [isLoading, setIsLoading] = useAtom(loadingAtom);
+  const setDetail = useSetAtom(jobDetailAtom);
+  const router = useRouter();
+  useEffect(() => {
+    setIsLoading(true);
+    fetch
+      .get<JobDetailResponse>(`/api/v1/job/${id}`)
+      .then((res) => {
+        setDetail(res.data);
+      })
+      .catch(() => {
+        // 該当の案件がない場合、404ページにリダイレクト
+        router.replace("/404.html");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [id, setDetail, setIsLoading, router]);
   return (
     <>
       <Head>
@@ -14,11 +36,8 @@ export default function Detail(props: JobDetailResponse) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div>
-        <Layout jobName={props.detail.title}>
-          <DetailContents {...props} />
-        </Layout>
-      </div>
+      <DetailContentsWrap />
+      <Loading open={isLoading} />
     </>
   );
 }
@@ -32,14 +51,9 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       notFound: true,
     };
   }
-  try {
-    const { data } = await fetch.get<JobType>(`/api/v1/job/${query.id}`);
-    return {
-      props: data,
-    };
-  } catch (error) {
-    return {
-      notFound: true,
-    };
-  }
+  return {
+    props: {
+      id: query.id,
+    },
+  };
 };

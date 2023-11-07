@@ -4,6 +4,7 @@ import JobList from "./JobList";
 import BasicPagination from "@/components/BasicPagination";
 import { useAtomValue } from "jotai";
 import { jobAtom, loadingAtom } from "@/atoms/atoms";
+import LoadPage from "@/components/LoadPage";
 
 const SearchContents = () => {
   const { palette } = useTheme();
@@ -11,17 +12,7 @@ const SearchContents = () => {
   const loading = useAtomValue(loadingAtom);
 
   if (loading || !data) {
-    return (
-      <Typography
-        textAlign={"center"}
-        fontSize={18}
-        mt={10}
-        fontWeight={500}
-        variant="h3"
-      >
-        読み込み中...
-      </Typography>
-    );
+    return <LoadPage />;
   }
 
   return (
