@@ -16,6 +16,17 @@ import {
 import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
 import RoomIcon from "@mui/icons-material/Room";
 import { useTableStyle } from "./useTableStyle";
+import { useRouter } from "next/router";
+import { useSetAtom } from "jotai";
+import {
+  jobAtom,
+  jobConditionAtom,
+  loadingAtom,
+  initialJobCondition,
+  jobConditionDisplayAtom,
+} from "@/atoms/atoms";
+import { JobListResponse } from "./job.type";
+import fetch from "@/libs/fetch";
 
 type Props = {
   title: string;
@@ -42,6 +53,7 @@ const JobCard = ({
 }: Props) => {
   const { palette } = useTheme();
   const { tableHeaderStyle, tagStyle } = useTableStyle();
+  const router = useRouter();
 
   const titleStyle = {
     fontSize: 18,
@@ -57,6 +69,34 @@ const JobCard = ({
   const buttonStyle = {
     marginTop: "16px",
     width: 200,
+  };
+
+  const setLoading = useSetAtom(loadingAtom);
+  const setJobData = useSetAtom(jobAtom);
+  const setCondition = useSetAtom(jobConditionAtom);
+  const setConditionDisplay = useSetAtom(jobConditionDisplayAtom);
+
+  /**
+   * 特徴クリック時
+   */
+  const handleClickFeature = async (featuteId: number) => {
+    try {
+      setLoading(true);
+      const { data } = await fetch.get<JobListResponse>(
+        `/api/v1/jobs?features=${featuteId}`
+      );
+      setJobData(data);
+      setCondition({ ...initialJobCondition, features: [featuteId] });
+      setConditionDisplay({ ...initialJobCondition, features: [featuteId] });
+      router.push(`/job/search?features=${featuteId}`, undefined, {
+        shallow: true,
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+      window.scrollTo({ top: 0 });
+    }
   };
 
   return (
@@ -98,7 +138,7 @@ const JobCard = ({
         <Stack my={2} direction={"row"} gap={1}>
           {features.map((feature, i) => (
             <Button
-              onClick={() => alert("実装中です。")}
+              onClick={() => handleClickFeature(feature.id)}
               variant="text"
               key={i}
               sx={tagStyle}
