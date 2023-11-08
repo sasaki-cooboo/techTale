@@ -15,8 +15,9 @@ import {
 } from "@mui/material";
 import { useTableStyle } from "../useTableStyle";
 import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
-import RelatedCard from "./RelatedCard";
+import JobCardSmall from "./JobCardSmall";
 import { JobDetailResponse } from "../job.type";
+import useJobs from "../useJobs";
 
 const DetailContents = ({
   detail,
@@ -52,6 +53,14 @@ const DetailContents = ({
       top: 4,
     },
   };
+
+  const {
+    handleClickFeature,
+    handleClickLanguage,
+    handleClickSkill,
+    handleClickEngineerType,
+    handleClickArea,
+  } = useJobs();
 
   return (
     <>
@@ -89,7 +98,7 @@ const DetailContents = ({
                     label={area.name}
                     sx={{ fontSize: 14 }}
                     variant="outlined"
-                    onClick={() => alert("実装中です。")}
+                    onClick={() => handleClickArea(area.id)}
                   />
                 </TableCell>
               </TableRow>
@@ -103,7 +112,7 @@ const DetailContents = ({
                         label={language.name}
                         sx={{ fontSize: 14 }}
                         variant="outlined"
-                        onClick={() => alert("実装中です。")}
+                        onClick={() => handleClickLanguage(language.id)}
                       />
                     ))}
                   </Stack>
@@ -119,7 +128,7 @@ const DetailContents = ({
                         label={skill.name}
                         sx={{ fontSize: 14 }}
                         variant="outlined"
-                        onClick={() => alert("実装中です。")}
+                        onClick={() => handleClickSkill(skill.id)}
                       />
                     ))}
                   </Stack>
@@ -135,7 +144,7 @@ const DetailContents = ({
                         label={engineerType.name}
                         sx={{ fontSize: 14 }}
                         variant="outlined"
-                        onClick={() => alert("実装中です。")}
+                        onClick={() => handleClickEngineerType(engineerType.id)}
                       />
                     ))}
                   </Stack>
@@ -187,7 +196,7 @@ const DetailContents = ({
                   label={feature.name}
                   sx={{ fontSize: 14 }}
                   variant="outlined"
-                  onClick={() => alert("実装中です。")}
+                  onClick={() => handleClickFeature(feature.id)}
                 />
               ))}
             </Stack>
@@ -212,7 +221,7 @@ const DetailContents = ({
           <Grid mt={1} container spacing={2}>
             {historyJobs.map((item, i) => (
               <Grid key={i} item sm={3}>
-                <RelatedCard
+                <JobCardSmall
                   {...item}
                   languages={item.languages.map((language) => language.name)}
                   area={item.area.name}
@@ -231,7 +240,7 @@ const DetailContents = ({
         <Grid mt={1} container spacing={2}>
           {relatedJobs.map((item, i) => (
             <Grid key={i} item sm={3}>
-              <RelatedCard
+              <JobCardSmall
                 {...item}
                 languages={item.languages.map((language) => language.name)}
                 area={item.area.name}

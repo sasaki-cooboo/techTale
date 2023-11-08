@@ -17,6 +17,8 @@ import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
 import RoomIcon from "@mui/icons-material/Room";
 import { useTableStyle } from "./useTableStyle";
 
+import useJobs from "./useJobs";
+
 type Props = {
   title: string;
   area: string;
@@ -59,6 +61,13 @@ const JobCard = ({
     width: 200,
   };
 
+  const {
+    handleClickFeature,
+    handleClickLanguage,
+    handleClickSkill,
+    handleClickEngineerType,
+  } = useJobs();
+
   return (
     <Card sx={{ p: 1 }}>
       <CardContent>
@@ -98,7 +107,7 @@ const JobCard = ({
         <Stack my={2} direction={"row"} gap={1}>
           {features.map((feature, i) => (
             <Button
-              onClick={() => alert("実装中です。")}
+              onClick={() => handleClickFeature(feature.id)}
               variant="text"
               key={i}
               sx={tagStyle}
@@ -113,13 +122,22 @@ const JobCard = ({
               <TableCell style={tableHeaderStyle}>言語・スキル</TableCell>
               <TableCell>
                 <Stack gap={1} direction={"row"} flexWrap={"wrap"}>
-                  {[...languages, ...skills].map((item, i) => (
+                  {languages.map((item) => (
                     <Chip
-                      key={i}
+                      key={item.id}
                       label={item.name}
                       sx={{ fontSize: 14 }}
                       variant="outlined"
-                      onClick={() => alert("実装中です。")}
+                      onClick={() => handleClickLanguage(item.id)}
+                    />
+                  ))}
+                  {skills.map((item) => (
+                    <Chip
+                      key={item.id * 10000} // languageとkeyが被らないように調整
+                      label={item.name}
+                      sx={{ fontSize: 14 }}
+                      variant="outlined"
+                      onClick={() => handleClickSkill(item.id)}
                     />
                   ))}
                 </Stack>
@@ -135,7 +153,7 @@ const JobCard = ({
                       label={engineerType.name}
                       sx={{ fontSize: 14 }}
                       variant="outlined"
-                      onClick={() => alert("実装中です。")}
+                      onClick={() => handleClickEngineerType(engineerType.id)}
                     />
                   ))}
                 </Stack>

@@ -16,10 +16,10 @@ type Props = {
 };
 
 /**
- * 関連する案件のカードコンポーネント
- *
+ * 案件のカードコンポーネント
+ * 閲覧履歴、関連する案件などに使用
  **/
-const RelatedCard = ({ id, title, cost, languages, area }: Props) => {
+const JobCardSmall = ({ id, title, cost, languages, area }: Props) => {
   const { palette } = useTheme();
 
   return (
@@ -71,4 +71,4 @@ const RelatedCard = ({ id, title, cost, languages, area }: Props) => {
     </Card>
   );
 };
-export default RelatedCard;
+export default JobCardSmall;
