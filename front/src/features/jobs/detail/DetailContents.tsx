@@ -16,17 +16,8 @@ import {
 import { useTableStyle } from "../useTableStyle";
 import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
 import JobCardSmall from "./JobCardSmall";
-import { JobDetailResponse, JobListResponse } from "../job.type";
-import fetch from "@/libs/fetch";
-import { useSetAtom } from "jotai";
-import {
-  jobAtom,
-  jobConditionAtom,
-  jobConditionDisplayAtom,
-  loadingAtom,
-  initialJobCondition,
-} from "@/atoms/atoms";
-import { useRouter } from "next/router";
+import { JobDetailResponse } from "../job.type";
+import useJobs from "../useJobs";
 
 const DetailContents = ({
   detail,
@@ -63,34 +54,12 @@ const DetailContents = ({
     },
   };
 
-  const router = useRouter();
-  const setLoading = useSetAtom(loadingAtom);
-  const setJobData = useSetAtom(jobAtom);
-  const setCondition = useSetAtom(jobConditionAtom);
-  const setConditionDisplay = useSetAtom(jobConditionDisplayAtom);
-
-  /**
-   * こだわりポイントクリック時
-   */
-  const handleClickFeature = async (featuteId: number) => {
-    try {
-      setLoading(true);
-      const { data } = await fetch.get<JobListResponse>(
-        `/api/v1/jobs?features=${featuteId}`
-      );
-      setJobData(data);
-      setCondition({ ...initialJobCondition, features: [featuteId] });
-      setConditionDisplay({ ...initialJobCondition, features: [featuteId] });
-      router.push(`/job/search?features=${featuteId}`, undefined, {
-        shallow: true,
-      });
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-      window.scrollTo({ top: 0 });
-    }
-  };
+  const {
+    handleClickFeature,
+    handleClickLanguage,
+    handleClickSkill,
+    handleClickEngineerType,
+  } = useJobs();
 
   return (
     <>
@@ -142,7 +111,7 @@ const DetailContents = ({
                         label={language.name}
                         sx={{ fontSize: 14 }}
                         variant="outlined"
-                        onClick={() => alert("実装中です。")}
+                        onClick={() => handleClickLanguage(language.id)}
                       />
                     ))}
                   </Stack>
@@ -158,7 +127,7 @@ const DetailContents = ({
                         label={skill.name}
                         sx={{ fontSize: 14 }}
                         variant="outlined"
-                        onClick={() => alert("実装中です。")}
+                        onClick={() => handleClickSkill(skill.id)}
                       />
                     ))}
                   </Stack>
@@ -174,7 +143,7 @@ const DetailContents = ({
                         label={engineerType.name}
                         sx={{ fontSize: 14 }}
                         variant="outlined"
-                        onClick={() => alert("実装中です。")}
+                        onClick={() => handleClickEngineerType(engineerType.id)}
                       />
                     ))}
                   </Stack>

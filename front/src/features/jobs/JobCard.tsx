@@ -16,17 +16,8 @@ import {
 import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
 import RoomIcon from "@mui/icons-material/Room";
 import { useTableStyle } from "./useTableStyle";
-import { useRouter } from "next/router";
-import { useSetAtom } from "jotai";
-import {
-  jobAtom,
-  jobConditionAtom,
-  loadingAtom,
-  initialJobCondition,
-  jobConditionDisplayAtom,
-} from "@/atoms/atoms";
-import { JobListResponse } from "./job.type";
-import fetch from "@/libs/fetch";
+
+import useJobs from "./useJobs";
 
 type Props = {
   title: string;
@@ -70,34 +61,12 @@ const JobCard = ({
     width: 200,
   };
 
-  const router = useRouter();
-  const setLoading = useSetAtom(loadingAtom);
-  const setJobData = useSetAtom(jobAtom);
-  const setCondition = useSetAtom(jobConditionAtom);
-  const setConditionDisplay = useSetAtom(jobConditionDisplayAtom);
-
-  /**
-   * 特徴クリック時
-   */
-  const handleClickFeature = async (featuteId: number) => {
-    try {
-      setLoading(true);
-      const { data } = await fetch.get<JobListResponse>(
-        `/api/v1/jobs?features=${featuteId}`
-      );
-      setJobData(data);
-      setCondition({ ...initialJobCondition, features: [featuteId] });
-      setConditionDisplay({ ...initialJobCondition, features: [featuteId] });
-      router.push(`/job/search?features=${featuteId}`, undefined, {
-        shallow: true,
-      });
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-      window.scrollTo({ top: 0 });
-    }
-  };
+  const {
+    handleClickFeature,
+    handleClickLanguage,
+    handleClickSkill,
+    handleClickEngineerType,
+  } = useJobs();
 
   return (
     <Card sx={{ p: 1 }}>
@@ -153,13 +122,22 @@ const JobCard = ({
               <TableCell style={tableHeaderStyle}>言語・スキル</TableCell>
               <TableCell>
                 <Stack gap={1} direction={"row"} flexWrap={"wrap"}>
-                  {[...languages, ...skills].map((item, i) => (
+                  {languages.map((item) => (
                     <Chip
-                      key={i}
+                      key={item.id}
                       label={item.name}
                       sx={{ fontSize: 14 }}
                       variant="outlined"
-                      onClick={() => alert("実装中です。")}
+                      onClick={() => handleClickLanguage(item.id)}
+                    />
+                  ))}
+                  {skills.map((item) => (
+                    <Chip
+                      key={item.id * 10000} // languageとkeyが被らないように調整
+                      label={item.name}
+                      sx={{ fontSize: 14 }}
+                      variant="outlined"
+                      onClick={() => handleClickSkill(item.id)}
                     />
                   ))}
                 </Stack>
@@ -175,7 +153,7 @@ const JobCard = ({
                       label={engineerType.name}
                       sx={{ fontSize: 14 }}
                       variant="outlined"
-                      onClick={() => alert("実装中です。")}
+                      onClick={() => handleClickEngineerType(engineerType.id)}
                     />
                   ))}
                 </Stack>
