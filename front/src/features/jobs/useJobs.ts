@@ -118,11 +118,39 @@ const useJobs = () => {
     }
   };
 
+  /**
+   * 地域クリック時
+   */
+  const handleClickArea = async (areaId: number) => {
+    try {
+      setLoading(true);
+      const { data } = await fetch.get<JobListResponse>(
+        `/api/v1/jobs?areas=${areaId}`
+      );
+      setJobData(data);
+      setCondition({ ...initialJobCondition, areas: [areaId] });
+      setConditionDisplay({
+        ...initialJobCondition,
+        areas: [areaId],
+      });
+      setSearchKeyword("");
+      router.push(`/job/search?areas=${areaId}`, undefined, {
+        shallow: true,
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+      window.scrollTo({ top: 0 });
+    }
+  };
+
   return {
     handleClickFeature,
     handleClickLanguage,
     handleClickSkill,
     handleClickEngineerType,
+    handleClickArea,
   };
 };
 export default useJobs;

@@ -59,6 +59,7 @@ const DetailContents = ({
     handleClickLanguage,
     handleClickSkill,
     handleClickEngineerType,
+    handleClickArea,
   } = useJobs();
 
   return (
@@ -97,7 +98,7 @@ const DetailContents = ({
                     label={area.name}
                     sx={{ fontSize: 14 }}
                     variant="outlined"
-                    onClick={() => alert("実装中です。")}
+                    onClick={() => handleClickArea(area.id)}
                   />
                 </TableCell>
               </TableRow>
