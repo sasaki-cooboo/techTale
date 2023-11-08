@@ -81,3 +81,17 @@ cd front && components-v1
 ```
 cd api && serverless deploy
 ```
+
+## 便利コマンド
+
+### API のルートを確認したい
+
+```
+cd api && serverless bref:cli --args="route:list"
+```
+
+### マイグレーションしたい
+
+```
+cd api && serverless bref:cli --args="migrate --force"
+```
