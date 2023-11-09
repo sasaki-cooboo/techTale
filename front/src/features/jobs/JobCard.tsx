@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -18,6 +18,7 @@ import RoomIcon from "@mui/icons-material/Room";
 import { useTableStyle } from "./useTableStyle";
 
 import useJobs from "./useJobs";
+import { BookmarkAdd, BookmarkAdded } from "@mui/icons-material";
 
 type Props = {
   title: string;
@@ -61,12 +62,19 @@ const JobCard = ({
     width: 200,
   };
 
+  const buttonBookmarkStyle = {
+    ...buttonStyle,
+    backgroundColor: "#f8b500",
+  };
+
   const {
     handleClickFeature,
     handleClickLanguage,
     handleClickSkill,
     handleClickEngineerType,
   } = useJobs();
+
+  const [bookmark, setBookMark] = useState(false);
 
   return (
     <Card sx={{ p: 1 }}>
@@ -171,7 +179,21 @@ const JobCard = ({
             </TableRow>
           </TableBody>
         </Table>
-        <Stack justifyContent={"center"} alignItems={"center"}>
+        <Stack
+          justifyContent={"center"}
+          direction={"row"}
+          columnGap={2}
+          alignItems={"center"}
+        >
+          <Button
+            variant={bookmark ? "contained" : "outlined"}
+            color="primary"
+            style={bookmark ? buttonBookmarkStyle : buttonStyle}
+            onClick={() => setBookMark(!bookmark)}
+            startIcon={bookmark ? <BookmarkAdded /> : <BookmarkAdd />}
+          >
+            {bookmark ? "ブックマーク済み" : "ブックマークする"}
+          </Button>
           <Button
             variant="contained"
             color="primary"
