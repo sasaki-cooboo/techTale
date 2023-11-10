@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\JobBookmarkRequest;
 use App\Http\Resources\AreaResource;
 use App\Http\Resources\EngineerTypeResource;
 use App\Http\Resources\FeatureResource;
@@ -155,5 +156,31 @@ class JobController extends Controller
             "engineerTypes" => EngineerTypeResource::collection($engineerTypes),
             "features" => FeatureResource::collection($features),
         ];
+    }
+
+    /**
+     * ブックマーク
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function bookmark(JobBookmarkRequest $request): array
+    {
+        $id = $request->id;
+        $bookmarkIds = session('job_bookmark', []);
+
+        // $idが含まれているか確認
+        $index = array_search($id, $bookmarkIds);
+
+        if ($index !== false) {
+            // $idが含まれている場合は削除
+            unset($bookmarkIds[$index]);
+        } else {
+            // $idが含まれていない場合は追加
+            $bookmarkIds[] = $id;
+        }
+
+        // セッションに更新したブックマークの配列を保存
+        session(['job_bookmark' => $bookmarkIds]);
+        return $bookmarkIds;
     }
 }
