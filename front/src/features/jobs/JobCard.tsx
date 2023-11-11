@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Card,
   CardContent,
@@ -19,8 +19,12 @@ import { useTableStyle } from "./useTableStyle";
 
 import useJobs from "./useJobs";
 import { BookmarkAdd, BookmarkAdded } from "@mui/icons-material";
+import fetch from "@/libs/fetch";
+import { useAtom } from "jotai";
+import { jobBookmarkAtom } from "@/atoms/atoms";
 
 type Props = {
+  id: number;
   title: string;
   area: string;
   cost: number;
@@ -33,6 +37,7 @@ type Props = {
 };
 
 const JobCard = ({
+  id,
   title,
   area,
   cost,
@@ -74,7 +79,27 @@ const JobCard = ({
     handleClickEngineerType,
   } = useJobs();
 
-  const [bookmark, setBookMark] = useState(false);
+  const [bookmarkIds, setBookMarkIds] = useAtom(jobBookmarkAtom);
+  const hasBoookMark = bookmarkIds.includes(id);
+
+  /**
+   * ブックマーククリック時
+   */
+  const handleClickBookmark = async () => {
+    // ブックマーク済みなら削除、そうでなければ追加
+    const newBookmarkIds = hasBoookMark
+      ? bookmarkIds.filter((bookmarkId) => bookmarkId !== id)
+      : [...bookmarkIds, id];
+    // サーバー側の処理待たずにUIを変更
+    setBookMarkIds(newBookmarkIds);
+    try {
+      await fetch.post<number[]>("/api/v1/jobBookmark", {
+        id,
+      });
+    } catch (error) {
+      alert("bookmark failed");
+    }
+  };
 
   return (
     <Card sx={{ p: 1 }}>
@@ -186,13 +211,13 @@ const JobCard = ({
           alignItems={"center"}
         >
           <Button
-            variant={bookmark ? "contained" : "outlined"}
+            variant={hasBoookMark ? "contained" : "outlined"}
             color="primary"
-            style={bookmark ? buttonBookmarkStyle : buttonStyle}
-            onClick={() => setBookMark(!bookmark)}
-            startIcon={bookmark ? <BookmarkAdded /> : <BookmarkAdd />}
+            style={hasBoookMark ? buttonBookmarkStyle : buttonStyle}
+            onClick={handleClickBookmark}
+            startIcon={hasBoookMark ? <BookmarkAdded /> : <BookmarkAdd />}
           >
-            {bookmark ? "ブックマーク済み" : "ブックマークする"}
+            {hasBoookMark ? "ブックマーク済み" : "ブックマークする"}
           </Button>
           <Button
             variant="contained"

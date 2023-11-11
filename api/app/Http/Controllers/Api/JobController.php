@@ -159,11 +159,24 @@ class JobController extends Controller
     }
 
     /**
-     * ブックマーク
+     * ブックマーク取得
      *
      * @return \Illuminate\Http\Response
      */
-    public function bookmark(JobBookmarkRequest $request): array
+    public function getBookmark(): array
+    {
+        $bookmarkIds = session('job_bookmark', []);
+
+        return $bookmarkIds;
+    }
+
+    /**
+     * ブックマーク更新
+     *
+     * @param \App\Http\Requests\JobBookmarkRequest $request
+     * @return \Illuminate\Http\Response
+     */
+    public function setBookmark(JobBookmarkRequest $request): array
     {
         $id = $request->id;
         $bookmarkIds = session('job_bookmark', []);

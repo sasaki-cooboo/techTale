@@ -9,12 +9,12 @@ import {
   JobListResponse,
 } from "@/features/jobs/job.type";
 import Loading from "@/components/Loading";
-import { useAtomValue } from "jotai";
 import {
   MENU_LIST,
   initialJobCondition,
   jobAtom,
   jobAttributesAtom,
+  jobBookmarkAtom,
   jobConditionAtom,
   jobConditionDisplayAtom,
   jobSortAtom,
@@ -25,10 +25,13 @@ import { Typography } from "@mui/material";
 import { useHydrateAtoms } from "jotai/utils";
 import { convertQueryStringToObject } from "@/libs/convertQuery";
 import SearchCondition from "@/features/jobs/SearchCondition";
+import { useEffect } from "react";
+import { useAtom, useSetAtom } from "jotai";
 
 type Props = {
   jobAttributes: JobAttributesType;
   jobs: JobListResponse;
+  bookmarkIds: number[];
   condition: JobConditionType;
   sort: (typeof MENU_LIST)[number];
 };
@@ -39,7 +42,9 @@ export default function Search({
   condition,
   sort,
 }: Props) {
-  const isLoading = useAtomValue(loadingAtom);
+  const [isLoading, setLoading] = useAtom(loadingAtom);
+  const setBookmark = useSetAtom(jobBookmarkAtom);
+
   useHydrateAtoms([
     [jobAtom, jobs],
     [jobConditionAtom, condition],
@@ -48,6 +53,20 @@ export default function Search({
     [jobAttributesAtom, jobAttributes],
     [jobTotalCountAtom, jobs.meta.total],
   ]);
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      // ブックマーク取得、セッション使用のためclientから取得する
+      const { data: bookmarkIds } = await fetch.get<number[]>(
+        `/api/v1/jobBookmark`
+      );
+      setBookmark(bookmarkIds);
+    })().then(() => {
+      setLoading(false);
+    });
+  }, [setBookmark, setLoading]);
+
   return (
     <>
       <Head>
