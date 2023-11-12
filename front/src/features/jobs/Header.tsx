@@ -12,6 +12,7 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import Link from "next/link";
 import { css } from "@emotion/react";
 import BookmarListButton from "./BookmarListButton";
+import { useRouter } from "next/router";
 
 type Props = {
   jobName?: string; // 案件名
@@ -19,6 +20,7 @@ type Props = {
 
 const Header = ({ jobName }: Props) => {
   const { palette } = useTheme();
+  const router = useRouter();
 
   const linkStyle = css({
     font: "14px",
@@ -40,7 +42,9 @@ const Header = ({ jobName }: Props) => {
       </Link>
     ) : (
       <Typography sx={{ fontSize: 14 }} key="2" color="text.primary">
-        案件一覧
+        {router.asPath.endsWith("job/bookmark")
+          ? "ブックマーク一覧"
+          : "案件一覧"}
       </Typography>
     ),
     jobName ? (
