@@ -1,17 +1,9 @@
 import Head from "next/head";
 import Layout from "@/features/jobs/Layout";
 import SearchContents from "@/features/jobs/SearchContents";
-import { GetServerSideProps } from "next";
-import fetch from "@/libs/fetch";
-import {
-  JobAttributesType,
-  JobConditionType,
-  JobListResponse,
-} from "@/features/jobs/job.type";
+import { JobAttributesType } from "@/features/jobs/job.type";
 import Loading from "@/components/Loading";
 import {
-  MENU_LIST,
-  initialJobCondition,
   jobAtom,
   jobAttributesAtom,
   jobBookmarkAtom,
@@ -22,50 +14,63 @@ import {
   loadingAtom,
 } from "@/atoms/atoms";
 import { Typography } from "@mui/material";
-import { useHydrateAtoms } from "jotai/utils";
-import { convertQueryStringToObject } from "@/libs/convertQuery";
 import SearchCondition from "@/features/jobs/SearchCondition";
 import { useEffect } from "react";
 import { useAtom, useSetAtom } from "jotai";
+import { useRouter } from "next/router";
+import { init } from "@/features/jobs/init";
+import { GetServerSideProps } from "next";
+import fetch from "@/libs/fetch";
+import { useHydrateAtoms } from "jotai/utils";
 
 type Props = {
   jobAttributes: JobAttributesType;
-  jobs: JobListResponse;
-  bookmarkIds: number[];
-  condition: JobConditionType;
-  sort: (typeof MENU_LIST)[number];
 };
 
-export default function Search({
-  jobAttributes,
-  jobs,
-  condition,
-  sort,
-}: Props) {
+export default function Search({ jobAttributes }: Props) {
   const [isLoading, setLoading] = useAtom(loadingAtom);
+  const setJobs = useSetAtom(jobAtom);
+  const setJobCondition = useSetAtom(jobConditionAtom);
+  const setJobConditionDisplay = useSetAtom(jobConditionDisplayAtom);
+  const setJobSort = useSetAtom(jobSortAtom);
+  const setJobTotalCount = useSetAtom(jobTotalCountAtom);
   const setBookmark = useSetAtom(jobBookmarkAtom);
+  const router = useRouter();
 
-  useHydrateAtoms([
-    [jobAtom, jobs],
-    [jobConditionAtom, condition],
-    [jobConditionDisplayAtom, condition],
-    [jobSortAtom, sort],
-    [jobAttributesAtom, jobAttributes],
-    [jobTotalCountAtom, jobs.meta.total],
-  ]);
+  useHydrateAtoms([[jobAttributesAtom, jobAttributes]]);
 
   useEffect(() => {
     (async () => {
       setLoading(true);
-      // ブックマーク取得、セッション使用のためclientから取得する
-      const { data: bookmarkIds } = await fetch.get<number[]>(
-        `/api/v1/jobBookmark`
-      );
+      const result = await init(router.query);
+      if (!result) {
+        throw new Error("データの取得に失敗しました。");
+      }
+      const { bookmarkIds, jobs, condition, sort } = result;
+      setJobs(jobs);
+      setJobCondition(condition);
+      setJobConditionDisplay(condition);
+      setJobSort(sort);
+      setJobTotalCount(jobs.meta.total);
       setBookmark(bookmarkIds);
-    })().then(() => {
-      setLoading(false);
-    });
-  }, [setBookmark, setLoading]);
+    })()
+      .then(() => {
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+        router.replace("/404.html");
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    setBookmark,
+    setLoading,
+    setJobs,
+    setJobCondition,
+    setJobConditionDisplay,
+    setJobSort,
+    setJobTotalCount,
+  ]);
 
   return (
     <>
@@ -88,45 +93,19 @@ export default function Search({
     </>
   );
 }
-
 /**
  * getServerSideProps
  */
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   try {
-    const queryParams = Object.keys(query)
-      .map((key) => `${key}=${query[key]}`)
-      .join("&");
-
-    // 属性取得
+    // 属性はサイドメニューレンダリング時に必要なのでgetServerSidePropsで取得する。
     const { data: jobAttributes } = await fetch.get<JobAttributesType>(
       `/api/v1/jobAttributes`
     );
 
-    // 求人取得
-    const { data: jobs } = await fetch.get<JobListResponse>(
-      `/api/v1/jobs?${queryParams}`
-    );
-
-    // 絞り込み条件を作成
-    const condition = {
-      ...initialJobCondition,
-      ...convertQueryStringToObject(queryParams),
-    };
-
-    const sort =
-      query.sort === "latest"
-        ? MENU_LIST[1]
-        : query.sort === "cost"
-        ? MENU_LIST[2]
-        : MENU_LIST[0];
     return {
       props: {
         jobAttributes,
-        jobs,
-        condition,
-        sort,
-        q: query.q || "",
       },
     };
   } catch (error) {
