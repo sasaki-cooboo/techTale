@@ -52,7 +52,7 @@ export default function Search({ jobAttributes }: Props) {
       setJobConditionDisplay(condition);
       setJobSort(sort);
       setJobTotalCount(jobs.meta.total);
-      setBookmark(bookmarkIds);
+      setBookmark(Object.values(bookmarkIds));
     })()
       .then(() => {
         setLoading(false);
