@@ -145,7 +145,7 @@ const JobCard = ({
           </Typography>
           <Stack ml={4} mt={2} direction={"row"} alignItems={"center"}>
             <RoomIcon color="info" />
-            <Typography fontSize={14} ml={1}>
+            <Typography fontSize={14} ml={0.5}>
               {area}
             </Typography>
           </Stack>
