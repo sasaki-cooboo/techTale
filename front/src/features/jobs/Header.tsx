@@ -63,6 +63,7 @@ const Header = ({ jobName }: Props) => {
               direction={"row"}
               width={"100%"}
               justifyContent={"space-between"}
+              alignItems={"center"}
             >
               <Typography color={palette.primary.main} ml={-4} variant="h6">
                 エンジニア求人サイト
