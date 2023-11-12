@@ -35,6 +35,7 @@ type Props = {
   skills: { name: string; id: number }[];
   engineerTypes: { name: string; id: number }[];
   requiredSkills: string[];
+  showBookmark?: boolean;
 };
 
 const JobCard = ({
@@ -48,6 +49,7 @@ const JobCard = ({
   skills,
   engineerTypes,
   requiredSkills,
+  showBookmark = true,
 }: Props) => {
   const { palette } = useTheme();
   const { tableHeaderStyle, tagStyle } = useTableStyle();
@@ -223,15 +225,17 @@ const JobCard = ({
           columnGap={2}
           alignItems={"center"}
         >
-          <Button
-            variant={hasBoookMark ? "contained" : "outlined"}
-            color="primary"
-            style={hasBoookMark ? buttonBookmarkStyle : buttonStyle}
-            onClick={handleClickBookmark}
-            startIcon={hasBoookMark ? <BookmarkAdded /> : <BookmarkAdd />}
-          >
-            {hasBoookMark ? "ブックマーク済み" : "ブックマークする"}
-          </Button>
+          {showBookmark ? (
+            <Button
+              variant={hasBoookMark ? "contained" : "outlined"}
+              color="primary"
+              style={hasBoookMark ? buttonBookmarkStyle : buttonStyle}
+              onClick={handleClickBookmark}
+              startIcon={hasBoookMark ? <BookmarkAdded /> : <BookmarkAdd />}
+            >
+              {hasBoookMark ? "ブックマーク済み" : "ブックマークする"}
+            </Button>
+          ) : null}
           <Button
             variant="contained"
             color="primary"

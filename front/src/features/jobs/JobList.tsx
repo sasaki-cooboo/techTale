@@ -4,9 +4,10 @@ import { JobType } from "./job.type";
 
 type Props = {
   jobList: JobType[];
+  showBookmark?: boolean;
 };
 
-const JobList = ({ jobList }: Props) => {
+const JobList = ({ jobList, showBookmark }: Props) => {
   return (
     <Stack direction={"column"} pb={4} rowGap={2}>
       {jobList.map((job, i) => (
@@ -15,6 +16,7 @@ const JobList = ({ jobList }: Props) => {
           {...job}
           area={job.area.name}
           applyLink={`/job/detail/${job.id}`}
+          showBookmark={showBookmark}
         />
       ))}
     </Stack>

@@ -159,11 +159,11 @@ class JobController extends Controller
     }
 
     /**
-     * ブックマーク取得
+     * ブックマークid取得
      *
-     * @return \Illuminate\Http\Response
+     * @return array
      */
-    public function getBookmark(): array
+    public function getBookmarkIds(): array
     {
         $bookmarkIds = session('job_bookmark', []);
 
@@ -195,5 +195,22 @@ class JobController extends Controller
         // セッションに更新したブックマークの配列を保存
         session(['job_bookmark' => $bookmarkIds]);
         return $bookmarkIds;
+    }
+
+    /**
+     * ブックマーク一覧取得
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getBookmarkList()
+    {
+        $bookmarkIds = $this->getBookmarkIds();
+
+        $query = Job::query()
+            ->whereIn("id", $bookmarkIds)
+            ->with(["area", "languages", "skills", "engineerTypes"]);
+
+        $jobs = $query->paginate(40);
+        return new JobCollection($jobs);
     }
 }

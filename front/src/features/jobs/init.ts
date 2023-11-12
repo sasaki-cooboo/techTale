@@ -25,7 +25,7 @@ export const init = async (query: ParsedUrlQuery) => {
 
     // ブックマーク取得、セッション使用のためclientから取得する
     const { data: bookmarkIds } = await fetch.get<number[]>(
-      `/api/v1/jobBookmark`
+      `/api/v1/jobBookmarkIds`
     );
 
     // 絞り込み条件を作成
