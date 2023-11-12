@@ -50,7 +50,7 @@ const Header = ({ jobName }: Props) => {
   return (
     <>
       <AppBar
-        position="static"
+        position="fixed"
         sx={{
           background: "white",
         }}
@@ -63,7 +63,7 @@ const Header = ({ jobName }: Props) => {
           </Toolbar>
         </Container>
       </AppBar>
-      <Box mt={0} py={1}>
+      <Box mt={8} py={1}>
         <Container>
           <Breadcrumbs
             separator={<NavigateNextIcon fontSize="small" />}
