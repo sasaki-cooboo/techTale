@@ -6,10 +6,12 @@ import {
   Box,
   Breadcrumbs,
   useTheme,
+  Stack,
 } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import Link from "next/link";
 import { css } from "@emotion/react";
+import BookmarListButton from "./BookmarListButton";
 
 type Props = {
   jobName?: string; // 案件名
@@ -57,9 +59,16 @@ const Header = ({ jobName }: Props) => {
       >
         <Container>
           <Toolbar>
-            <Typography color={palette.primary.main} ml={-4} variant="h6">
-              エンジニア求人サイト
-            </Typography>
+            <Stack
+              direction={"row"}
+              width={"100%"}
+              justifyContent={"space-between"}
+            >
+              <Typography color={palette.primary.main} ml={-4} variant="h6">
+                エンジニア求人サイト
+              </Typography>
+              <BookmarListButton />
+            </Stack>
           </Toolbar>
         </Container>
       </AppBar>
