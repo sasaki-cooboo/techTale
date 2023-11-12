@@ -6,9 +6,10 @@ import {
   Box,
   Breadcrumbs,
   useTheme,
-  Link,
 } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import Link from "next/link";
+import { css } from "@emotion/react";
 
 type Props = {
   jobName?: string; // 案件名
@@ -17,25 +18,23 @@ type Props = {
 const Header = ({ jobName }: Props) => {
   const { palette } = useTheme();
 
+  const linkStyle = css({
+    font: "14px",
+    fontSize: "14px",
+    color: "inherit",
+    textDecoration: "none",
+    "&:hover": {
+      textDecoration: "underline",
+    },
+  });
+
   const breadcrumbs = [
-    <Link
-      sx={{ fontSize: 14 }}
-      underline="hover"
-      key="1"
-      color="inherit"
-      href="/"
-    >
-      HOME
+    <Link key="1" href="/" passHref>
+      <a css={linkStyle}>HOME</a>
     </Link>,
     jobName ? (
-      <Link
-        sx={{ fontSize: 14 }}
-        underline="hover"
-        key="1"
-        color="inherit"
-        href="/job/search"
-      >
-        案件一覧
+      <Link key="2" href="/job/search" passHref>
+        <a css={linkStyle}>案件一覧</a>
       </Link>
     ) : (
       <Typography sx={{ fontSize: 14 }} key="2" color="text.primary">
