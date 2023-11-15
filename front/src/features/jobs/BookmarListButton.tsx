@@ -1,6 +1,6 @@
 import { jobBookmarkAtom, loadingAtom } from "@/atoms/atoms";
 import { StarBorderOutlined } from "@mui/icons-material";
-import { Badge, IconButton, Typography } from "@mui/material";
+import { Badge, IconButton } from "@mui/material";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useRouter } from "next/router";
 
@@ -21,9 +21,6 @@ const BookmarListButton = () => {
       onClick={handleClick}
       aria-label="bookmark"
     >
-      <Typography pr={0.5} fontSize={12}>
-        ブックマーク
-      </Typography>
       <Badge
         badgeContent={bookmarkList.length}
         color="error"

@@ -42,8 +42,8 @@ const Header = ({ jobName }: Props) => {
       </Link>
     ) : (
       <Typography sx={{ fontSize: 14 }} key="2" color="text.primary">
-        {router.asPath.endsWith("job/bookmark")
-          ? "ブックマーク一覧"
+        {new RegExp("/job/bookmark*").test(router.asPath)
+          ? "ブックマークした求人"
           : "案件一覧"}
       </Typography>
     ),
