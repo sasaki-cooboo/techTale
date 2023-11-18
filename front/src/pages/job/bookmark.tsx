@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Layout from "@/features/jobs/Layout";
 import Loading from "@/components/Loading";
-import { loadingAtom } from "@/atoms/atoms";
+import { jobBookmarkAtom, loadingAtom } from "@/atoms/atoms";
 import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 
 export default function Bookmark() {
   const [isLoading, setLoading] = useAtom(loadingAtom);
+  const [bookmarkIds, setBookMarkIds] = useAtom(jobBookmarkAtom);
   const initialState: JobListResponse = {
     jobList: [],
     meta: {
@@ -54,10 +55,11 @@ export default function Bookmark() {
         "/api/v1/jobBookmarkList"
       );
       setBookMark(data);
+      setBookMarkIds(data.jobList.map((job) => job.id));
     })().finally(() => {
       setLoading(false);
     });
-  }, [setLoading]);
+  }, [setLoading, setBookMarkIds]);
 
   return (
     <>
