@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\JobBookmarkRequest;
 use App\Http\Resources\AreaResource;
 use App\Http\Resources\EngineerTypeResource;
 use App\Http\Resources\FeatureResource;
@@ -155,5 +156,61 @@ class JobController extends Controller
             "engineerTypes" => EngineerTypeResource::collection($engineerTypes),
             "features" => FeatureResource::collection($features),
         ];
+    }
+
+    /**
+     * ブックマークid取得
+     *
+     * @return array
+     */
+    public function getBookmarkIds(): array
+    {
+        $bookmarkIds = session('job_bookmark', []);
+
+        return $bookmarkIds;
+    }
+
+    /**
+     * ブックマーク更新
+     *
+     * @param \App\Http\Requests\JobBookmarkRequest $request
+     * @return \Illuminate\Http\Response
+     */
+    public function setBookmark(JobBookmarkRequest $request): array
+    {
+        $id = $request->id;
+        $bookmarkIds = session('job_bookmark', []);
+
+        // $idが含まれているか確認
+        $index = array_search($id, $bookmarkIds);
+
+        if ($index !== false) {
+            // $idが含まれている場合は削除
+            unset($bookmarkIds[$index]);
+        } else {
+            // $idが含まれていない場合は追加
+            $bookmarkIds[] = $id;
+        }
+
+        // セッションに更新したブックマークの配列を保存
+        session(['job_bookmark' => $bookmarkIds]);
+        return $bookmarkIds;
+    }
+
+    /**
+     * ブックマーク一覧取得
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getBookmarkList()
+    {
+        $bookmarkIds = $this->getBookmarkIds();
+
+        $query = Job::query()
+            ->whereIn("id", $bookmarkIds)
+            ->with(["area", "languages", "skills", "engineerTypes"]);
+
+        $jobs = $query->paginate(40);
+        return new JobCollection($jobs);
     }
 }

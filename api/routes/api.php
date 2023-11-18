@@ -24,6 +24,9 @@ Route::middleware('basicAuth')->prefix('v1')->group(
         Route::get("/jobs", [JobController::class, "index"]);
         Route::get("/job/{id}", [JobController::class, "show"]);
         Route::get("/jobAttributes", [JobController::class, "getAttributes"]);
+        Route::get("/jobBookmarkIds", [JobController::class, "getBookmarkIds"]);
+        Route::post("/jobBookmark", [JobController::class, "setBookmark"]);
+        Route::get("/jobBookmarkList", [JobController::class, "getBookmarkList"]);
     }
 );
 

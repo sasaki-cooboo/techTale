@@ -45,3 +45,6 @@ export const jobTotalCountAtom = atom<number>(0);
 
 // キーワード保持用
 export const jobSearchKeywordAtom = atom<string>("");
+
+// ブックマーク
+export const jobBookmarkAtom = atom<number[]>([]);

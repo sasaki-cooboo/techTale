@@ -1,33 +1,37 @@
 import Head from "next/head";
 import { GetServerSideProps } from "next";
-import fetch from "@/libs/fetch";
-import { JobDetailResponse } from "@/features/jobs/job.type";
 import { useEffect } from "react";
 import Loading from "@/components/Loading";
 import { useAtom, useSetAtom } from "jotai";
-import { jobDetailAtom, loadingAtom } from "@/atoms/atoms";
+import { jobBookmarkAtom, jobDetailAtom, loadingAtom } from "@/atoms/atoms";
 import DetailContentsWrap from "@/features/jobs/detail/DetailContentsWrap";
 import { useRouter } from "next/router";
+import { init } from "@/features/jobs/detail/init";
 
 export default function Detail({ id }: { id: string }) {
   const [isLoading, setIsLoading] = useAtom(loadingAtom);
+  const [bookmark, setBookmark] = useAtom(jobBookmarkAtom);
   const setDetail = useSetAtom(jobDetailAtom);
   const router = useRouter();
   useEffect(() => {
-    setIsLoading(true);
-    fetch
-      .get<JobDetailResponse>(`/api/v1/job/${id}`)
-      .then((res) => {
-        setDetail(res.data);
+    (async () => {
+      setIsLoading(true);
+      const result = await init(id);
+      if (!result) {
+        throw new Error("データの取得に失敗しました。");
+      }
+      const { job, bookmarkIds } = result;
+      setDetail(job);
+      setBookmark(Object.values(bookmarkIds));
+    })()
+      .then(() => {
+        setIsLoading(false);
       })
       .catch(() => {
-        // 該当の案件がない場合、404ページにリダイレクト
-        router.replace("/404.html");
-      })
-      .finally(() => {
         setIsLoading(false);
+        router.replace("/404.html");
       });
-  }, [id, setDetail, setIsLoading, router]);
+  }, [id, setDetail, setBookmark, setIsLoading, router]);
   return (
     <>
       <Head>

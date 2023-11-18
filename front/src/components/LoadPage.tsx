@@ -1,18 +1,8 @@
-import { Typography } from "@mui/material";
+import { Box } from "@mui/material";
 
 const LoadPage = () => {
-  return (
-    <Typography
-      textAlign={"center"}
-      fontSize={18}
-      pt={20}
-      fontWeight={500}
-      height={"100vh"}
-      variant="h3"
-    >
-      読み込み中...
-    </Typography>
-  );
+  // ローディング中のコンテンツ表示
+  return <Box pt={20} height={"100vh"}></Box>;
 };
 
 export default LoadPage;

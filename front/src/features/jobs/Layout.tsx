@@ -6,7 +6,7 @@ import { JobAttributesType } from "./job.type";
 
 type Props = {
   children: ReactNode;
-  jobAttributes: JobAttributesType;
+  jobAttributes?: JobAttributesType;
 };
 
 const Layout = ({ children, jobAttributes }: Props) => {
@@ -15,18 +15,22 @@ const Layout = ({ children, jobAttributes }: Props) => {
   return (
     <div>
       <Header />
-      <Box mt={4} bgcolor={palette.secondary.main}>
+      <Box pt={4} bgcolor={palette.secondary.main}>
         <Container>
-          <Grid container spacing={4}>
-            <Grid item xs={12} sm={3}>
-              <Box>
-                <SideNav jobAttributes={jobAttributes} />
-              </Box>
+          {jobAttributes ? (
+            <Grid container spacing={4}>
+              <Grid item xs={12} sm={3}>
+                <Box>
+                  <SideNav jobAttributes={jobAttributes} />
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={9}>
+                {children}
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={9}>
-              {children}
-            </Grid>
-          </Grid>
+          ) : (
+            <>{children}</>
+          )}
         </Container>
       </Box>
     </div>

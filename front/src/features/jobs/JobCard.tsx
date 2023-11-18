@@ -11,15 +11,21 @@ import {
   useTheme,
   Stack,
   Chip,
-  Link,
 } from "@mui/material";
 import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
 import RoomIcon from "@mui/icons-material/Room";
 import { useTableStyle } from "./useTableStyle";
-
+import { css } from "@emotion/react";
 import useJobs from "./useJobs";
+import { BookmarkAdd, BookmarkAdded } from "@mui/icons-material";
+import fetch from "@/libs/fetch";
+import { useAtom, useSetAtom } from "jotai";
+import { jobBookmarkAtom, loadingAtom } from "@/atoms/atoms";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 type Props = {
+  id: number;
   title: string;
   area: string;
   cost: number;
@@ -29,9 +35,11 @@ type Props = {
   skills: { name: string; id: number }[];
   engineerTypes: { name: string; id: number }[];
   requiredSkills: string[];
+  showBookmark?: boolean;
 };
 
 const JobCard = ({
+  id,
   title,
   area,
   cost,
@@ -41,15 +49,21 @@ const JobCard = ({
   skills,
   engineerTypes,
   requiredSkills,
+  showBookmark = true,
 }: Props) => {
   const { palette } = useTheme();
   const { tableHeaderStyle, tagStyle } = useTableStyle();
 
-  const titleStyle = {
-    fontSize: 18,
+  const titleStyle = css({
+    font: "18px", // 先頭のスタイルが効かない？？
     color: palette.primary.main,
     fontWeight: "bold",
-  };
+    fontSize: "18px",
+    textDecoration: "none",
+    "&:hover": {
+      textDecoration: "underline",
+    },
+  });
 
   const descriptionStyle = {
     fontSize: 14,
@@ -61,6 +75,11 @@ const JobCard = ({
     width: 200,
   };
 
+  const buttonBookmarkStyle = {
+    ...buttonStyle,
+    backgroundColor: "#f8b500",
+  };
+
   const {
     handleClickFeature,
     handleClickLanguage,
@@ -68,16 +87,45 @@ const JobCard = ({
     handleClickEngineerType,
   } = useJobs();
 
+  const [bookmarkIds, setBookMarkIds] = useAtom(jobBookmarkAtom);
+  const hasBoookMark = bookmarkIds.includes(id);
+  const router = useRouter();
+  const setLoading = useSetAtom(loadingAtom);
+
+  /**
+   * ブックマーククリック時
+   */
+  const handleClickBookmark = async () => {
+    // ブックマーク済みなら削除、そうでなければ追加
+    const newBookmarkIds = hasBoookMark
+      ? bookmarkIds.filter((bookmarkId) => bookmarkId !== id)
+      : [...bookmarkIds, id];
+    // サーバー側の処理待たずにUIを変更
+    setBookMarkIds(newBookmarkIds);
+    try {
+      await fetch.post<number[]>("/api/v1/jobBookmark", {
+        id,
+      });
+    } catch (error) {
+      alert("bookmark failed");
+    }
+  };
+
+  /**
+   * 詳細へのリンククリック時
+   */
+  const handleClickDetail = async () => {
+    setLoading(true);
+    router.push(applyLink).finally(() => {
+      setLoading(false);
+    });
+  };
+
   return (
     <Card sx={{ p: 1 }}>
       <CardContent>
-        <Link
-          variant="h3"
-          style={titleStyle}
-          href={applyLink}
-          underline="hover"
-        >
-          {title}
+        <Link href={applyLink} passHref>
+          <a css={titleStyle}>{title}</a>
         </Link>
         <Stack direction={"row"} alignItems={"center"}>
           <Typography variant="body2" style={descriptionStyle}>
@@ -99,7 +147,7 @@ const JobCard = ({
           </Typography>
           <Stack ml={4} mt={2} direction={"row"} alignItems={"center"}>
             <RoomIcon color="info" />
-            <Typography fontSize={14} ml={1}>
+            <Typography fontSize={14} ml={0.5}>
               {area}
             </Typography>
           </Stack>
@@ -171,12 +219,28 @@ const JobCard = ({
             </TableRow>
           </TableBody>
         </Table>
-        <Stack justifyContent={"center"} alignItems={"center"}>
+        <Stack
+          justifyContent={"center"}
+          direction={"row"}
+          columnGap={2}
+          alignItems={"center"}
+        >
+          {showBookmark ? (
+            <Button
+              variant={hasBoookMark ? "contained" : "outlined"}
+              color="primary"
+              style={hasBoookMark ? buttonBookmarkStyle : buttonStyle}
+              onClick={handleClickBookmark}
+              startIcon={hasBoookMark ? <BookmarkAdded /> : <BookmarkAdd />}
+            >
+              {hasBoookMark ? "ブックマーク済み" : "ブックマークする"}
+            </Button>
+          ) : null}
           <Button
             variant="contained"
             color="primary"
             style={buttonStyle}
-            href={applyLink}
+            onClick={handleClickDetail}
           >
             詳細を見る
           </Button>
