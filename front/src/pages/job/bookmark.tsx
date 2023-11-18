@@ -10,6 +10,7 @@ import fetch from "@/libs/fetch";
 import { JobListResponse } from "@/features/jobs/job.type";
 import BasicPagination from "@/components/BasicPagination";
 import { useRouter } from "next/router";
+import LoadPage from "@/components/LoadPage";
 
 export default function Bookmark() {
   const [isLoading, setLoading] = useAtom(loadingAtom);
@@ -54,8 +55,11 @@ export default function Bookmark() {
       const { data } = await fetch.get<JobListResponse>(
         "/api/v1/jobBookmarkList"
       );
+      const { data: bookmarkIds } = await fetch.get<number[]>(
+        `/api/v1/jobBookmarkIds`
+      );
       setBookMark(data);
-      setBookMarkIds(data.jobList.map((job) => job.id));
+      setBookMarkIds(Object.values(bookmarkIds));
     })().finally(() => {
       setLoading(false);
     });
@@ -84,7 +88,9 @@ export default function Bookmark() {
                 />
               </Box>
             </>
-          ) : null}
+          ) : (
+            <LoadPage />
+          )}
         </Layout>
       </div>
       <Loading open={isLoading} />
