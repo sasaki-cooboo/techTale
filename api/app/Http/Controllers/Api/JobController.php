@@ -210,7 +210,7 @@ class JobController extends Controller
             ->whereIn("id", $bookmarkIds)
             ->with(["area", "languages", "skills", "engineerTypes"]);
 
-        $jobs = $query->paginate(40);
+        $jobs = $query->paginate(10);
         return new JobCollection($jobs);
     }
 }
