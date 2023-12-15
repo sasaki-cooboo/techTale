@@ -5,7 +5,7 @@
   "editor.formatOnSave": true,
   // ファイル保存時、ESLint, Stylelint による自動フォーマット
   "editor.codeActionsOnSave": {
-    "source.fixAll": true
+    "source.fixAll": "explicit"
   },
   // 追記
   // css, scss ファイルは Stylelint でフォーマットするため、Pretteir によるフォーマットを回避
