@@ -49,4 +49,15 @@ export const jobSearchKeywordAtom = atom<string>("");
 // ブックマーク
 export const jobBookmarkIdsAtom = atom<number[]>([]);
 
-export const jobBookmarkAtom = atom<JobListResponse | null>(null);
+const initialState: JobListResponse = {
+  jobList: [],
+  meta: {
+    per_page: 0,
+    current_page: 0,
+    total: 0,
+    from: 0,
+    to: 0,
+  },
+};
+
+export const jobBookmarkAtom = atom<JobListResponse | null>(initialState);

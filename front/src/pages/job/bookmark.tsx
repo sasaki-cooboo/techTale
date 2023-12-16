@@ -8,7 +8,7 @@ import {
 } from "@/atoms/atoms";
 import { Box, Typography } from "@mui/material";
 import { useEffect } from "react";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import JobList from "@/features/jobs/JobList";
 import fetch from "@/libs/fetch";
 import { JobListResponse } from "@/features/jobs/job.type";
@@ -18,17 +18,7 @@ import LoadPage from "@/components/LoadPage";
 
 export default function Bookmark() {
   const [isLoading, setLoading] = useAtom(loadingAtom);
-  const [bookmarkIds, setBookMarkIds] = useAtom(jobBookmarkIdsAtom);
-  const initialState: JobListResponse = {
-    jobList: [],
-    meta: {
-      per_page: 0,
-      current_page: 0,
-      total: 0,
-      from: 0,
-      to: 0,
-    },
-  };
+  const setBookMarkIds = useSetAtom(jobBookmarkIdsAtom);
   const [bookmark, setBookMark] = useAtom(jobBookmarkAtom);
   const router = useRouter();
 
@@ -56,13 +46,13 @@ export default function Bookmark() {
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const { data } = await fetch.get<JobListResponse>(
+      const { data: bookmark } = await fetch.get<JobListResponse>(
         "/api/v1/jobBookmarkList"
       );
       const { data: bookmarkIds } = await fetch.get<number[]>(
         `/api/v1/jobBookmarkIds`
       );
-      setBookMark(data);
+      setBookMark(bookmark);
       setBookMarkIds(Object.values(bookmarkIds));
     })().finally(() => {
       setLoading(false);

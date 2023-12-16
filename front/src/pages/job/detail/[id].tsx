@@ -3,14 +3,14 @@ import { GetServerSideProps } from "next";
 import { useEffect } from "react";
 import Loading from "@/components/Loading";
 import { useAtom, useSetAtom } from "jotai";
-import { jobBookmarkAtom, jobDetailAtom, loadingAtom } from "@/atoms/atoms";
+import { jobBookmarkIdsAtom, jobDetailAtom, loadingAtom } from "@/atoms/atoms";
 import DetailContentsWrap from "@/features/jobs/detail/DetailContentsWrap";
 import { useRouter } from "next/router";
 import { init } from "@/features/jobs/detail/init";
 
 export default function Detail({ id }: { id: string }) {
   const [isLoading, setIsLoading] = useAtom(loadingAtom);
-  const [bookmark, setBookmark] = useAtom(jobBookmarkAtom);
+  const setBookmarkIds = useSetAtom(jobBookmarkIdsAtom);
   const setDetail = useSetAtom(jobDetailAtom);
   const router = useRouter();
   useEffect(() => {
@@ -22,7 +22,7 @@ export default function Detail({ id }: { id: string }) {
       }
       const { job, bookmarkIds } = result;
       setDetail(job);
-      setBookmark(Object.values(bookmarkIds));
+      setBookmarkIds(Object.values(bookmarkIds));
     })()
       .then(() => {
         setIsLoading(false);
@@ -31,7 +31,7 @@ export default function Detail({ id }: { id: string }) {
         setIsLoading(false);
         router.replace("/404.html");
       });
-  }, [id, setDetail, setBookmark, setIsLoading, router]);
+  }, [id, setDetail, setBookmarkIds, setIsLoading, router]);
   return (
     <>
       <Head>
