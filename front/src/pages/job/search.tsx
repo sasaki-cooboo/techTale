@@ -6,7 +6,7 @@ import Loading from "@/components/Loading";
 import {
   jobAtom,
   jobAttributesAtom,
-  jobBookmarkAtom,
+  jobBookmarkIdsAtom,
   jobConditionAtom,
   jobConditionDisplayAtom,
   jobSortAtom,
@@ -34,7 +34,7 @@ export default function Search({ jobAttributes }: Props) {
   const setJobConditionDisplay = useSetAtom(jobConditionDisplayAtom);
   const setJobSort = useSetAtom(jobSortAtom);
   const setJobTotalCount = useSetAtom(jobTotalCountAtom);
-  const setBookmark = useSetAtom(jobBookmarkAtom);
+  const setBookmarkIds = useSetAtom(jobBookmarkIdsAtom);
   const router = useRouter();
 
   useHydrateAtoms([[jobAttributesAtom, jobAttributes]]);
@@ -52,7 +52,7 @@ export default function Search({ jobAttributes }: Props) {
       setJobConditionDisplay(condition);
       setJobSort(sort);
       setJobTotalCount(jobs.meta.total);
-      setBookmark(Object.values(bookmarkIds));
+      setBookmarkIds(Object.values(bookmarkIds));
     })()
       .then(() => {
         setLoading(false);
@@ -63,7 +63,7 @@ export default function Search({ jobAttributes }: Props) {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    setBookmark,
+    setBookmarkIds,
     setLoading,
     setJobs,
     setJobCondition,

@@ -17,10 +17,14 @@ import RoomIcon from "@mui/icons-material/Room";
 import { useTableStyle } from "./useTableStyle";
 import { css } from "@emotion/react";
 import useJobs from "./useJobs";
-import { BookmarkAdd, BookmarkAdded } from "@mui/icons-material";
+import { BookmarkAdd, BookmarkAdded, Delete } from "@mui/icons-material";
 import fetch from "@/libs/fetch";
 import { useAtom, useSetAtom } from "jotai";
-import { jobBookmarkAtom, loadingAtom } from "@/atoms/atoms";
+import {
+  jobBookmarkAtom,
+  jobBookmarkIdsAtom,
+  loadingAtom,
+} from "@/atoms/atoms";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
@@ -36,6 +40,7 @@ type Props = {
   engineerTypes: { name: string; id: number }[];
   requiredSkills: string[];
   showBookmark?: boolean;
+  showDeleteBookmark?: boolean;
 };
 
 const JobCard = ({
@@ -50,6 +55,7 @@ const JobCard = ({
   engineerTypes,
   requiredSkills,
   showBookmark = true,
+  showDeleteBookmark = false,
 }: Props) => {
   const { palette } = useTheme();
   const { tableHeaderStyle, tagStyle } = useTableStyle();
@@ -87,7 +93,8 @@ const JobCard = ({
     handleClickEngineerType,
   } = useJobs();
 
-  const [bookmarkIds, setBookMarkIds] = useAtom(jobBookmarkAtom);
+  const [bookmarkIds, setBookMarkIds] = useAtom(jobBookmarkIdsAtom);
+  const [bookmark, setBookMark] = useAtom(jobBookmarkAtom);
   const hasBoookMark = bookmarkIds.includes(id);
   const router = useRouter();
   const setLoading = useSetAtom(loadingAtom);
@@ -102,6 +109,31 @@ const JobCard = ({
       : [...bookmarkIds, id];
     // サーバー側の処理待たずにUIを変更
     setBookMarkIds(newBookmarkIds);
+    try {
+      await fetch.post<number[]>("/api/v1/jobBookmark", {
+        id,
+      });
+    } catch (error) {
+      alert("bookmark failed");
+    }
+  };
+
+  /**
+   * ブックマーク削除クリック時
+   */
+  const handleClickDeleteBookmark = async () => {
+    // ブックマーク済みなら削除、そうでなければ追加
+    const newBookmarkIds = bookmarkIds.filter(
+      (bookmarkId) => bookmarkId !== id
+    );
+    const newBookmarkList =
+      bookmark?.jobList.filter((bookmark) => bookmark.id !== id) || [];
+    const newBookMark = bookmark
+      ? { ...bookmark, jobList: newBookmarkList }
+      : null;
+    // サーバー側の処理待たずにUIを変更
+    setBookMarkIds(newBookmarkIds);
+    setBookMark(newBookMark);
     try {
       await fetch.post<number[]>("/api/v1/jobBookmark", {
         id,
@@ -234,6 +266,17 @@ const JobCard = ({
               startIcon={hasBoookMark ? <BookmarkAdded /> : <BookmarkAdd />}
             >
               {hasBoookMark ? "ブックマーク済み" : "ブックマークする"}
+            </Button>
+          ) : null}
+          {showDeleteBookmark ? (
+            <Button
+              variant={"outlined"}
+              color="info"
+              style={buttonStyle}
+              onClick={handleClickDeleteBookmark}
+              startIcon={<Delete />}
+            >
+              {"ブックマークから削除"}
             </Button>
           ) : null}
           <Button

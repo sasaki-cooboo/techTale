@@ -1,10 +1,14 @@
 import Head from "next/head";
 import Layout from "@/features/jobs/Layout";
 import Loading from "@/components/Loading";
-import { jobBookmarkAtom, loadingAtom } from "@/atoms/atoms";
+import {
+  jobBookmarkAtom,
+  jobBookmarkIdsAtom,
+  loadingAtom,
+} from "@/atoms/atoms";
 import { Box, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useAtom } from "jotai";
+import { useEffect } from "react";
+import { useAtom, useSetAtom } from "jotai";
 import JobList from "@/features/jobs/JobList";
 import fetch from "@/libs/fetch";
 import { JobListResponse } from "@/features/jobs/job.type";
@@ -14,18 +18,8 @@ import LoadPage from "@/components/LoadPage";
 
 export default function Bookmark() {
   const [isLoading, setLoading] = useAtom(loadingAtom);
-  const [bookmarkIds, setBookMarkIds] = useAtom(jobBookmarkAtom);
-  const initialState: JobListResponse = {
-    jobList: [],
-    meta: {
-      per_page: 0,
-      current_page: 0,
-      total: 0,
-      from: 0,
-      to: 0,
-    },
-  };
-  const [bookmark, setBookMark] = useState<JobListResponse>(initialState);
+  const setBookMarkIds = useSetAtom(jobBookmarkIdsAtom);
+  const [bookmark, setBookMark] = useAtom(jobBookmarkAtom);
   const router = useRouter();
 
   const handleChangePagination = async (
@@ -52,18 +46,18 @@ export default function Bookmark() {
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const { data } = await fetch.get<JobListResponse>(
+      const { data: bookmark } = await fetch.get<JobListResponse>(
         "/api/v1/jobBookmarkList"
       );
       const { data: bookmarkIds } = await fetch.get<number[]>(
         `/api/v1/jobBookmarkIds`
       );
-      setBookMark(data);
+      setBookMark(bookmark);
       setBookMarkIds(Object.values(bookmarkIds));
     })().finally(() => {
       setLoading(false);
     });
-  }, [setLoading, setBookMarkIds]);
+  }, [setLoading, setBookMarkIds, setBookMark]);
 
   return (
     <>
@@ -78,9 +72,15 @@ export default function Bookmark() {
           <Typography fontSize={24} pb={2} fontWeight={500} variant="h2">
             ブックマークした求人
           </Typography>
-          {!isLoading && bookmark.meta.total ? (
+          {isLoading ? (
+            <LoadPage />
+          ) : bookmark && bookmark.jobList.length ? (
             <>
-              <JobList jobList={bookmark.jobList} showBookmark={false} />
+              <JobList
+                jobList={bookmark.jobList}
+                showBookmark={false}
+                showDeleteBookmark
+              />
               <Box pt={2} pb={8}>
                 <BasicPagination
                   jobData={bookmark}
@@ -89,7 +89,15 @@ export default function Bookmark() {
               </Box>
             </>
           ) : (
-            <LoadPage />
+            <Typography
+              textAlign={"center"}
+              fontSize={20}
+              fontWeight={600}
+              pt={4}
+              pb={20}
+            >
+              ブックマークがありません。
+            </Typography>
           )}
         </Layout>
       </div>
