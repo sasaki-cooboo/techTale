@@ -1,11 +1,11 @@
-import { jobBookmarkAtom, loadingAtom } from "@/atoms/atoms";
+import { jobBookmarkIdsAtom, loadingAtom } from "@/atoms/atoms";
 import { Bookmark } from "@mui/icons-material";
 import { Badge, IconButton } from "@mui/material";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useRouter } from "next/router";
 
 const BookmarListButton = () => {
-  const bookmarkList = useAtomValue(jobBookmarkAtom);
+  const bookmarkList = useAtomValue(jobBookmarkIdsAtom);
   const setLoading = useSetAtom(loadingAtom);
   const router = useRouter();
   const handleClick = () => {

@@ -47,4 +47,6 @@ export const jobTotalCountAtom = atom<number>(0);
 export const jobSearchKeywordAtom = atom<string>("");
 
 // ブックマーク
-export const jobBookmarkAtom = atom<number[]>([]);
+export const jobBookmarkIdsAtom = atom<number[]>([]);
+
+export const jobBookmarkAtom = atom<JobListResponse | null>(null);

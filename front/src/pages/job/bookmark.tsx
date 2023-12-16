@@ -1,9 +1,13 @@
 import Head from "next/head";
 import Layout from "@/features/jobs/Layout";
 import Loading from "@/components/Loading";
-import { jobBookmarkAtom, loadingAtom } from "@/atoms/atoms";
+import {
+  jobBookmarkAtom,
+  jobBookmarkIdsAtom,
+  loadingAtom,
+} from "@/atoms/atoms";
 import { Box, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAtom } from "jotai";
 import JobList from "@/features/jobs/JobList";
 import fetch from "@/libs/fetch";
@@ -14,7 +18,7 @@ import LoadPage from "@/components/LoadPage";
 
 export default function Bookmark() {
   const [isLoading, setLoading] = useAtom(loadingAtom);
-  const [bookmarkIds, setBookMarkIds] = useAtom(jobBookmarkAtom);
+  const [bookmarkIds, setBookMarkIds] = useAtom(jobBookmarkIdsAtom);
   const initialState: JobListResponse = {
     jobList: [],
     meta: {
@@ -25,7 +29,7 @@ export default function Bookmark() {
       to: 0,
     },
   };
-  const [bookmark, setBookMark] = useState<JobListResponse>(initialState);
+  const [bookmark, setBookMark] = useAtom(jobBookmarkAtom);
   const router = useRouter();
 
   const handleChangePagination = async (
@@ -63,7 +67,7 @@ export default function Bookmark() {
     })().finally(() => {
       setLoading(false);
     });
-  }, [setLoading, setBookMarkIds]);
+  }, [setLoading, setBookMarkIds, setBookMark]);
 
   return (
     <>
@@ -78,9 +82,13 @@ export default function Bookmark() {
           <Typography fontSize={24} pb={2} fontWeight={500} variant="h2">
             ブックマークした求人
           </Typography>
-          {!isLoading && bookmark.meta.total ? (
+          {!isLoading && bookmark && bookmark.meta.total ? (
             <>
-              <JobList jobList={bookmark.jobList} showBookmark={false} />
+              <JobList
+                jobList={bookmark.jobList}
+                showBookmark={false}
+                showDeleteBookmark
+              />
               <Box pt={2} pb={8}>
                 <BasicPagination
                   jobData={bookmark}
