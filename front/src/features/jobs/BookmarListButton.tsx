@@ -1,5 +1,5 @@
 import { jobBookmarkAtom, loadingAtom } from "@/atoms/atoms";
-import { StarBorderOutlined } from "@mui/icons-material";
+import { Bookmark } from "@mui/icons-material";
 import { Badge, IconButton } from "@mui/material";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useRouter } from "next/router";
@@ -26,7 +26,7 @@ const BookmarListButton = () => {
         color="error"
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >
-        <StarBorderOutlined sx={{ color: "#f8b500", fontSize: 32 }} />
+        <Bookmark sx={{ color: "#f8b500", fontSize: 32 }} />
       </Badge>
     </IconButton>
   );
