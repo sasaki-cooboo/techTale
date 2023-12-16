@@ -72,7 +72,9 @@ export default function Bookmark() {
           <Typography fontSize={24} pb={2} fontWeight={500} variant="h2">
             ブックマークした求人
           </Typography>
-          {!isLoading && bookmark && bookmark.meta.total ? (
+          {isLoading ? (
+            <LoadPage />
+          ) : bookmark && bookmark.jobList.length ? (
             <>
               <JobList
                 jobList={bookmark.jobList}
@@ -87,7 +89,15 @@ export default function Bookmark() {
               </Box>
             </>
           ) : (
-            <LoadPage />
+            <Typography
+              textAlign={"center"}
+              fontSize={20}
+              fontWeight={600}
+              pt={4}
+              pb={20}
+            >
+              ブックマークがありません。
+            </Typography>
           )}
         </Layout>
       </div>
