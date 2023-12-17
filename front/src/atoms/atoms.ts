@@ -47,6 +47,7 @@ export const jobTotalCountAtom = atom<number>(0);
 export const jobSearchKeywordAtom = atom<string>("");
 
 // ブックマーク
+// id保持用（全て）
 export const jobBookmarkIdsAtom = atom<number[]>([]);
 
 const initialState: JobListResponse = {
@@ -60,4 +61,5 @@ const initialState: JobListResponse = {
   },
 };
 
+// 表示用、ページネーションで分割されている
 export const jobBookmarkAtom = atom<JobListResponse | null>(initialState);

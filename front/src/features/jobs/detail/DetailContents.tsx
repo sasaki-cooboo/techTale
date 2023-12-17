@@ -19,6 +19,10 @@ import JobCardSmall from "./JobCardSmall";
 import { JobDetailResponse } from "../job.type";
 import useJobs from "../useJobs";
 import { BookmarkAdd, BookmarkAdded } from "@mui/icons-material";
+import { useAtom } from "jotai";
+import { jobBookmarkIdsAtom } from "@/atoms/atoms";
+import { useRouter } from "next/router";
+import fetch from "@/libs/fetch";
 
 const DetailContents = ({
   detail,
@@ -73,10 +77,29 @@ const DetailContents = ({
     handleClickEngineerType,
     handleClickArea,
   } = useJobs();
-  const hasBoookMark = true;
 
-  const handleClickBookmark = () => {
-    console.log("clicked");
+  const [bookmarkIds, setBookMarkIds] = useAtom(jobBookmarkIdsAtom);
+  const router = useRouter();
+  const id = Number(router.query.id);
+  const hasBoookMark = bookmarkIds.includes(id);
+
+  /**
+   * ブックマーククリック時
+   */
+  const handleClickBookmark = async () => {
+    // ブックマーク済みなら削除、そうでなければ追加
+    const newBookmarkIds = hasBoookMark
+      ? bookmarkIds.filter((bookmarkId) => bookmarkId !== id)
+      : [...bookmarkIds, id];
+    // サーバー側の処理待たずにUIを変更
+    setBookMarkIds(newBookmarkIds);
+    try {
+      await fetch.post<number[]>("/api/v1/jobBookmark", {
+        id,
+      });
+    } catch (error) {
+      alert("bookmark failed");
+    }
   };
 
   return (
