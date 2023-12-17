@@ -18,6 +18,11 @@ import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
 import JobCardSmall from "./JobCardSmall";
 import { JobDetailResponse } from "../job.type";
 import useJobs from "../useJobs";
+import { BookmarkAdd, BookmarkAdded } from "@mui/icons-material";
+import { useAtom } from "jotai";
+import { jobBookmarkIdsAtom } from "@/atoms/atoms";
+import { useRouter } from "next/router";
+import fetch from "@/libs/fetch";
 
 const DetailContents = ({
   detail,
@@ -54,6 +59,17 @@ const DetailContents = ({
     },
   };
 
+  const buttonStyle = {
+    width: 200,
+    flexShrink: 0,
+    marginLeft: "8px",
+  };
+
+  const buttonBookmarkStyle = {
+    ...buttonStyle,
+    backgroundColor: "#f8b500",
+  };
+
   const {
     handleClickFeature,
     handleClickLanguage,
@@ -62,10 +78,49 @@ const DetailContents = ({
     handleClickArea,
   } = useJobs();
 
+  const [bookmarkIds, setBookMarkIds] = useAtom(jobBookmarkIdsAtom);
+  const router = useRouter();
+  const id = Number(router.query.id);
+  const hasBoookMark = bookmarkIds.includes(id);
+
+  /**
+   * ブックマーククリック時
+   */
+  const handleClickBookmark = async () => {
+    // ブックマーク済みなら削除、そうでなければ追加
+    const newBookmarkIds = hasBoookMark
+      ? bookmarkIds.filter((bookmarkId) => bookmarkId !== id)
+      : [...bookmarkIds, id];
+    // サーバー側の処理待たずにUIを変更
+    setBookMarkIds(newBookmarkIds);
+    try {
+      await fetch.post<number[]>("/api/v1/jobBookmark", {
+        id,
+      });
+    } catch (error) {
+      alert("bookmark failed");
+    }
+  };
+
   return (
     <>
       <Container sx={{ py: 4, mt: -4, bgcolor: "white" }}>
-        <Typography variant="h5">{title}</Typography>
+        <Stack
+          direction={"row"}
+          alignItems={"start"}
+          justifyContent={"space-between"}
+        >
+          <Typography variant="h5">{title}</Typography>
+          <Button
+            variant={hasBoookMark ? "contained" : "outlined"}
+            color="primary"
+            style={hasBoookMark ? buttonBookmarkStyle : buttonStyle}
+            onClick={handleClickBookmark}
+            startIcon={hasBoookMark ? <BookmarkAdded /> : <BookmarkAdd />}
+          >
+            {hasBoookMark ? "ブックマーク済み" : "ブックマークする"}
+          </Button>
+        </Stack>
         <Box mt={4}>
           <Table>
             <TableBody>
