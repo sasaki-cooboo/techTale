@@ -18,6 +18,7 @@ import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
 import JobCardSmall from "./JobCardSmall";
 import { JobDetailResponse } from "../job.type";
 import useJobs from "../useJobs";
+import { BookmarkAdd, BookmarkAdded } from "@mui/icons-material";
 
 const DetailContents = ({
   detail,
@@ -54,6 +55,17 @@ const DetailContents = ({
     },
   };
 
+  const buttonStyle = {
+    width: 200,
+    flexShrink: 0,
+    marginLeft: "8px",
+  };
+
+  const buttonBookmarkStyle = {
+    ...buttonStyle,
+    backgroundColor: "#f8b500",
+  };
+
   const {
     handleClickFeature,
     handleClickLanguage,
@@ -61,11 +73,31 @@ const DetailContents = ({
     handleClickEngineerType,
     handleClickArea,
   } = useJobs();
+  const hasBoookMark = true;
+
+  const handleClickBookmark = () => {
+    console.log("clicked");
+  };
 
   return (
     <>
       <Container sx={{ py: 4, mt: -4, bgcolor: "white" }}>
-        <Typography variant="h5">{title}</Typography>
+        <Stack
+          direction={"row"}
+          alignItems={"start"}
+          justifyContent={"space-between"}
+        >
+          <Typography variant="h5">{title}</Typography>
+          <Button
+            variant={hasBoookMark ? "contained" : "outlined"}
+            color="primary"
+            style={hasBoookMark ? buttonBookmarkStyle : buttonStyle}
+            onClick={handleClickBookmark}
+            startIcon={hasBoookMark ? <BookmarkAdded /> : <BookmarkAdd />}
+          >
+            {hasBoookMark ? "ブックマーク済み" : "ブックマークする"}
+          </Button>
+        </Stack>
         <Box mt={4}>
           <Table>
             <TableBody>
