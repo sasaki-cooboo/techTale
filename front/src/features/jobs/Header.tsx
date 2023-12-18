@@ -11,7 +11,7 @@ import {
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import Link from "next/link";
 import { css } from "@emotion/react";
-import BookmarListButton from "./BookmarListButton";
+import BookmarListButton from "./bookmark/BookmarListButton";
 import { useRouter } from "next/router";
 
 type Props = {
