@@ -21,7 +21,7 @@ const SearchField = () => {
         },
       }
     );
-    console.log(bookmark);
+    setBookmark(bookmark);
   };
 
   return (
