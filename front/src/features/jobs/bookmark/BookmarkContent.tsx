@@ -1,5 +1,5 @@
 import LoadPage from "@/components/LoadPage";
-import { Box, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import JobList from "../JobList";
 import BasicPagination from "@/components/BasicPagination";
 import {
@@ -12,6 +12,7 @@ import { useAtom, useSetAtom } from "jotai";
 import fetch from "@/libs/fetch";
 import { JobListResponse } from "@/features/jobs/job.type";
 import { useRouter } from "next/router";
+import SearchField from "./SearchField";
 
 const BookmarkContent = () => {
   const [isLoading, setLoading] = useAtom(loadingAtom);
@@ -57,9 +58,12 @@ const BookmarkContent = () => {
   }, [setLoading, setBookMarkIds, setBookMark]);
   return (
     <>
-      <Typography fontSize={24} pb={2} fontWeight={500} variant="h2">
-        ブックマークした求人
-      </Typography>
+      <Stack pb={1} direction={"row"} justifyContent={"space-between"}>
+        <Typography fontSize={24} pb={2} fontWeight={500} variant="h2">
+          ブックマークした求人
+        </Typography>
+        <SearchField />
+      </Stack>
       {isLoading ? (
         <LoadPage />
       ) : bookmark && bookmark.jobList.length ? (
