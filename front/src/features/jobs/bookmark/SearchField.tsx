@@ -1,7 +1,9 @@
 import { jobBookmarkAtom } from "@/atoms/atoms";
+import fetch from "@/libs/fetch";
 import { Box, TextField } from "@mui/material";
 import { useSetAtom } from "jotai";
 import { ChangeEventHandler } from "react";
+import { JobListResponse } from "../job.type";
 
 const SearchField = () => {
   const setBookmark = useSetAtom(jobBookmarkAtom);
@@ -10,9 +12,16 @@ const SearchField = () => {
    */
   const handleChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
-  > = (e) => {
-    //   setBookmark()
-    console.log(e.target.value);
+  > = async (e) => {
+    const { data: bookmark } = await fetch.get<JobListResponse>(
+      "/api/v1/jobBookmarkList",
+      {
+        params: {
+          q: e.target.value,
+        },
+      }
+    );
+    console.log(bookmark);
   };
 
   return (
