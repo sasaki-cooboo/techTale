@@ -204,6 +204,7 @@ class JobController extends Controller
      */
     public function getBookmarkList(Request $request)
     {
+        DB::enableQueryLog();
         $bookmarkIds = $this->getBookmarkIds();
 
         $query = Job::query()
@@ -213,20 +214,23 @@ class JobController extends Controller
         // キーワード検索
         $keyword = $request->q;
         $query->when($keyword, function ($query) use ($keyword) {
-            $target = "%" . $keyword . "%";
             return $query
-                ->where("title", "like", $target)
-                ->orWhere("description", "like", $target)
-                ->orWhere("message", "like", $target)
-                ->orWhere("required_skills", "like", $target)
-                ->orWhereHas("area", fn ($q) => $q->where("areas.name", "like", $target))
-                ->orWhereHas("languages", fn ($q) => $q->where("languages.name", "like", $target))
-                ->orWhereHas("skills", fn ($q) => $q->where("skills.name", "like", $target))
-                ->orWhereHas("engineerTypes", fn ($q) => $q->where("engineer_types.name", "like", $target))
-                ->orWhereHas("features", fn ($q) => $q->where("features.name", "like", $target));
+                ->where(function ($query) use ($keyword) {
+                    $target = "%" . $keyword . "%";
+                    $query->where("title", "like", $target)
+                        ->orWhere("description", "like", $target)
+                        ->orWhere("message", "like", $target)
+                        ->orWhere("required_skills", "like", $target)
+                        ->orWhereHas("area", fn ($q) => $q->where("areas.name", "like", $target))
+                        ->orWhereHas("languages", fn ($q) => $q->where("languages.name", "like", $target))
+                        ->orWhereHas("skills", fn ($q) => $q->where("skills.name", "like", $target))
+                        ->orWhereHas("engineerTypes", fn ($q) => $q->where("engineer_types.name", "like", $target))
+                        ->orWhereHas("features", fn ($q) => $q->where("features.name", "like", $target));
+                });
         });
 
         $jobs = $query->paginate(10);
+        Log::info(DB::getQueryLog());
         return new JobCollection($jobs);
     }
 }
