@@ -204,7 +204,6 @@ class JobController extends Controller
      */
     public function getBookmarkList(Request $request)
     {
-        DB::enableQueryLog();
         $bookmarkIds = $this->getBookmarkIds();
 
         $query = Job::query()
@@ -230,7 +229,6 @@ class JobController extends Controller
         });
 
         $jobs = $query->paginate(10);
-        Log::info(DB::getQueryLog());
         return new JobCollection($jobs);
     }
 }
