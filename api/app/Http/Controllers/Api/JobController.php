@@ -228,7 +228,7 @@ class JobController extends Controller
                 });
         });
 
-        $jobs = $query->paginate(10);
+        $jobs = $query->paginate($keyword ? 10000 : 10);
         return new JobCollection($jobs);
     }
 }
