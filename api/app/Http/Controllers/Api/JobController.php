@@ -228,6 +228,18 @@ class JobController extends Controller
                 });
         });
 
+        // デフォルトはブックマーク順
+
+        // 新着順にソート
+        $query->when($request->sort === "latest", function ($query) {
+            return $query->latest();
+        });
+
+        // 高単価順にソート
+        $query->when($request->sort === "cost", function ($query) {
+            return $query->orderBy("cost", "desc");
+        });
+
         $jobs = $query->paginate($keyword ? 10000 : 10);
         return new JobCollection($jobs);
     }
