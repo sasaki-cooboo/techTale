@@ -38,7 +38,7 @@ const SortMenu = () => {
     try {
       setLoading(true);
       const { data } = await fetch.get<JobListResponse>(
-        `/api/v1/jobs?${getSortQuery(option)}`
+        `/api/v1/jobBookmarkList?${getSortQuery(option)}`
       );
       setBokmarkJobs(data);
     } catch (error) {

@@ -240,7 +240,7 @@ class JobController extends Controller
             return $query->orderBy("cost", "desc");
         });
 
-        $jobs = $query->paginate($keyword ? 10000 : 10);
+        $jobs = $query->paginate($keyword ? 10000 : 40);
         return new JobCollection($jobs);
     }
 }
