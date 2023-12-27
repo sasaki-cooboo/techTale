@@ -19,8 +19,6 @@ use App\Models\Language;
 use App\Models\Skill;
 use App\Services\JobService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class JobController extends Controller
 {
@@ -228,7 +226,27 @@ class JobController extends Controller
                 });
         });
 
-        $jobs = $query->paginate($keyword ? 10000 : 10);
+        // デフォルトはブックマーク順
+        $query->when($request->sort !== "latest" && $request->sort !== "cost", function ($query) use ($bookmarkIds) {
+            $ids = array_reverse($bookmarkIds);
+            $placeholder = '';
+            foreach ($ids as $key => $_) {
+                $placeholder .= ($key == 0) ? '?' : ',?';
+            }
+            return $query->orderByRaw("FIELD(id, $placeholder)", $ids);
+        });
+
+        // 新着順にソート
+        $query->when($request->sort === "latest", function ($query) {
+            return $query->latest();
+        });
+
+        // 高単価順にソート
+        $query->when($request->sort === "cost", function ($query) {
+            return $query->orderBy("cost", "desc");
+        });
+
+        $jobs = $query->paginate($keyword ? 10000 : 40);
         return new JobCollection($jobs);
     }
 }

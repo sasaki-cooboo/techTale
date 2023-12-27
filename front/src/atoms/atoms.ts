@@ -63,3 +63,12 @@ const initialState: JobListResponse = {
 
 // 表示用、ページネーションで分割されている
 export const jobBookmarkAtom = atom<JobListResponse | null>(initialState);
+
+export const BOOKMARK_MENU_LIST = [
+  "ブックマーク登録順",
+  "新着順",
+  "高単価順",
+] as const;
+export const jobBookmarkSortAtom = atom<(typeof BOOKMARK_MENU_LIST)[number]>(
+  BOOKMARK_MENU_LIST[0]
+);

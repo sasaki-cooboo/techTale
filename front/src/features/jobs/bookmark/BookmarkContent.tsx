@@ -13,6 +13,7 @@ import fetch from "@/libs/fetch";
 import { JobListResponse } from "@/features/jobs/job.type";
 import { useRouter } from "next/router";
 import SearchField from "./SearchField";
+import SortMenu from "./SortMenu";
 
 const BookmarkContent = () => {
   const [isLoading, setLoading] = useAtom(loadingAtom);
@@ -62,7 +63,12 @@ const BookmarkContent = () => {
         <Typography fontSize={24} pb={2} fontWeight={500} variant="h2">
           ブックマークした求人
         </Typography>
-        <SearchField />
+        <Stack direction={"row"} columnGap={2}>
+          <SearchField />
+          <Box textAlign={"right"} width={180}>
+            <SortMenu />
+          </Box>
+        </Stack>
       </Stack>
       {isLoading ? (
         <LoadPage />
