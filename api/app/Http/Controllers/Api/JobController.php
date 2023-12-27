@@ -19,8 +19,6 @@ use App\Models\Language;
 use App\Models\Skill;
 use App\Services\JobService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class JobController extends Controller
 {
@@ -229,6 +227,14 @@ class JobController extends Controller
         });
 
         // デフォルトはブックマーク順
+        $query->when($request->sort !== "latest" && $request->sort !== "cost", function ($query) use ($bookmarkIds) {
+            $ids = array_reverse($bookmarkIds);
+            $placeholder = '';
+            foreach ($ids as $key => $_) {
+                $placeholder .= ($key == 0) ? '?' : ',?';
+            }
+            return $query->orderByRaw("FIELD(id, $placeholder)", $ids);
+        });
 
         // 新着順にソート
         $query->when($request->sort === "latest", function ($query) {
